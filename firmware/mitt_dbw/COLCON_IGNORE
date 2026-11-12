@@ -1,0 +1,3 @@
+lib/micro_ros_arduino holds generated micro-ROS headers (including mitt_msgs) and .pio/ holds
+build output. Neither may be seen by a colcon build of the ROS workspace. This file makes colcon
+skip this directory.

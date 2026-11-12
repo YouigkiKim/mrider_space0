@@ -1,0 +1,7 @@
+# PlatformIO build output and downloaded libraries (every project under firmware/)
+.pio/
+# Host unit-test binaries (mitt_dbw/test/host/run_host_tests.sh)
+.host_build/
+# micro-ROS static library + generated headers: a build artifact, ~20 MB.
+# Regenerate with mitt_dbw/scripts/build_microros_lib.sh (docker).
+mitt_dbw/lib/micro_ros_arduino/
