@@ -8,7 +8,7 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
   `docs/02_guide/01_firmware/01_teensy_guide.md`에 있다. 이 문서는 그 내용을 반복하지 않는다.
 - **설계의 원본:** `docs/design/dbw.md` §9–12, `docs/design/safety.md`. **절차의 원본:** `docs/build/04-firmware.md`.
   이 문서와 원본이 다르면 원본이 맞다.
-- **마지막 갱신:** 2026-11-13 · 브랜치 `firmware/sensing` · 커밋 `0e81598`
+- **마지막 갱신:** 2026-11-14 · 브랜치 `firmware/sensing` (테스트 벤치 검증 반영)
 - **경로 표기:** 모든 경로는 **저장소 루트** 기준이다. 저장소 밖 경로는 출처(공식 문서의 설치 위치, 도구 기본값)를 함께 적었다.
 
 ---
@@ -21,7 +21,8 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
 - **검증 상태**
   - PC 단위 테스트 21개 통과
   - Teensy 4.1 실기 확인(센서 미연결 상태): 안정 동작, `/mitt/dbw/status` 200 Hz, 고장 비트·서비스 거부 정상
-  - **센서를 연결한 확인은 아직 안 함** → 다음 작업(가이드 7.3절)
+  - **책상 위 테스트 벤치 검증 완료 (2026-11-14):** 홀센서 래치·카운트, AS5600 I²C·공극·각도 (7.7절)
+  - **차량 장착 후 확인은 아직 안 함** → 다음 작업: 장착, wrap 검사, k·c0 보정, USB 30분 안정성
 - **개발 방식:** 기능 하나 = 브랜치 하나. 앞 브랜치 위에 쌓는다.
   `main`(교수님 원본) → `firmware/sensing`(지금) → `firmware/steering` → …
 - **다음 단계:** 센서 배선·보정(Stage 0 gate) → 조향 위치 루프(Stage 1)
@@ -318,6 +319,22 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
   - `mode 0`, `faults 1` (센서 없음 → 정상)
   - debug: raw 0, I²C 0, 자석 0, c0 2048, 워치독 리셋 0
   - 영점 서비스: "AS5600 not healthy"로 거부 (정상)
+
+### 7.7 테스트 벤치 검증 (2026-11-14, 책상 위)
+
+- **결과:** 검증 방법과 기록은 `docs/03_validation/01_firmware/test_bench.md`
+  - 홀센서 A·B: 자석에 따라 OUT 0 V ↔ 3.3 V 래치 동작, `quad_count`에서 순서대로 대면 count 증가
+  - AS5600: `i2c_scan` `PASS 0x36 alone.`, `as5600_check` 공극·각도 확인
+- **겪은 문제와 해결**
+  - **홀센서가 자석에 반응 없음, VCC–OUT 2 V:** DRV5013을 반대로 꽂아 VCC와 OUT이 바뀜.
+    진짜 VCC가 10 kΩ 풀업을 거쳐서만 전원을 받아 동작 전압(2.5 V) 미만이었다. 인쇄면(TO-92 사다리꼴의 **좁은 쪽**)을
+    보고 왼쪽부터 1 VCC · 2 GND · 3 OUT으로 다시 꽂아 해결(TI SLIS150N Figure 4-2·8-3).
+  - **회로도 보완:** 데이터시트와 `03-electrical.md` §3.5.4가 요구하는 래치별 100 nF 바이패스(C3·C4)가 빠져 있어 추가.
+  - **`i2c_scan`이 아무것도 출력하지 않고 업로드에도 무응답:** 배선 재점검(SDA·SCL 3.3 V, 18·19–GND 약 15 kΩ) 후
+    USB를 다시 꽂자 정상 동작. 앞서 SDA가 0 V로 측정됐던 배선 문제와 관련된 것으로 추정(정확한 원인은 미확인).
+  - **`pio device monitor`가 포트 번호를 물음:** 업로드 직후 WSL 재연결(10~15초) 전에 모니터가 시작돼서.
+    `firmware/bench/platformio.ini`에 `monitor_port = /dev/ttyACM*` 추가.
+- **회로도:** `docs/02_guide/01_firmware/images/stage0_bench_schematic.svg` (Teensy 실제 핀 배치 기준, 생성 스크립트 동봉)
 
 ---
 
