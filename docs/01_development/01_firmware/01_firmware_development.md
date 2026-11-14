@@ -344,18 +344,22 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
   - `origin` = 교수님 저장소(`jrkwon/mrider`). 읽기 전용, push 차단(`no_push`).
   - `team` = 팀 저장소. 우리 작업을 올리는 곳.
 - **브랜치**
-  - `main` = 교수님 원본과 동일하게 유지. 교수님 업데이트를 받는 용도.
+  - `main` = **팀 통합 브랜치.** 검증이 끝난 기능 브랜치를 PR로 합친다. 교수님 원본(`origin/main`)과는 다르다.
   - 기능 브랜치를 앞 단계 위에 쌓는다.
     ```
-    main
-     └─ firmware/sensing        Stage 0 센싱 (지금)
+    main  ← PR로 합침
+     └─ firmware/sensing        Stage 0 센싱
          └─ firmware/steering   Stage 1 조향 위치 루프
              └─ firmware/drive  구동 채널 …
     ```
-  - 다음 브랜치 시작: `git switch -c firmware/steering firmware/sensing`
-- **교수님 업데이트 받기**
-  - `git fetch origin` → `main`을 `origin/main`으로 앞으로 이동 → `git push team main`
-  - 작업 브랜치는 필요할 때 새 `main` 위로 옮긴다(`git rebase main`). 이미 팀원과 공유한 브랜치라면 `merge`를 쓴다.
+  - 다음 브랜치 시작: 앞 단계가 `main`에 합쳐졌으면 `git switch -c firmware/steering main`,
+    아직이면 `git switch -c firmware/steering firmware/sensing`
+  - 기능이 검증되면 그 브랜치를 `team`에 push하고 `main`으로 PR을 만든다.
+- **교수님 업데이트 받기 (pull만)**
+  - `git switch main && git pull origin main && git push team main`
+  - 교수님이 우리가 고친 파일(예: `firmware/bench/platformio.ini`)을 함께 고쳤다면 충돌이 난다. 그 부분만 정리해서 커밋한다.
+  - 이미 push한 `main`은 되돌리거나 다시 쓰지 않는다(`rebase`, `push --force` 금지). 팀원이 받은 기록과 어긋나기 때문이다.
+  - 진행 중인 기능 브랜치는 필요하면 새 `main`을 합친다(`git merge main`).
 - **커밋**
   - 한 커밋 = 검증이 끝난 기능 하나. 6장의 절차를 통과한 뒤 커밋한다.
   - 메시지에 무엇을, 왜, 어떻게 검증했는지 적는다.

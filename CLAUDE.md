@@ -14,9 +14,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   `jrkwon/mrider`이고 문서 사이트(MkDocs)가 `main` push 때 배포된다.
 - 이 클론은 **Track E(전장·펌웨어) 팀 작업용**이다.
   - `origin` = 교수님 저장소(읽기 전용, push 차단 `no_push`), `team` = 팀 저장소.
-  - `main`은 `origin/main`과 똑같이 유지하고 업데이트를 받는 데만 쓴다.
+  - `main` = **팀 통합 브랜치**로, 교수님 원본과 다르다. 검증이 끝난 기능 브랜치를 PR로 합친다.
   - 작업은 기능 브랜치를 앞 단계 위에 쌓는다: `firmware/sensing`(Stage 0) → `firmware/steering`(Stage 1) → …
-  - push는 사용자가 직접 한다.
+  - 교수님 업데이트는 **pull만** 받는다: `git switch main && git pull origin main && git push team main`.
+    충돌은 그 부분만 정리하고, push한 `main`은 다시 쓰지 않는다(`rebase`, `push --force` 금지).
+  - push와 PR 생성은 사용자가 직접 한다(이 환경에는 GitHub 인증과 `gh`가 없다).
+  - `main`에 push하면 교수님 저장소에서 따라온 GitHub Actions(문서 배포 등)가 팀 저장소에서 돌아 실패 메일이 갈 수 있다.
 - **설계·절차의 원본:** `docs/design/`(ADR, `dbw.md`, `safety.md`, `calibration.md`, `software.md`),
   `docs/build/`(단계별 절차, 특히 `04-firmware.md` 핀 표·Stage 0–2), `docs/course/`(수업·merge 일정).
   수치·핀·안전 규칙은 여기서 가져오고, 문서에 없는 값은 `[POLICY]`로 표시해 팀이 확정한다.
