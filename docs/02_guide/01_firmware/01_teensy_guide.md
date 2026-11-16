@@ -513,6 +513,17 @@ UBEC 5 V를 `VIN`에 넣어야 Teensy가 켜진다. "USB만 꽂았더니 Teensy�
 
 ### 7.4 Stage 1: 조향 모터, 전류 제한 전원으로
 
+![조향 벤치 회로도: RC 수신기의 CH1·CH5가 신호 MUX의 SLAVE 1·SEL로, Teensy 핀 2가 MASTER 1로 들어가고, MUX OUT 1이 MDDS30 RC1로, MDDS30 M1이 조향 모터로 간다. i-BUS는 R5·R6를 거쳐 Teensy 핀 15로, 모터 전원은 전류 제한 실험용 전원에서 온다](images/steer_bench_schematic.svg)
+
+- 위 그림은 **조향 출력과 RC 입력을 더한 벤치 회로도**다(Stage 0 센서 회로는 그대로). 조향 펌웨어의 설계는
+  `docs/01_development/01_firmware/02_steering_design.md`를 본다.
+- 그림 아래쪽 패널은 **신호 MUX를 앞면(부품면)에서 본 실제 핀 배치**다. 단자마다 핀이 3개(신호 · + · GND)이고,
+  앞에서 보면 신호 핀이 보드 안쪽, GND가 바깥 가장자리다. **Teensy → `M1`, `OUT1` → MDDS30 RC1은 신호·GND만** 연결하고
+  가운데 + 핀은 비운다. 수신기에서 오는 `SEL`·`S1`은 3선 모두 연결한다.
+- 실제로 납땜할 **신호 보드(PCB)의 구멍 단위 배치**는 공식 그림 `docs/images/signal-board-perfboard-layout.svg`
+  (`03-electrical.md` §3.5.4)에 있다. 조향 펄스는 그 보드의 `PWM 1 · steer` 헤더, i-BUS는 `i-BUS in` 단자와 R5·R6로 나간다.
+  수신기·MUX·드라이버의 연결 관계는 `docs/images/rc-mux-estop.svg`(`03-electrical.md` §3.5.1)에 있다.
+
 > **현재 저장소의 펌웨어는 Stage 0(센싱만)이다.** 이 절에서 쓰는 `mitt_dbw`의 기능(명령 추종, `enable`·게인
 > 파라미터, effort·P/I/D 디버그 값, `mitt_dbw_hangtest`)은 Stage 1을 시작할 때 펌웨어에 추가한다.
 > 아래 설명은 그 기능이 들어온 뒤의 사용법이다. debug 값의 번호도 그때 기준이다.
@@ -611,7 +622,7 @@ E4 전환 여부 결정과 기록. 이것이 Week 11 (11/23) Merge 1의 내용�
 드라이버에 직접 연결하는 방식이라 Teensy가 죽어도 동작한다. 한 칩이 모든 것을 맡는 설계가 허용된 조건이 바로
 Layer B이므로, **Teensy를 일부러 멈춘 상태에서** 시험한다.
 
-**어떻게 (준비 단계):**
+**어떻게 (준비 단계):** 수신기 핀 구조, 연결, 바인딩, 출력 읽는 법은 [RC 수신기 가이드](02_rc_receiver_guide.md)에 정리했다.
 1. **전압부터 잰다.** 수신기(FS-iA6B)는 5 V로 동작하고 Teensy는 5 V를 못 견딘다. 수신기의 i-BUS 출력이 쉬고 있을
    때의 전압을 잰다. 3.3 V 근처면 그대로, 5 V 근처면 분압 저항을 넣는다(`03-electrical.md` §3.5.4). 그다음에 핀 15에 연결.
 2. `pio run -e ibus_monitor -t upload` 후 `pio device monitor`. 확인할 것: 프레임이 초당 약 130개 들어오는가, 체크섬

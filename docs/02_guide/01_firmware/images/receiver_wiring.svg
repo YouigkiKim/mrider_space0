@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 860" width="1200" height="860" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<style>
+.t{font-size:14px;fill:#1e293b}.ts{font-size:12px;fill:#475569}.tb{font-size:14px;font-weight:bold;fill:#0f172a}
+.h1{font-size:20px;font-weight:bold;fill:#0f172a}.h2{font-size:16px;font-weight:bold;fill:#0f172a}
+.lb{font-size:13px;font-weight:bold;fill:#be123c}.lp{font-size:13px;font-weight:bold;fill:#dc2626}
+.lg{font-size:13px;font-weight:bold;fill:#334155}.lgw{font-size:13px;font-weight:bold;fill:#e2e8f0}.warn{font-size:13px;font-weight:bold;fill:#b45309}
+.mono{font-size:13px;font-weight:bold;fill:#f8fafc;font-family:monospace}
+.panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}
+.face{fill:#1f2937;stroke:#0f172a;stroke-width:2}
+.tag{fill:#f8fafc;stroke:#94a3b8;stroke-width:1}
+.box{fill:#ffffff;stroke:#334155;stroke-width:2}
+.servo{fill:none;stroke:#be123c;stroke-width:2.5}
+.sens{fill:none;stroke:#94a3b8;stroke-width:2;stroke-dasharray:5 4}
+.pwr{fill:none;stroke:#dc2626;stroke-width:2.5;stroke-dasharray:6 4}
+.pin{fill:#e5e7eb;stroke:#0f172a;stroke-width:1.5}
+.pS{fill:#fbbf24;stroke:#be123c;stroke-width:2.5}.pP{fill:#dc2626;stroke:#0f172a;stroke-width:1.5}
+.pG{fill:#334155;stroke:#f8fafc;stroke-width:1.5}.pX{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+.wS{stroke:#be123c;stroke-width:3;fill:none}.wP{stroke:#dc2626;stroke-width:3;fill:none}
+.wG{stroke:#334155;stroke-width:3;fill:none}.rf{stroke:#7c3aed;stroke-width:2;fill:none;stroke-dasharray:4 5}
+.ok{fill:#f0fdf4;stroke:#22c55e;stroke-width:2}
+</style>
+<rect width="1200" height="860" fill="#ffffff"/>
+<text class="h1" x="30" y="38" text-anchor="start">FS-iA6B 수신기 — 핀 구조와 벤치 연결 (firmware/steering)</text>
+<text class="ts" x="30" y="62" text-anchor="start">출처: 수신기 라벨(사진 fs_ia6b_ports.jpg)과 2026-11-14 측정 · 03-electrical.md §3.5.4(R5·R6), §3.5.1(수신기 역할) · 04-firmware.md 핀 표(핀 15 = Serial3 RX)</text>
+<rect class="panel" x="20" y="84" width="540" height="640" rx="10"/>
+<text class="h2" x="40" y="114" text-anchor="start">① 수신기 끝면 — 라벨을 바로 읽는 방향 (B/VCC가 위)</text>
+<rect class="face" x="50" y="140" width="480" height="460" rx="14"/>
+<rect class="tag" x="70" y="168" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="187" text-anchor="middle">B/VCC</text>
+<circle class="pS" cx="380" cy="182" r="7"/>
+<circle class="pP" cx="425" cy="182" r="7"/>
+<circle class="pG" cx="470" cy="182" r="7"/>
+<rect class="tag" x="70" y="230" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="249" text-anchor="middle">CH6</text>
+<circle class="pS" cx="380" cy="244" r="7"/>
+<circle class="pP" cx="425" cy="244" r="7"/>
+<circle class="pG" cx="470" cy="244" r="7"/>
+<rect class="tag" x="70" y="292" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="311" text-anchor="middle">CH5</text>
+<circle class="pS" cx="380" cy="306" r="7"/>
+<circle class="pP" cx="425" cy="306" r="7"/>
+<circle class="pG" cx="470" cy="306" r="7"/>
+<rect class="tag" x="70" y="354" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="373" text-anchor="middle">CH4</text>
+<circle class="pS" cx="380" cy="368" r="7"/>
+<circle class="pP" cx="425" cy="368" r="7"/>
+<circle class="pG" cx="470" cy="368" r="7"/>
+<rect class="tag" x="70" y="416" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="435" text-anchor="middle">CH3</text>
+<circle class="pS" cx="380" cy="430" r="7"/>
+<circle class="pP" cx="425" cy="430" r="7"/>
+<circle class="pG" cx="470" cy="430" r="7"/>
+<rect class="tag" x="70" y="478" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="497" text-anchor="middle">CH2</text>
+<circle class="pS" cx="380" cy="492" r="7"/>
+<circle class="pP" cx="425" cy="492" r="7"/>
+<circle class="pG" cx="470" cy="492" r="7"/>
+<rect class="tag" x="70" y="540" width="96" height="26" rx="4"/>
+<text class="tb" x="118" y="559" text-anchor="middle">PPM/CH1</text>
+<circle class="pS" cx="380" cy="554" r="7"/>
+<circle class="pP" cx="425" cy="554" r="7"/>
+<circle class="pG" cx="470" cy="554" r="7"/>
+<circle class="pS" cx="290" cy="182" r="7"/>
+<text class="lb" x="274" y="187" text-anchor="end">신호</text>
+<circle class="pP" cx="290" cy="244" r="7"/>
+<text class="lp" x="274" y="249" text-anchor="end">+5 V</text>
+<circle class="pG" cx="290" cy="306" r="7"/>
+<text class="lgw" x="274" y="311" text-anchor="end">GND</text>
+<circle class="pin" cx="290" cy="368" r="7"/>
+<circle class="pin" cx="290" cy="430" r="7"/>
+<circle class="pin" cx="290" cy="492" r="7"/>
+<rect class="servo" x="215" y="160" width="98" height="168" rx="8"/>
+<rect class="sens" x="215" y="346" width="98" height="168" rx="8"/>
+<text class="lb" x="264" y="152" text-anchor="middle">i-BUS SERVO</text>
+<text class="ts" x="264" y="534" text-anchor="middle">i-BUS SENS (안 씀)</text>
+<rect class="pwr" x="362" y="162" width="126" height="40" rx="8"/>
+<text class="lp" x="425.0" y="134" text-anchor="middle">전원 5 V 입력</text>
+<text class="lb" x="380" y="624" text-anchor="middle">신호</text>
+<text class="lp" x="425" y="624" text-anchor="middle">+</text>
+<text class="lg" x="470" y="624" text-anchor="middle">GND</text>
+<text class="t" x="40" y="664" text-anchor="start">· 채널 블록 한 줄 = 서보 3핀: 왼쪽 신호 · 가운데 + · 오른쪽 GND (+, GND는 모든 줄 공통).</text>
+<text class="t" x="40" y="685" text-anchor="start">· i-BUS는 채널 블록 왼쪽의 세로 1열: 위 3핀 SERVO, 아래 3핀 SENS.</text>
+<text class="warn" x="40" y="706" text-anchor="start">· CH1→MUX S1, CH2→S2, CH5→SEL은 3선 그대로 (MUX 전원 VM·VS도 이 선으로).</text>
+<rect class="panel" x="580" y="84" width="600" height="640" rx="10"/>
+<text class="h2" x="600" y="114" text-anchor="start">② 벤치 연결 — 선 4가닥</text>
+<rect class="box" x="900" y="134" width="250" height="70" rx="10"/>
+<text class="tb" x="1025" y="162" text-anchor="middle">FS-i6 송신기 (리모컨)</text>
+<text class="ts" x="1025" y="184" text-anchor="middle">손에 듦 · 스틱/스위치 → 전파</text>
+<rect class="box" x="600" y="134" width="210" height="96" rx="8"/>
+<text class="tb" x="705" y="160" text-anchor="middle">벤치 전원 5 V</text>
+<text class="ts" x="705" y="180" text-anchor="middle">전류 제한 0.2 A</text>
+<circle class="pP" cx="640" cy="214" r="7"/>
+<circle class="pG" cx="770" cy="214" r="7"/>
+<text class="lp" x="654" y="219" text-anchor="start">+</text>
+<text class="lg" x="756" y="219" text-anchor="end">−</text>
+<rect class="box" x="600" y="330" width="250" height="250" rx="10"/>
+<text class="tb" x="755.0" y="400" text-anchor="middle">FS-iA6B 수신기</text>
+<text class="ts" x="755.0" y="420" text-anchor="middle">라벨: 4.0–8.4 V DC</text>
+<circle class="pP" cx="640" cy="330" r="7"/>
+<circle class="pG" cx="700" cy="330" r="7"/>
+<text class="lp" x="726" y="358" text-anchor="start">← B/VCC 줄</text>
+<text class="lp" x="640" y="356" text-anchor="middle">+</text>
+<text class="lg" x="700" y="356" text-anchor="middle">GND</text>
+<circle class="pS" cx="850" cy="480" r="7"/>
+<text class="lb" x="836" y="485" text-anchor="end">신호 (위)</text>
+<circle class="pX" cx="850" cy="515" r="7"/>
+<text class="lp" x="836" y="520" text-anchor="end">+5 V (가운데)</text>
+<circle class="pG" cx="850" cy="550" r="7"/>
+<text class="lg" x="836" y="555" text-anchor="end">GND (아래)</text>
+<text class="lb" x="836" y="456" text-anchor="end">i-BUS SERVO</text>
+<path class="rf" d="M900 190 Q 820 270 820 330"/>
+<text class="ts" x="905" y="262" text-anchor="start">2.4 GHz (바인딩된 짝끼리만)</text>
+<rect class="box" x="960" y="330" width="200" height="250" rx="10" style="fill:#f1f5f9"/>
+<text class="tb" x="1060.0" y="356" text-anchor="middle">Teensy 4.1</text>
+<text class="ts" x="1060.0" y="376" text-anchor="middle">USB 전원 (노트북)</text>
+<circle class="pS" cx="960" cy="480" r="7"/>
+<circle class="pG" cx="960" cy="550" r="7"/>
+<text class="lb" x="976" y="485" text-anchor="start">15 (Serial3 RX)</text>
+<text class="lg" x="976" y="555" text-anchor="start">GND</text>
+<path class="wP" d="M640 214 L640 290 L640 290 L640 330"/>
+<path class="wG" d="M770 214 L770 300 L700 300 L700 330"/>
+<path class="wS" d="M850 480 L860 480"/>
+<rect x="860" y="464" width="60" height="32" rx="5" fill="#fff1f2" stroke="#be123c" stroke-width="2"/>
+<text class="lb" x="890" y="479" text-anchor="middle">R5</text>
+<text class="ts" x="890" y="492" text-anchor="middle">점퍼선</text>
+<path class="wS" d="M920 480 L960 480"/>
+<path class="wG" d="M850 550 L960 550"/>
+<line class="wP" x1="860" y1="515" x2="900" y2="515"/>
+<line class="wP" x1="892" y1="507" x2="908" y2="523"/>
+<line class="wP" x1="892" y1="523" x2="908" y2="507"/>
+<text class="lp" x="916" y="520" text-anchor="start">연결 안 함</text>
+<text class="t" x="600" y="616" text-anchor="start">· 신호 + GND 2가닥이 Teensy로. 수신기 +5 V는 Teensy에 연결하지 않는다.</text>
+<text class="t" x="600" y="636" text-anchor="start">· GND 공통: SERVO의 GND선 하나로 전원 −·수신기·Teensy GND가 묶인다.</text>
+<text class="t" x="600" y="656" text-anchor="start">· 켜는 순서: Teensy(USB) → 수신기 5 V. 끌 때는 반대.</text>
+<text class="t" x="600" y="676" text-anchor="start">· 차량에서는 수신기 전원 = UBEC B 5 V (03-electrical.md 52행).</text>
+<text class="warn" x="600" y="702" text-anchor="start">· R5·R6은 신호 기판의 i-BUS 레벨 자리. 3.3 V 측정 → R5 점퍼선, R6 생략.</text>
+<rect class="ok" x="20" y="744" width="1160" height="96" rx="10"/>
+<text class="h2" x="40" y="772" text-anchor="start">③ 측정 결과 (2026-11-14, 수신기 5 V · 송신기 켬 · Teensy 미연결)</text>
+<text class="t" x="40" y="798" text-anchor="start">· i-BUS SERVO: 위 = 3.3 V (신호) · 가운데 = 5 V (+) · 아래 = 0 V (GND). SENS도 위 3.3 V / 가운데 5 V.</text>
+<text class="t" x="40" y="820" text-anchor="start">· Teensy 연결 후 ibus_monitor: 128–132 fr/s, bad 0, age 1–8 ms → 수신 정상. 자세한 기록은 docs/03_validation/01_firmware/02_steering_bench.md</text>
+</svg>

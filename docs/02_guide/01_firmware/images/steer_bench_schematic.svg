@@ -1,0 +1,381 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 1960" width="1420" height="1960" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<title>조향 벤치 회로도 — RC 수신기와 Teensy에서 조향 모터까지</title>
+<style>
+.w{stroke:#1f2328;stroke-width:2;fill:none}
+.wd{stroke:#8c959f;stroke-width:2;fill:none;stroke-dasharray:6 5}
+.wp{stroke:#8250df;stroke-width:2.5;fill:none}
+.wb{stroke:#0969da;stroke-width:2.5;fill:none}
+.wo{stroke:#bc4c00;stroke-width:2.5;fill:none}
+.wm{stroke:#cf222e;stroke-width:3;fill:none}
+.box{stroke:#1f2328;stroke-width:2;fill:#fff}
+.chip{stroke:#1f2328;stroke-width:2;fill:#f6f8fa}
+.pcb{stroke:#1f2328;stroke-width:2;fill:#e8f3ec}
+.grp{stroke:#8c959f;stroke-width:1.5;fill:none;stroke-dasharray:6 5}
+.dot{fill:#1f2328}
+.nc{stroke:#1f2328;stroke-width:1.5;fill:#fff}
+.pill{stroke:#cf222e;stroke-width:1.5;fill:#fff5f5}
+.pilltx{fill:#cf222e;font-size:12px;font-weight:700;text-anchor:middle}
+.pill5{stroke:#9a6700;stroke-width:1.5;fill:#fff8c5}
+.pill5tx{fill:#9a6700;font-size:12px;font-weight:700;text-anchor:middle}
+.t{fill:#1f2328;font-size:13px}
+.ts{fill:#57606a;font-size:12px}
+.tb{fill:#1f2328;font-size:14px;font-weight:700}
+.h1{fill:#1f2328;font-size:20px;font-weight:700}
+.pin{font-size:11px;fill:#57606a}
+.pinN{font-size:11px;fill:#1a7f37;font-weight:700}
+.pinO{font-size:11px;fill:#0969da;font-weight:700}
+.pinL{font-size:11px;fill:#bc4c00;font-weight:700}
+.pinD{font-size:11px;fill:#0969da}
+.hN{fill:#1a7f37;stroke:#1f2328;stroke-width:1}
+.hO{fill:#79b8ff;stroke:#1f2328;stroke-width:1}
+.hL{fill:#ffb77a;stroke:#1f2328;stroke-width:1}
+.hD{fill:#ddf4ff;stroke:#0969da;stroke-width:1}
+.hX{fill:#fff;stroke:#8c959f;stroke-width:1}
+.lp{fill:#8250df;font-size:12px;font-weight:700}
+.lb{fill:#0969da;font-size:12px;font-weight:700}
+.lo{fill:#bc4c00;font-size:12px;font-weight:700}
+.lm{fill:#cf222e;font-size:12px;font-weight:700}
+.warn{fill:#cf222e;font-size:12px;font-weight:700}
+</style>
+<rect x="0" y="0" width="1420" height="1960" fill="#fff"/>
+<text class="h1" x="30" y="40" text-anchor="start">조향 벤치 회로도 — RC 수신기·Teensy → 신호 MUX → MDDS30 → 조향 모터</text>
+<text class="ts" x="30" y="63" text-anchor="start">firmware/steering 단계. Teensy는 윗면(USB 위쪽), 실제 핀 배치. Stage 0 센서 회로는 그대로 두고 조향 출력과 RC 입력을 더한다.</text>
+<text class="ts" x="30" y="81" text-anchor="start">원본: 04-firmware.md 핀 표 · 03-electrical.md §3.5.1(RC·MUX), §3.5.4(신호 보드: PWM 1 헤더, R5·R6) · dbw.md(MDDS30 M1 = 조향) · rc-mux-estop.svg</text>
+<rect class="pcb" x="560" y="226" width="200" height="784" rx="8"/>
+<rect class="chip" x="635" y="216" width="50" height="22" rx="3"/>
+<text class="ts" x="660" y="232" text-anchor="middle">USB</text>
+<text class="tb" x="660" y="996" text-anchor="middle">Teensy 4.1</text>
+<line class="w" x1="660" y1="216" x2="660" y2="196"/>
+<text class="ts" x="668" y="192" text-anchor="start">USB → 노트북 (micro-ROS agent)</text>
+<circle class="hO" cx="574" cy="270" r="5"/>
+<text class="pinO" x="584" y="274" text-anchor="start">GND</text>
+<circle class="hO" cx="574" cy="300" r="5"/>
+<text class="pinO" x="584" y="304" text-anchor="start">0 엔코더 A</text>
+<circle class="hO" cx="574" cy="330" r="5"/>
+<text class="pinO" x="584" y="334" text-anchor="start">1 엔코더 B</text>
+<circle class="hN" cx="574" cy="360" r="5"/>
+<text class="pinN" x="584" y="364" text-anchor="start">2 조향 PWM</text>
+<circle class="hL" cx="574" cy="390" r="5"/>
+<text class="pinL" x="584" y="394" text-anchor="start">3 구동 PWM</text>
+<circle class="hX" cx="574" cy="420" r="5"/>
+<text class="pin" x="584" y="424" text-anchor="start">4</text>
+<circle class="hX" cx="574" cy="450" r="5"/>
+<text class="pin" x="584" y="454" text-anchor="start">5</text>
+<circle class="hX" cx="574" cy="480" r="5"/>
+<text class="pin" x="584" y="484" text-anchor="start">6</text>
+<circle class="hX" cx="574" cy="510" r="5"/>
+<text class="pin" x="584" y="514" text-anchor="start">7</text>
+<circle class="hX" cx="574" cy="540" r="5"/>
+<text class="pin" x="584" y="544" text-anchor="start">8</text>
+<circle class="hX" cx="574" cy="570" r="5"/>
+<text class="pin" x="584" y="574" text-anchor="start">9</text>
+<circle class="hX" cx="574" cy="600" r="5"/>
+<text class="pin" x="584" y="604" text-anchor="start">10</text>
+<circle class="hX" cx="574" cy="630" r="5"/>
+<text class="pin" x="584" y="634" text-anchor="start">11</text>
+<circle class="hX" cx="574" cy="660" r="5"/>
+<text class="pin" x="584" y="664" text-anchor="start">12</text>
+<circle class="hO" cx="574" cy="690" r="5"/>
+<text class="pinO" x="584" y="694" text-anchor="start">3.3V</text>
+<circle class="hX" cx="574" cy="720" r="5"/>
+<text class="pin" x="584" y="724" text-anchor="start">24</text>
+<circle class="hX" cx="574" cy="750" r="5"/>
+<text class="pin" x="584" y="754" text-anchor="start">25</text>
+<circle class="hX" cx="574" cy="780" r="5"/>
+<text class="pin" x="584" y="784" text-anchor="start">26</text>
+<circle class="hX" cx="574" cy="810" r="5"/>
+<text class="pin" x="584" y="814" text-anchor="start">27</text>
+<circle class="hX" cx="574" cy="840" r="5"/>
+<text class="pin" x="584" y="844" text-anchor="start">28</text>
+<circle class="hX" cx="574" cy="870" r="5"/>
+<text class="pin" x="584" y="874" text-anchor="start">29</text>
+<circle class="hX" cx="574" cy="900" r="5"/>
+<text class="pin" x="584" y="904" text-anchor="start">30</text>
+<circle class="hX" cx="574" cy="930" r="5"/>
+<text class="pin" x="584" y="934" text-anchor="start">31</text>
+<circle class="hX" cx="574" cy="960" r="5"/>
+<text class="pin" x="584" y="964" text-anchor="start">32</text>
+<circle class="hX" cx="746" cy="270" r="5"/>
+<text class="pin" x="736" y="274" text-anchor="end">VIN</text>
+<circle class="hO" cx="746" cy="300" r="5"/>
+<text class="pinO" x="736" y="304" text-anchor="end">GND</text>
+<circle class="hO" cx="746" cy="330" r="5"/>
+<text class="pinO" x="736" y="334" text-anchor="end">3.3V</text>
+<circle class="hX" cx="746" cy="360" r="5"/>
+<text class="pin" x="736" y="364" text-anchor="end">23</text>
+<circle class="hX" cx="746" cy="390" r="5"/>
+<text class="pin" x="736" y="394" text-anchor="end">22</text>
+<circle class="hL" cx="746" cy="420" r="5"/>
+<text class="pinL" x="736" y="424" text-anchor="end">릴레이 21</text>
+<circle class="hL" cx="746" cy="450" r="5"/>
+<text class="pinL" x="736" y="454" text-anchor="end">E-stop 20</text>
+<circle class="hO" cx="746" cy="480" r="5"/>
+<text class="pinO" x="736" y="484" text-anchor="end">SCL 19</text>
+<circle class="hO" cx="746" cy="510" r="5"/>
+<text class="pinO" x="736" y="514" text-anchor="end">SDA 18</text>
+<circle class="hX" cx="746" cy="540" r="5"/>
+<text class="pin" x="736" y="544" text-anchor="end">17</text>
+<circle class="hX" cx="746" cy="570" r="5"/>
+<text class="pin" x="736" y="574" text-anchor="end">16</text>
+<circle class="hN" cx="746" cy="600" r="5"/>
+<text class="pinN" x="736" y="604" text-anchor="end">i-BUS 15</text>
+<circle class="hX" cx="746" cy="630" r="5"/>
+<text class="pin" x="736" y="634" text-anchor="end">14</text>
+<circle class="hD" cx="746" cy="660" r="5"/>
+<text class="pinD" x="736" y="664" text-anchor="end">LED 13</text>
+<circle class="hX" cx="746" cy="690" r="5"/>
+<text class="pin" x="736" y="694" text-anchor="end">GND</text>
+<circle class="hX" cx="746" cy="720" r="5"/>
+<text class="pin" x="736" y="724" text-anchor="end">41</text>
+<circle class="hX" cx="746" cy="750" r="5"/>
+<text class="pin" x="736" y="754" text-anchor="end">40</text>
+<circle class="hX" cx="746" cy="780" r="5"/>
+<text class="pin" x="736" y="784" text-anchor="end">39</text>
+<circle class="hX" cx="746" cy="810" r="5"/>
+<text class="pin" x="736" y="814" text-anchor="end">38</text>
+<circle class="hX" cx="746" cy="840" r="5"/>
+<text class="pin" x="736" y="844" text-anchor="end">37</text>
+<circle class="hX" cx="746" cy="870" r="5"/>
+<text class="pin" x="736" y="874" text-anchor="end">36</text>
+<circle class="hX" cx="746" cy="900" r="5"/>
+<text class="pin" x="736" y="904" text-anchor="end">35</text>
+<circle class="hX" cx="746" cy="930" r="5"/>
+<text class="pin" x="736" y="934" text-anchor="end">34</text>
+<circle class="hX" cx="746" cy="960" r="5"/>
+<text class="pin" x="736" y="964" text-anchor="end">33</text>
+<line class="w" x1="560" y1="300" x2="540" y2="300"/>
+<line class="w" x1="560" y1="330" x2="540" y2="330"/>
+<rect class="box" x="340" y="274" width="200" height="74" rx="6"/>
+<text class="tb" x="440.0" y="296" text-anchor="middle">구동 엔코더</text>
+<text class="ts" x="440.0" y="314" text-anchor="middle">Stage 0 그대로</text>
+<text class="ts" x="440.0" y="330" text-anchor="middle">R3·R4 10 kΩ, C1·C2 1 nF</text>
+<line class="w" x1="760" y1="480" x2="1010" y2="480"/>
+<line class="w" x1="760" y1="510" x2="1010" y2="510"/>
+<rect class="box" x="1010" y="452" width="220" height="86" rx="6"/>
+<text class="tb" x="1120.0" y="474" text-anchor="middle">조향각 센서 AS5600</text>
+<text class="ts" x="1120.0" y="492" text-anchor="middle">Stage 0 그대로 · R1·R2 4.7 kΩ</text>
+<text class="ts" x="1120.0" y="508" text-anchor="middle">킹핀(조향축)에 장착</text>
+<line class="w" x1="760" y1="330" x2="800" y2="330"/>
+<rect class="pill" x="800" y="321" width="60" height="18" rx="9"/><text class="pilltx" x="830" y="334">+3V3</text>
+<line class="w" x1="760" y1="300" x2="790" y2="300"/>
+<line class="w" x1="790" y1="300" x2="790" y2="306"/>
+<g class="w"><line x1="780" y1="306" x2="800" y2="306"/><line x1="783.5" y1="310" x2="796.5" y2="310"/><line x1="787" y1="314" x2="793" y2="314"/></g>
+<rect class="chip" x="40" y="200" width="260" height="190" rx="6"/>
+<text class="tb" x="170.0" y="222" text-anchor="middle">RC 수신기 FS-iA6B</text>
+<text class="ts" x="170.0" y="240" text-anchor="middle">5 V로 동작 · 모드 채널은 미정 [D1]</text>
+<rect class="pill5" x="230" y="174" width="60" height="18" rx="9"/><text class="pill5tx" x="260" y="187">+5 V</text>
+<line class="w" x1="260" y1="192" x2="260" y2="200"/>
+<text class="lb" x="292" y="274" text-anchor="end">i-BUS</text>
+<text class="lb" x="80" y="378" text-anchor="middle">CH1</text>
+<text class="lo" x="140" y="378" text-anchor="middle">CH2</text>
+<text class="lb" x="200" y="378" text-anchor="middle">CH5</text>
+<line class="w" x1="40" y1="350" x2="26" y2="350"/>
+<g class="w"><line x1="16" y1="350" x2="36" y2="350"/><line x1="19.5" y1="354" x2="32.5" y2="354"/><line x1="23" y1="358" x2="29" y2="358"/></g>
+<polyline class="wb" points="300,270 320,270 320,175 870,175 870,474"/>
+<path class="wb" d="M870 474 A6 6 0 0 1 870 486 L870 504 A6 6 0 0 1 870 516 L870 575"/>
+<text class="lb" x="330" y="168" text-anchor="start">i-BUS (시리얼)</text>
+<rect class="box" x="800" y="575" width="130" height="50" rx="6"/>
+<text class="tb" x="865" y="597" text-anchor="middle">R5 = 점퍼선</text>
+<text class="ts" x="865" y="615" text-anchor="middle">R6 생략</text>
+<line class="wb" x1="800" y1="600" x2="760" y2="600"/>
+<text class="warn" x="800" y="647" text-anchor="start">i-BUS 대기 전압 3.3 V 측정 (2026-11-14)</text>
+<text class="warn" x="800" y="663" text-anchor="start">3.3 V → R5 = 점퍼 / 5 V였다면 R5·R6 분압</text>
+<text class="ts" x="800" y="679" text-anchor="start">(03-electrical §3.5.4)</text>
+<rect class="chip" x="40" y="500" width="290" height="200" rx="6"/>
+<text class="tb" x="185.0" y="522" text-anchor="middle">신호 MUX (Pololu #2806)</text>
+<text class="ts" x="185.0" y="540" text-anchor="middle">4채널 서보 MUX · 5 V</text>
+<text class="ts" x="185.0" y="556" text-anchor="middle">FAILMODE 점퍼: 연결 안 함</text>
+<text class="ts" x="185.0" y="572" text-anchor="middle">핀 배치는 아래 '앞면 배선' 그림</text>
+<line class="wb" x1="80" y1="390" x2="80" y2="500"/>
+<line class="wb" x1="200" y1="390" x2="200" y2="500"/>
+<line class="wd" x1="140" y1="390" x2="140" y2="500"/>
+<text class="lb" x="85" y="492" text-anchor="start">SLAVE 1</text>
+<text class="lo" x="145" y="492" text-anchor="start">SLAVE 2</text>
+<text class="lb" x="205" y="492" text-anchor="start">SEL</text>
+<rect class="pill5" x="260" y="470" width="60" height="18" rx="9"/><text class="pill5tx" x="290" y="483">+5 V</text>
+<line class="w" x1="290" y1="488" x2="290" y2="500"/>
+<text class="ts" x="324" y="484" text-anchor="start">VM</text>
+<line class="w" x1="40" y1="530" x2="26" y2="530"/>
+<g class="w"><line x1="16" y1="530" x2="36" y2="530"/><line x1="19.5" y1="534" x2="32.5" y2="534"/><line x1="23" y1="538" x2="29" y2="538"/></g>
+<text class="lp" x="322" y="629" text-anchor="end">MASTER 1</text>
+<text class="lo" x="322" y="664" text-anchor="end">MASTER 2</text>
+<polyline class="wp" points="560,360 520,360 520,625 330,625"/>
+<polyline class="wd" points="560,390 505,390 505,660 330,660"/>
+<text class="lp" x="340" y="603" text-anchor="start">PWM 1 · steer 헤더</text>
+<text class="ts" x="340" y="618" text-anchor="start">신호·GND만 (+5 n/c)</text>
+<text class="lo" x="340" y="678" text-anchor="start">핀 3 → MASTER 2 (구동, 다음 단계)</text>
+<text class="lp" x="110" y="690" text-anchor="middle">OUT 1</text>
+<text class="lo" x="240" y="690" text-anchor="middle">OUT 2</text>
+<rect class="chip" x="40" y="790" width="290" height="160" rx="6"/>
+<text class="tb" x="185.0" y="812" text-anchor="middle">모터 드라이버 MDDS30</text>
+<text class="ts" x="185.0" y="830" text-anchor="middle">R/C 모드 · DIP SW1·2=00, SW3·4=11,</text>
+<text class="ts" x="185.0" y="846" text-anchor="middle">SW5=0, SW6=0, SW7·8=10</text>
+<line class="wp" x1="110" y1="700" x2="110" y2="790"/>
+<line class="wd" x1="240" y1="700" x2="240" y2="790"/>
+<text class="lp" x="116" y="730" text-anchor="start">OUT 1 → RC1</text>
+<text class="warn" x="116" y="746" text-anchor="start">신호·GND만, 빨간 +5 선은 뽑는다</text>
+<text class="lp" x="110" y="882" text-anchor="middle">RC1 조향</text>
+<text class="lo" x="240" y="882" text-anchor="middle">RC2 구동</text>
+<text class="lm" x="60" y="938" text-anchor="start">B+ / B−</text>
+<text class="lm" x="210" y="938" text-anchor="start">M1 (Left)</text>
+<text class="lo" x="322" y="910" text-anchor="end">M2: 다음 단계</text>
+<line class="w" x1="330" y1="850" x2="360" y2="850"/>
+<g class="w"><line x1="350" y1="850" x2="370" y2="850"/><line x1="353.5" y1="854" x2="366.5" y2="854"/><line x1="357" y1="858" x2="363" y2="858"/></g>
+<text class="warn" x="378" y="856" text-anchor="start">★ 스타 접지점</text>
+<text class="ts" x="378" y="872" text-anchor="start">Teensy·MUX·수신기·전원 −의</text>
+<text class="ts" x="378" y="888" text-anchor="start">GND를 이 한 점에 모은다</text>
+<rect class="box" x="40" y="1010" width="180" height="74" rx="6"/>
+<text class="tb" x="130.0" y="1032" text-anchor="middle">실험용 전원</text>
+<text class="ts" x="130.0" y="1050" text-anchor="middle">전류 제한을 낮게</text>
+<text class="ts" x="130.0" y="1066" text-anchor="middle">(7–35 V 범위)</text>
+<line class="wm" x1="70" y1="950" x2="70" y2="1010"/>
+<line class="wm" x1="100" y1="950" x2="100" y2="1010"/>
+<circle class="box" cx="300" cy="1045" r="40"/>
+<text class="tb" x="300" y="1041" text-anchor="middle">조향</text>
+<text class="tb" x="300" y="1059" text-anchor="middle">모터</text>
+<line class="wm" x1="220" y1="950" x2="220" y2="1030"/>
+<line class="wm" x1="220" y1="1030" x2="260" y2="1030"/>
+<line class="wm" x1="250" y1="950" x2="250" y2="1010"/>
+<rect class="box" x="1010" y="760" width="220" height="80" rx="6"/>
+<text class="tb" x="1120.0" y="782" text-anchor="middle">+5 V 전원</text>
+<text class="ts" x="1120.0" y="800" text-anchor="middle">차량: UBEC B (전원 팀)</text>
+<text class="ts" x="1120.0" y="816" text-anchor="middle">벤치: 별도 5 V, GND는 공통</text>
+<rect class="pill5" x="1090" y="735" width="60" height="18" rx="9"/><text class="pill5tx" x="1120" y="748">+5 V</text>
+<polyline class="wd" points="300,1085 300,1110 1250,1110 1250,495 1230,495"/>
+<text class="ts" x="760" y="1102" text-anchor="middle">기계 연결: 모터가 조향축을 돌리면 AS5600이 바퀴 각도를 잰다 → 위치 루프의 피드백</text>
+<line x1="30" y1="1150" x2="1390" y2="1150" stroke="#d0d7de" stroke-width="1"/>
+<text class="tb" x="30" y="1176" text-anchor="start">핀 색</text>
+<circle class="hN" cx="40" cy="1194" r="5"/>
+<text class="t" x="54" y="1198" text-anchor="start">이번 단계에서 새로 연결 (핀 2 조향 PWM, 핀 15 i-BUS)</text>
+<circle class="hO" cx="40" cy="1216" r="5"/>
+<text class="t" x="54" y="1220" text-anchor="start">Stage 0에서 연결한 그대로</text>
+<circle class="hL" cx="40" cy="1238" r="5"/>
+<text class="t" x="54" y="1242" text-anchor="start">다음 단계 (핀 3 구동, 20 E-stop, 21 릴레이)</text>
+<circle class="hX" cx="40" cy="1260" r="5"/>
+<text class="t" x="54" y="1264" text-anchor="start">사용 안 함</text>
+<text class="tb" x="520" y="1176" text-anchor="start">선 색</text>
+<text class="lp" x="520" y="1198" text-anchor="start">보라: 조향 펄스 (Teensy → MUX → MDDS30)</text>
+<text class="lb" x="520" y="1220" text-anchor="start">파랑: RC 수신기 신호</text>
+<text class="lm" x="520" y="1242" text-anchor="start">빨강: 모터 전원·모터 선</text>
+<text class="lo" x="520" y="1264" text-anchor="start">점선·주황: 다음 단계 (구동)</text>
+<text class="tb" x="960" y="1176" text-anchor="start">켜는 순서와 주의</text>
+<text class="t" x="960" y="1198" text-anchor="start">① Teensy (1500 µs 출력 시작) → ② MUX·수신기 5 V</text>
+<text class="t" x="960" y="1220" text-anchor="start">→ ③ 마지막에 MDDS30 (켜질 때 펄스를 정지로 학습)</text>
+<text class="t" x="960" y="1242" text-anchor="start">실험용 전원은 모터가 겨우 돌 만큼만 전류 제한</text>
+<text class="t" x="960" y="1264" text-anchor="start">FAILMODE 점퍼를 빼 두면 SEL을 잃어도 Teensy(MASTER)가 제어</text>
+<line x1="30" y1="1320" x2="1390" y2="1320" stroke="#d0d7de" stroke-width="1"/>
+<text class="tb" x="30" y="1350" text-anchor="start">신호 MUX 앞면 배선 — 부품면을 보고, SEL이 위로 오게 들었을 때 (뒷면 사진을 좌우로 뒤집은 모습)</text>
+<text class="ts" x="30" y="1370" text-anchor="start">규칙: 두 블록 모두 신호 핀이 보드 안쪽, GND(뒷면에서 네모 패드)가 바깥 가장자리. 가운데 핀이 + (왼쪽 블록 VM, 오른쪽 블록 VS — 서로 다른 전원선)</text>
+<rect x="470.0" y="1395.0" width="548.0" height="544.0" rx="10" fill="#e8f3ec" stroke="#1f2328" stroke-width="2"/>
+<circle cx="960.0" cy="1451.0" r="25.6" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="960.0" cy="1887.0" r="25.6" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="868.0" y="1410.0" width="28" height="14" fill="#d0d7de" stroke="#8c959f"/>
+<rect x="868.0" y="1440.0" width="28" height="14" fill="#d0d7de" stroke="#8c959f"/>
+<text class="ts" x="860.0" y="1435.0" text-anchor="end">LEARN (건드리지 않음)</text>
+<circle cx="802.0" cy="1581.0" r="9" fill="#fff" stroke="#1f2328" stroke-width="1.5"/>
+<circle cx="802.0" cy="1639.0" r="9" fill="#fff" stroke="#1f2328" stroke-width="1.5"/>
+<text class="ts" x="802.0" y="1675.0" text-anchor="middle">FAILMODE</text>
+<text class="warn" x="802.0" y="1691.0" text-anchor="middle">점퍼 꽂지 않음</text>
+<circle cx="612.0" cy="1425.0" r="9" fill="#79b8ff" stroke="#1f2328" stroke-width="2"/>
+<circle cx="556.0" cy="1425.0" r="9" fill="#ffb3b3" stroke="#1f2328" stroke-width="2"/>
+<rect x="491.0" y="1416.0" width="18" height="18" fill="#57606a" stroke="#1f2328" stroke-width="2"/>
+<text class="tb" x="628.0" y="1430.0" text-anchor="start">SEL</text>
+<circle cx="612.0" cy="1483.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="556.0" cy="1483.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="491.0" y="1474.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="628.0" y="1488.0" text-anchor="start">M4</text>
+<circle cx="612.0" cy="1541.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="556.0" cy="1541.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="491.0" y="1532.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="628.0" y="1546.0" text-anchor="start">M3</text>
+<circle cx="612.0" cy="1597.0" r="9" fill="#79b8ff" stroke="#bc4c00" stroke-width="2"/>
+<circle cx="556.0" cy="1597.0" r="9" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+<line x1="545.0" y1="1586.0" x2="567.0" y2="1608.0" stroke="#cf222e" stroke-width="2.5"/><line x1="545.0" y1="1608.0" x2="567.0" y2="1586.0" stroke="#cf222e" stroke-width="2.5"/>
+<rect x="491.0" y="1588.0" width="18" height="18" fill="#57606a" stroke="#bc4c00" stroke-width="2"/>
+<text class="tb" x="628.0" y="1602.0" text-anchor="start">M2</text>
+<circle cx="612.0" cy="1653.0" r="9" fill="#79b8ff" stroke="#1f2328" stroke-width="2"/>
+<circle cx="556.0" cy="1653.0" r="9" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+<line x1="545.0" y1="1642.0" x2="567.0" y2="1664.0" stroke="#cf222e" stroke-width="2.5"/><line x1="545.0" y1="1664.0" x2="567.0" y2="1642.0" stroke="#cf222e" stroke-width="2.5"/>
+<rect x="491.0" y="1644.0" width="18" height="18" fill="#57606a" stroke="#1f2328" stroke-width="2"/>
+<text class="tb" x="628.0" y="1658.0" text-anchor="start">M1</text>
+<circle cx="612.0" cy="1741.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="556.0" cy="1741.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="491.0" y="1732.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="628.0" y="1746.0" text-anchor="start">OUT4</text>
+<circle cx="612.0" cy="1803.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="556.0" cy="1803.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="491.0" y="1794.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="628.0" y="1808.0" text-anchor="start">OUT3</text>
+<circle cx="612.0" cy="1863.0" r="9" fill="#79b8ff" stroke="#bc4c00" stroke-width="2"/>
+<circle cx="556.0" cy="1863.0" r="9" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+<line x1="545.0" y1="1852.0" x2="567.0" y2="1874.0" stroke="#cf222e" stroke-width="2.5"/><line x1="545.0" y1="1874.0" x2="567.0" y2="1852.0" stroke="#cf222e" stroke-width="2.5"/>
+<rect x="491.0" y="1854.0" width="18" height="18" fill="#57606a" stroke="#bc4c00" stroke-width="2"/>
+<text class="tb" x="628.0" y="1868.0" text-anchor="start">OUT2</text>
+<circle cx="612.0" cy="1919.0" r="9" fill="#79b8ff" stroke="#1f2328" stroke-width="2"/>
+<circle cx="556.0" cy="1919.0" r="9" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+<line x1="545.0" y1="1908.0" x2="567.0" y2="1930.0" stroke="#cf222e" stroke-width="2.5"/><line x1="545.0" y1="1930.0" x2="567.0" y2="1908.0" stroke="#cf222e" stroke-width="2.5"/>
+<rect x="491.0" y="1910.0" width="18" height="18" fill="#57606a" stroke="#1f2328" stroke-width="2"/>
+<text class="tb" x="628.0" y="1924.0" text-anchor="start">OUT1</text>
+<text class="ts" x="500.0" y="1701.0" text-anchor="middle">GND</text>
+<text class="ts" x="556.0" y="1701.0" text-anchor="middle">VM</text>
+<circle cx="876.0" cy="1539.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="934.0" cy="1539.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="981.0" y="1530.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="860.0" y="1544.0" text-anchor="end">S4</text>
+<circle cx="876.0" cy="1591.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<circle cx="934.0" cy="1591.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="981.0" y="1582.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="860.0" y="1596.0" text-anchor="end">S3</text>
+<circle cx="876.0" cy="1651.0" r="9" fill="#79b8ff" stroke="#bc4c00" stroke-width="2"/>
+<circle cx="934.0" cy="1651.0" r="9" fill="#ffb3b3" stroke="#bc4c00" stroke-width="2"/>
+<rect x="981.0" y="1642.0" width="18" height="18" fill="#57606a" stroke="#bc4c00" stroke-width="2"/>
+<text class="tb" x="860.0" y="1656.0" text-anchor="end">S2</text>
+<circle cx="876.0" cy="1707.0" r="9" fill="#79b8ff" stroke="#1f2328" stroke-width="2"/>
+<circle cx="934.0" cy="1707.0" r="9" fill="#ffb3b3" stroke="#1f2328" stroke-width="2"/>
+<rect x="981.0" y="1698.0" width="18" height="18" fill="#57606a" stroke="#1f2328" stroke-width="2"/>
+<text class="tb" x="860.0" y="1712.0" text-anchor="end">S1</text>
+<circle cx="934.0" cy="1767.0" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<rect x="981.0" y="1758.0" width="18" height="18" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="934.0" y="1795.0" text-anchor="middle">VS</text>
+<text class="ts" x="990.0" y="1795.0" text-anchor="middle">GND</text>
+<text class="ts" x="962.0" y="1815.0" text-anchor="middle">(전원 입력, 안 씀)</text>
+<line class="wb" x1="486.0" y1="1425.0" x2="446.0" y2="1425.0"/>
+<text class="lb" x="438.0" y="1423.0" text-anchor="end">← 수신기 CH5 (3선 모두)</text>
+<text class="ts" x="438.0" y="1439.0" text-anchor="end">신호·+5·GND → MUX 전원(VM)도 여기서 받음</text>
+<line class="wd" x1="486.0" y1="1597.0" x2="446.0" y2="1597.0"/>
+<text class="lo" x="438.0" y="1595.0" text-anchor="end">← Teensy 핀 3 (다음 단계)</text>
+<text class="ts" x="438.0" y="1611.0" text-anchor="end">신호·GND만, 가운데 비움</text>
+<line class="wp" x1="486.0" y1="1653.0" x2="446.0" y2="1653.0"/>
+<text class="lp" x="438.0" y="1651.0" text-anchor="end">← Teensy 핀 2 (신호·GND만)</text>
+<text class="ts" x="438.0" y="1667.0" text-anchor="end">가운데 VM 핀은 비운다 ✕</text>
+<line class="wd" x1="486.0" y1="1863.0" x2="446.0" y2="1863.0"/>
+<text class="lo" x="438.0" y="1861.0" text-anchor="end">→ MDDS30 RC2 (다음 단계)</text>
+<text class="ts" x="438.0" y="1877.0" text-anchor="end">신호·GND만</text>
+<line class="wp" x1="486.0" y1="1919.0" x2="446.0" y2="1919.0"/>
+<text class="lp" x="438.0" y="1917.0" text-anchor="end">→ MDDS30 RC1 (신호·GND만)</text>
+<text class="ts" x="438.0" y="1933.0" text-anchor="end">가운데 VM 핀은 비운다 ✕ (빨간 선 뽑기)</text>
+<line class="wd" x1="1004.0" y1="1651.0" x2="1044.0" y2="1651.0"/>
+<text class="lo" x="1052.0" y="1649.0" text-anchor="start">수신기 CH2 → (다음 단계)</text>
+<text class="ts" x="1052.0" y="1665.0" text-anchor="start">3선 모두</text>
+<line class="wb" x1="1004.0" y1="1707.0" x2="1044.0" y2="1707.0"/>
+<text class="lb" x="1052.0" y="1705.0" text-anchor="start">수신기 CH1 → (3선 모두)</text>
+<text class="ts" x="1052.0" y="1721.0" text-anchor="start">신호·+5·GND → S쪽 전원(VS)도 여기서</text>
+<text class="tb" x="1070" y="1415" text-anchor="start">패드 표시</text>
+<circle cx="1080" cy="1441" r="9" fill="#79b8ff" stroke="#1f2328" stroke-width="2"/>
+<text class="t" x="1100" y="1446" text-anchor="start">신호 — 연결</text>
+<circle cx="1080" cy="1469" r="9" fill="#ffb3b3" stroke="#1f2328" stroke-width="2"/>
+<text class="t" x="1100" y="1474" text-anchor="start">+ (VM·VS) — 연결</text>
+<rect x="1071" y="1488" width="18" height="18" fill="#57606a" stroke="#1f2328" stroke-width="2"/>
+<text class="t" x="1100" y="1502" text-anchor="start">GND — 연결</text>
+<circle cx="1080" cy="1525" r="9" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+<line x1="1069" y1="1514" x2="1091" y2="1536" stroke="#cf222e" stroke-width="2.5"/><line x1="1069" y1="1536" x2="1091" y2="1514" stroke="#cf222e" stroke-width="2.5"/>
+<text class="warn" x="1100" y="1530" text-anchor="start">연결하면 안 됨</text>
+<circle cx="1080" cy="1553" r="9" fill="#79b8ff" stroke="#bc4c00" stroke-width="2"/>
+<text class="lo" x="1100" y="1558" text-anchor="start">다음 단계 (구동)</text>
+<circle cx="1080" cy="1581" r="9" fill="#fff" stroke="#8c959f" stroke-width="2"/>
+<text class="ts" x="1100" y="1586" text-anchor="start">사용 안 함</text>
+<text class="tb" x="1070" y="1807.0" text-anchor="start">왜 가운데 핀을 비우나:</text>
+<text class="ts" x="1070" y="1827.0" text-anchor="start">VM은 수신기의 5 V(UBEC B)를 쓴다.</text>
+<text class="ts" x="1070" y="1845.0" text-anchor="start">Teensy(UBEC A)나 MDDS30의 자체 5 V와</text>
+<text class="ts" x="1070" y="1863.0" text-anchor="start">이으면 두 전원이 맞붙는다 (03-electrical §3.5.1)</text>
+</svg>

@@ -8,7 +8,7 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
   `docs/02_guide/01_firmware/01_teensy_guide.md`에 있다. 이 문서는 그 내용을 반복하지 않는다.
 - **설계의 원본:** `docs/design/dbw.md` §9–12, `docs/design/safety.md`. **절차의 원본:** `docs/build/04-firmware.md`.
   이 문서와 원본이 다르면 원본이 맞다.
-- **마지막 갱신:** 2026-11-14 · 브랜치 `firmware/sensing` (테스트 벤치 검증 반영)
+- **마지막 갱신:** 2026-11-16 · 브랜치 `firmware/steering` (RC 수신기 i-BUS 연결, 조향 설계, 신호 기판 문서 반영)
 - **경로 표기:** 모든 경로는 **저장소 루트** 기준이다. 저장소 밖 경로는 출처(공식 문서의 설치 위치, 도구 기본값)를 함께 적었다.
 
 ---
@@ -101,11 +101,11 @@ firmware/
 ```
 
 - **커밋된 것:** 위 트리 전체(산출물 제외)
+  - `bench/src/ibus_monitor.cpp` — `firmware/steering`에서 커밋. 수신기로 하드웨어 검증(2026-11-14, 7.8절)
 - **아직 커밋하지 않은 것 (해당 단계에서 커밋 예정)**
   - `bench/src/pwm_effort_check.cpp` — Stage 1 (출력 부호, PWM 주기, hang 테스트)
-  - `bench/src/ibus_monitor.cpp` — Stage 2 (RC 수신기)
   - `bench/src/estop_relay_check.cpp` — E-stop 단계
-  - 세 파일 모두 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
+  - 두 파일 모두 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
 - **저장소 밖에 보관 중 (개발자 PC)**
   - 저장소 옆 폴더 `../mrider-wip/mitt_dbw_steer_drive_2026-11-13/` — Stage 1 조향 루프 + 구동 채널 코드
     (테스트 104개 통과). **이 PC에만 있고 다른 팀원 PC에는 없다.** 필요하면 해당 단계 브랜치로 옮겨 공유한다.
@@ -336,6 +336,20 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
     `firmware/bench/platformio.ini`에 `monitor_port = /dev/ttyACM*` 추가.
 - **회로도:** `docs/02_guide/01_firmware/images/stage0_bench_schematic.svg` (Teensy 실제 핀 배치 기준, 생성 스크립트 동봉)
 
+### 7.8 RC 수신기 i-BUS 연결 (2026-11-14, firmware/steering 준비)
+
+- **결과:** 검증 기록은 `docs/03_validation/01_firmware/02_steering_bench.md` §1·§2, 설명은 `docs/02_guide/01_firmware/02_rc_receiver_guide.md`
+  - i-BUS SERVO 신호 대기 전압 **3.3 V** → 신호 기판 **R5 = 점퍼선, R6 생략**(`03-electrical.md` §3.5.4 표)
+  - `ibus_monitor`: 128–132 fr/s, bad 0 — 송신기 → 수신기 → 핀 15 경로 동작
+- **겪은 문제와 해결**
+  - **"신호 핀이 5 V":** i-BUS 포트의 가운데 핀을 신호로 알고 잼. 서보 커넥터의 가운데는 항상 **+ 전원**이다.
+    위 핀을 다시 재서 3.3 V 확인. 교훈: 전압을 재기 전에 도통 테스트로 핀 역할부터 확인한다.
+  - **수신기 LED 깜빡임:** 송신기와 연결이 안 된 상태. 송신기 쪽 조치 후 연결됨(시작 경고 해제였는지 바인딩이었는지 기록 필요).
+  - **모니터에 아무 줄도 안 나옴:** 업로드 직후 Claude가 출력을 직접 읽으려고 `stty`로 포트를 열다가 멈췄고, 그 뒤 USB가 다시 붙으면서
+    시리얼이 이상한 상태로 남음. USB를 다시 꽂자 정상. 교훈: 시리얼 포트는 한 프로그램만 쓴다. 확인은 `pio device monitor`로 한다.
+  - **`monitor_port`가 `한`으로 바뀌어 있음:** 한글 입력 중 실수. `/dev/ttyACM*`로 복구.
+- **CH5가 1727(중간값):** 다이얼(VrA)에 연결된 송신기 기본 설정으로 추정. MUX SEL은 2단 스위치여야 하므로 채널 배치 확인 때 정한다(조향 설계 D1).
+
 ---
 
 ## 8. 브랜치와 커밋 규칙
@@ -376,15 +390,12 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
 | 브랜치 | 추가할 것 | 함께 할 배선 | 통과 기준 (gate) |
 |---|---|---|---|
 | `firmware/sensing` (지금) | — | AS5600, Hall 래치 2개, 풀업 | wrap 없음, k·c0 측정, 센서 뽑으면 고장 비트, 엔코더 방향, USB 30분 끊김 0 |
-| `firmware/steering` | 명령 수신, 조향 PID, 파라미터(게인·`enable`), 한계·stall·끊김 규칙, hang 테스트 빌드 | MDDS30(RC1), 조향 모터, 전류 제한 전원, 신호 MUX | 정상상태 오차 ≤ 1°, 스텝·RMS·드리프트 기준, 안전 동작, hang 테스트 → **Merge 1 (11/23)** |
-| `firmware/drive` | 구동 채널(속도 상한·가감속 제한), 바퀴 속도 활용 | RC2, 후륜 모터 (바퀴 띄움) | 명령 속도 추종, 끊김 시 즉시 정지 |
-| `firmware/rc` | i-BUS 해석, MANUAL_RC 모드, RC arm | RC 수신기(전압 확인 후), 신호 MUX SEL | Layer A 200 ms 이내 전환, RC 상실 → ESTOP, Layer B는 Teensy 정지 상태로 시험 |
+| `firmware/steering` | **1차: RC 조향**(i-BUS 해석, RC arm, MANUAL_RC, 스틱 = 조향각) → **2차: 컴퓨터 조향**(명령 수신, AUTONOMOUS). 공통: 조향 PID, 게인 파라미터, 한계·stall·끊김 규칙, hang 테스트 빌드 | MDDS30(RC1), 조향 모터, 전류 제한 전원, 신호 MUX, RC 수신기(전압 확인 후) | 1차: RC arm·override·RC 상실 → ESTOP, Layer B는 Teensy 정지 상태로 시험. 2차: 정상상태 오차 ≤ 1° 등 6가지 측정 → **Merge 1 (11/23)** |
+| `firmware/drive` | 구동 채널(속도 상한·가감속 제한), 바퀴 속도 활용, 스로틀 스틱(CH2) | RC2, 후륜 모터 (바퀴 띄움) | 명령 속도 추종, 끊김 시 즉시 정지 |
 | `firmware/estop` | E-stop 감지, hold-off, 재허가 규칙, 릴레이 | E-stop 분압 회로, 릴레이 MUX | 눌림/해제/선 빠짐 동작, 해제 시 움직임 없음 (`06-bench-test.md` row 5a) |
 
-- **단계별로 결정이 필요한 것**
-  - steering: Stage 1에서 RC 없이 무엇으로 허가할지 → 보관 코드는 `enable` 파라미터 사용
-  - steering: 신호 MUX가 RC 수신기 없이 어느 입력을 고르는지(Pololu 2806 설명서 확인) — 문서에 없음
-  - rc: 모드 스위치 채널과 arm 동작(`[POLICY]`), 송신기 failsafe 설정
+- **조향 설계와 결정 대기 항목:** `02_steering_design.md` (모드 스위치·arm 동작, 송신기 failsafe, debug 토픽, Layer B 처리, 수치 기준값 등)
+- **단계별로 결정이 필요한 것 (그 밖)**
   - estop: 릴레이를 DBW로 붙이는 조건, `DbwStatus.msg`에 E-stop 비트 추가 여부
 
 ---
