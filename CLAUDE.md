@@ -72,7 +72,8 @@ pio run -e i2c_scan -t upload && pio device monitor
 - **DBW 데이터 경로:** 노트북(ROS 2) ↔ micro-ROS agent ↔ USB ↔ Teensy 4.1.
   - 노트북 → Teensy: `/mitt/dbw/command` (`mitt_msgs/DbwCommand`). Teensy → 노트북: `/mitt/dbw/status` (`DbwStatus`).
   - Teensy가 200 Hz 조향 위치 루프를 돌리고 서보 PWM(핀 2·3) → 신호 MUX → MDDS30(RC1 조향, RC2 구동)으로 낸다.
-  - 센서는 AS5600 조향 절대각(I²C 18·19), 구동 엔코더 Hall 래치(QDC 0·1).
+  - 센서는 AS5600 조향 절대각(I²C 18·19), 구동 엔코더 Hall 래치(QDC 0·1), IMU BNO085(두 번째 I²C `Wire1`,
+    SDA1 17·SCL1 16 — 2026-11-16 원본 결정, `docs/design/sensors.md` §3). IMU 읽기는 조향 루프를 늦추면 안 된다.
 - **안전은 겹으로 되어 있다** (`docs/design/safety.md`):
   - 하드웨어가 멈춘다: E-stop, 릴레이 MUX(기본 STOCK), 신호 MUX(Layer B).
   - 펌웨어는 함부로 재출발하지 않는다: E-stop 감지, 재허가(arm), 끊김 감시, 워치독.
