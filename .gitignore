@@ -58,3 +58,4 @@ docs/images/.system-overview.gv
 
 # pytest
 .pytest_cache/
+.vscode/

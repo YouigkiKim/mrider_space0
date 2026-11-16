@@ -1,0 +1,305 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1190 1290" width="1190" height="1290" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<title>Stage 0 테스트 벤치 회로도 — Teensy 4.1 실제 핀 배치 기준</title>
+<style>
+.w{stroke:#1f2328;stroke-width:2;fill:none}
+.box{stroke:#1f2328;stroke-width:2;fill:#fff}
+.chip{stroke:#1f2328;stroke-width:2;fill:#f6f8fa}
+.pcb{stroke:#1f2328;stroke-width:2;fill:#e8f3ec}
+.board{stroke:#8c959f;stroke-width:1.5;fill:none;stroke-dasharray:6 5}
+.res{stroke:#1f2328;stroke-width:2;fill:#fff}
+.dot{fill:#1f2328}
+.nc{stroke:#1f2328;stroke-width:1.5;fill:#fff}
+.pill{stroke:#cf222e;stroke-width:1.5;fill:#fff5f5}
+.pilltx{fill:#cf222e;font-size:12px;font-weight:700;text-anchor:middle}
+.t{fill:#1f2328;font-size:13px}
+.ts{fill:#57606a;font-size:12px}
+.tb{fill:#1f2328;font-size:14px;font-weight:700}
+.h1{fill:#1f2328;font-size:20px;font-weight:700}
+.pin{font-size:11px;fill:#57606a}
+.pinU{font-size:11px;fill:#1a7f37;font-weight:700}
+.pinL{font-size:11px;fill:#bc4c00;font-weight:700}
+.pinD{font-size:11px;fill:#0969da;font-weight:700}
+.hU{fill:#1a7f37;stroke:#1f2328;stroke-width:1}
+.hL{fill:#ffb77a;stroke:#1f2328;stroke-width:1}
+.hD{fill:#79b8ff;stroke:#1f2328;stroke-width:1}
+.hN{fill:#fff;stroke:#8c959f;stroke-width:1}
+.lbl{fill:#0969da;font-size:12px;font-weight:700}
+.step{fill:#fff;stroke:#0969da;stroke-width:1.5}
+.steptx{fill:#0969da;font-size:12px;font-weight:700;text-anchor:middle}
+.mN{fill:#ffd8d3;stroke:#1f2328;stroke-width:1}
+.mS{fill:#d3e3ff;stroke:#1f2328;stroke-width:1}
+.mtx{fill:#1f2328;font-size:10px;text-anchor:middle}
+</style>
+<rect x="0" y="0" width="1190" height="1290" fill="#fff"/>
+<text class="h1" x="30" y="40">Stage 0 테스트 벤치 회로도 — Teensy 4.1 실제 핀 배치 기준</text>
+<text class="ts" x="30" y="63">Teensy를 윗면(부품면)에서 본 모습, USB가 위쪽. 핀 위치는 실제 보드와 같다. 센서만 연결 (모터·드라이버·RC·E-stop 없음).</text>
+<text class="ts" x="30" y="81">원본: PJRC Teensy 4.1 핀 카드, docs/build/04-firmware.md 핀 표, docs/build/03-electrical.md §3.5.2–3.5.3</text>
+<rect class="board" x="12" y="300" width="196" height="360" rx="10"/>
+<text class="ts" x="200" y="318" text-anchor="end">보드 B</text>
+<rect class="board" x="216" y="150" width="676" height="870" rx="10"/>
+<text class="ts" x="884" y="1012" text-anchor="end">보드 A — Teensy + 풀업 · 커패시터</text>
+<rect class="board" x="900" y="330" width="278" height="250" rx="10"/>
+<text class="ts" x="1170" y="572" text-anchor="end">보드 C</text>
+<rect class="box" x="500" y="96" width="140" height="44" rx="8"/>
+<text class="tb" x="570" y="116" text-anchor="middle">노트북</text>
+<text class="ts" x="570" y="132" text-anchor="middle">WSL + agent</text>
+<line class="w" x1="570" y1="140" x2="570" y2="186"/>
+<text class="ts" x="650" y="123">← USB: 업로드 · 통신 · 5 V 전원</text>
+<rect class="pcb" x="470" y="186" width="200" height="784" rx="8"/>
+<rect class="chip" x="545" y="178" width="50" height="22" rx="3"/>
+<text class="ts" x="570" y="194" text-anchor="middle">USB</text>
+<text class="tb" x="570" y="956" text-anchor="middle">Teensy 4.1</text>
+<text class="ts" x="570" y="770" text-anchor="middle">윗면</text>
+<circle class="hU" cx="484" cy="230" r="5"/>
+<text class="pinU" x="494" y="234">GND</text>
+<circle class="hU" cx="484" cy="260" r="5"/>
+<text class="pinU" x="494" y="264">0 엔코더 A</text>
+<circle class="hU" cx="484" cy="290" r="5"/>
+<text class="pinU" x="494" y="294">1 엔코더 B</text>
+<circle class="hL" cx="484" cy="320" r="5"/>
+<text class="pinL" x="494" y="324">2 조향 PWM</text>
+<circle class="hL" cx="484" cy="350" r="5"/>
+<text class="pinL" x="494" y="354">3 구동 PWM</text>
+<circle class="hN" cx="484" cy="380" r="5"/>
+<text class="pin" x="494" y="384">4</text>
+<circle class="hN" cx="484" cy="410" r="5"/>
+<text class="pin" x="494" y="414">5</text>
+<circle class="hN" cx="484" cy="440" r="5"/>
+<text class="pin" x="494" y="444">6</text>
+<circle class="hN" cx="484" cy="470" r="5"/>
+<text class="pin" x="494" y="474">7</text>
+<circle class="hN" cx="484" cy="500" r="5"/>
+<text class="pin" x="494" y="504">8</text>
+<circle class="hN" cx="484" cy="530" r="5"/>
+<text class="pin" x="494" y="534">9</text>
+<circle class="hN" cx="484" cy="560" r="5"/>
+<text class="pin" x="494" y="564">10</text>
+<circle class="hN" cx="484" cy="590" r="5"/>
+<text class="pin" x="494" y="594">11</text>
+<circle class="hN" cx="484" cy="620" r="5"/>
+<text class="pin" x="494" y="624">12</text>
+<circle class="hN" cx="484" cy="650" r="5"/>
+<text class="pin" x="494" y="654">3.3V</text>
+<circle class="hN" cx="484" cy="680" r="5"/>
+<text class="pin" x="494" y="684">24</text>
+<circle class="hN" cx="484" cy="710" r="5"/>
+<text class="pin" x="494" y="714">25</text>
+<circle class="hN" cx="484" cy="740" r="5"/>
+<text class="pin" x="494" y="744">26</text>
+<circle class="hN" cx="484" cy="770" r="5"/>
+<text class="pin" x="494" y="774">27</text>
+<circle class="hN" cx="484" cy="800" r="5"/>
+<text class="pin" x="494" y="804">28</text>
+<circle class="hN" cx="484" cy="830" r="5"/>
+<text class="pin" x="494" y="834">29</text>
+<circle class="hN" cx="484" cy="860" r="5"/>
+<text class="pin" x="494" y="864">30</text>
+<circle class="hN" cx="484" cy="890" r="5"/>
+<text class="pin" x="494" y="894">31</text>
+<circle class="hN" cx="484" cy="920" r="5"/>
+<text class="pin" x="494" y="924">32</text>
+<circle class="hN" cx="656" cy="230" r="5"/>
+<text class="pin" x="646" y="234" text-anchor="end">VIN</text>
+<circle class="hU" cx="656" cy="260" r="5"/>
+<text class="pinU" x="646" y="264" text-anchor="end">GND</text>
+<circle class="hU" cx="656" cy="290" r="5"/>
+<text class="pinU" x="646" y="294" text-anchor="end">3.3V</text>
+<circle class="hN" cx="656" cy="320" r="5"/>
+<text class="pin" x="646" y="324" text-anchor="end">23</text>
+<circle class="hN" cx="656" cy="350" r="5"/>
+<text class="pin" x="646" y="354" text-anchor="end">22</text>
+<circle class="hL" cx="656" cy="380" r="5"/>
+<text class="pinL" x="646" y="384" text-anchor="end">릴레이 21</text>
+<circle class="hL" cx="656" cy="410" r="5"/>
+<text class="pinL" x="646" y="414" text-anchor="end">E-stop 20</text>
+<circle class="hU" cx="656" cy="440" r="5"/>
+<text class="pinU" x="646" y="444" text-anchor="end">SCL 19</text>
+<circle class="hU" cx="656" cy="470" r="5"/>
+<text class="pinU" x="646" y="474" text-anchor="end">SDA 18</text>
+<circle class="hN" cx="656" cy="500" r="5"/>
+<text class="pin" x="646" y="504" text-anchor="end">17</text>
+<circle class="hN" cx="656" cy="530" r="5"/>
+<text class="pin" x="646" y="534" text-anchor="end">16</text>
+<circle class="hL" cx="656" cy="560" r="5"/>
+<text class="pinL" x="646" y="564" text-anchor="end">i-BUS 15</text>
+<circle class="hN" cx="656" cy="590" r="5"/>
+<text class="pin" x="646" y="594" text-anchor="end">14</text>
+<circle class="hD" cx="656" cy="620" r="5"/>
+<text class="pinD" x="646" y="624" text-anchor="end">LED 13</text>
+<circle class="hN" cx="656" cy="650" r="5"/>
+<text class="pin" x="646" y="654" text-anchor="end">GND</text>
+<circle class="hN" cx="656" cy="680" r="5"/>
+<text class="pin" x="646" y="684" text-anchor="end">41</text>
+<circle class="hN" cx="656" cy="710" r="5"/>
+<text class="pin" x="646" y="714" text-anchor="end">40</text>
+<circle class="hN" cx="656" cy="740" r="5"/>
+<text class="pin" x="646" y="744" text-anchor="end">39</text>
+<circle class="hN" cx="656" cy="770" r="5"/>
+<text class="pin" x="646" y="774" text-anchor="end">38</text>
+<circle class="hN" cx="656" cy="800" r="5"/>
+<text class="pin" x="646" y="804" text-anchor="end">37</text>
+<circle class="hN" cx="656" cy="830" r="5"/>
+<text class="pin" x="646" y="834" text-anchor="end">36</text>
+<circle class="hN" cx="656" cy="860" r="5"/>
+<text class="pin" x="646" y="864" text-anchor="end">35</text>
+<circle class="hN" cx="656" cy="890" r="5"/>
+<text class="pin" x="646" y="894" text-anchor="end">34</text>
+<circle class="hN" cx="656" cy="920" r="5"/>
+<text class="pin" x="646" y="924" text-anchor="end">33</text>
+<line class="w" x1="470" y1="230" x2="440" y2="230"/>
+<line class="w" x1="440" y1="230" x2="440" y2="238"/>
+<g class="w"><line x1="430" y1="238" x2="450" y2="238"/><line x1="433.5" y1="242" x2="446.5" y2="242"/><line x1="437" y1="246" x2="443" y2="246"/></g>
+<line class="w" x1="470" y1="260" x2="350" y2="260"/>
+<line class="w" x1="350" y1="260" x2="350" y2="400"/>
+<line class="w" x1="350" y1="400" x2="190" y2="400"/>
+<line class="w" x1="470" y1="290" x2="385" y2="290"/>
+<line class="w" x1="385" y1="290" x2="385" y2="590"/>
+<line class="w" x1="385" y1="590" x2="190" y2="590"/>
+<text class="lbl" x="360" y="254">A</text>
+<text class="lbl" x="395" y="284">B</text>
+<circle class="step" cx="420" cy="345" r="10"/><text class="steptx" x="420" y="349">⑤</text>
+<circle class="dot" cx="300" cy="400" r="4"/>
+<line class="w" x1="300" y1="400" x2="300" y2="388"/>
+<rect class="res" x="294" y="352" width="12" height="36"/>
+<text class="t" x="314" y="367" text-anchor="start">R1</text><text class="ts" x="314" y="383" text-anchor="start">10 kΩ</text>
+<line class="w" x1="300" y1="352" x2="300" y2="342"/>
+<rect class="pill" x="275" y="324" width="50" height="18" rx="9"/><text class="pilltx" x="300" y="337">+3V3</text>
+<circle class="dot" cx="250" cy="400" r="4"/>
+<line class="w" x1="250" y1="400" x2="250" y2="417"/>
+<line class="w" x1="238" y1="417" x2="262" y2="417"/>
+<line class="w" x1="238" y1="424" x2="262" y2="424"/>
+<line class="w" x1="250" y1="424" x2="250" y2="436"/>
+<g class="w"><line x1="240" y1="436" x2="260" y2="436"/><line x1="243.5" y1="440" x2="256.5" y2="440"/><line x1="247" y1="444" x2="253" y2="444"/></g>
+<text class="t" x="264" y="422">C1</text><text class="ts" x="264" y="438">1 nF</text>
+<circle class="dot" cx="300" cy="590" r="4"/>
+<line class="w" x1="300" y1="590" x2="300" y2="578"/>
+<rect class="res" x="294" y="542" width="12" height="36"/>
+<text class="t" x="314" y="557" text-anchor="start">R2</text><text class="ts" x="314" y="573" text-anchor="start">10 kΩ</text>
+<line class="w" x1="300" y1="542" x2="300" y2="532"/>
+<rect class="pill" x="275" y="514" width="50" height="18" rx="9"/><text class="pilltx" x="300" y="527">+3V3</text>
+<circle class="dot" cx="250" cy="590" r="4"/>
+<line class="w" x1="250" y1="590" x2="250" y2="607"/>
+<line class="w" x1="238" y1="607" x2="262" y2="607"/>
+<line class="w" x1="238" y1="614" x2="262" y2="614"/>
+<line class="w" x1="250" y1="614" x2="250" y2="626"/>
+<g class="w"><line x1="240" y1="626" x2="260" y2="626"/><line x1="243.5" y1="630" x2="256.5" y2="630"/><line x1="247" y1="634" x2="253" y2="634"/></g>
+<text class="t" x="264" y="612">C2</text><text class="ts" x="264" y="628">1 nF</text>
+<rect class="chip" x="70" y="372" width="120" height="56" rx="6"/>
+<text class="tb" x="130" y="397" text-anchor="middle">H1 DRV5013</text>
+<text class="ts" x="130" y="415" text-anchor="middle">래치 A</text>
+<text class="pinD" x="101" y="367">1 VCC</text>
+<text class="pinD" x="188" y="367" text-anchor="end">3 OUT →</text>
+<text class="pinD" x="159" y="444" text-anchor="end">2 GND</text>
+<line class="w" x1="95" y1="372" x2="95" y2="355"/>
+<rect class="pill" x="70" y="337" width="50" height="18" rx="9"/><text class="pilltx" x="95" y="350">+3V3</text>
+<line class="w" x1="165" y1="428" x2="165" y2="448"/>
+<g class="w"><line x1="155" y1="448" x2="175" y2="448"/><line x1="158.5" y1="452" x2="171.5" y2="452"/><line x1="162" y1="456" x2="168" y2="456"/></g>
+<circle class="dot" cx="95" cy="362" r="4"/>
+<line class="w" x1="95" y1="362" x2="40" y2="362"/>
+<line class="w" x1="40" y1="362" x2="40" y2="392"/>
+<line class="w" x1="28" y1="392" x2="52" y2="392"/>
+<line class="w" x1="28" y1="399" x2="52" y2="399"/>
+<line class="w" x1="40" y1="399" x2="40" y2="410"/>
+<g class="w"><line x1="30" y1="410" x2="50" y2="410"/><line x1="33.5" y1="414" x2="46.5" y2="414"/><line x1="37" y1="418" x2="43" y2="418"/></g>
+<text class="t" x="40" y="436" text-anchor="middle">C3</text>
+<text class="ts" x="40" y="451" text-anchor="middle">100 nF</text>
+<rect class="chip" x="70" y="562" width="120" height="56" rx="6"/>
+<text class="tb" x="130" y="587" text-anchor="middle">H2 DRV5013</text>
+<text class="ts" x="130" y="605" text-anchor="middle">래치 B</text>
+<text class="pinD" x="101" y="557">1 VCC</text>
+<text class="pinD" x="188" y="557" text-anchor="end">3 OUT →</text>
+<text class="pinD" x="159" y="634" text-anchor="end">2 GND</text>
+<line class="w" x1="95" y1="562" x2="95" y2="545"/>
+<rect class="pill" x="70" y="527" width="50" height="18" rx="9"/><text class="pilltx" x="95" y="540">+3V3</text>
+<line class="w" x1="165" y1="618" x2="165" y2="638"/>
+<g class="w"><line x1="155" y1="638" x2="175" y2="638"/><line x1="158.5" y1="642" x2="171.5" y2="642"/><line x1="162" y1="646" x2="168" y2="646"/></g>
+<circle class="dot" cx="95" cy="552" r="4"/>
+<line class="w" x1="95" y1="552" x2="40" y2="552"/>
+<line class="w" x1="40" y1="552" x2="40" y2="582"/>
+<line class="w" x1="28" y1="582" x2="52" y2="582"/>
+<line class="w" x1="28" y1="589" x2="52" y2="589"/>
+<line class="w" x1="40" y1="589" x2="40" y2="600"/>
+<g class="w"><line x1="30" y1="600" x2="50" y2="600"/><line x1="33.5" y1="604" x2="46.5" y2="604"/><line x1="37" y1="608" x2="43" y2="608"/></g>
+<text class="t" x="40" y="626" text-anchor="middle">C4</text>
+<text class="ts" x="40" y="641" text-anchor="middle">100 nF</text>
+<circle class="step" cx="140" cy="346" r="10"/><text class="steptx" x="140" y="350">①</text>
+<circle class="step" cx="222" cy="422" r="10"/><text class="steptx" x="222" y="426">②</text>
+<rect class="mN" x="24" y="462" width="40" height="12"/>
+<text class="mtx" x="44" y="472">N</text>
+<rect class="mS" x="24" y="474" width="40" height="12"/>
+<text class="mtx" x="44" y="484">S</text>
+<rect class="mN" x="24" y="486" width="40" height="12"/>
+<text class="mtx" x="44" y="496">N</text>
+<rect class="mS" x="24" y="498" width="40" height="12"/>
+<text class="mtx" x="44" y="508">S</text>
+<rect class="mN" x="24" y="510" width="40" height="12"/>
+<text class="mtx" x="44" y="520">N</text>
+<rect class="mS" x="24" y="522" width="40" height="12"/>
+<text class="mtx" x="44" y="532">S</text>
+<text class="ts" x="76" y="484">← 허브 자석</text>
+<text class="ts" x="76" y="500">(N/S 교대)</text>
+<line class="w" x1="670" y1="230" x2="696" y2="230"/>
+<circle class="nc" cx="700" cy="230" r="4"/>
+<text class="ts" x="712" y="234">VIN: 비움 (가이드 7.2)</text>
+<line class="w" x1="670" y1="260" x2="720" y2="260"/>
+<line class="w" x1="720" y1="260" x2="720" y2="266"/>
+<g class="w"><line x1="710" y1="266" x2="730" y2="266"/><line x1="713.5" y1="270" x2="726.5" y2="270"/><line x1="717" y1="274" x2="723" y2="274"/></g>
+<line class="w" x1="670" y1="290" x2="760" y2="290"/>
+<rect class="pill" x="760" y="281" width="50" height="18" rx="9"/><text class="pilltx" x="785" y="294">+3V3</text>
+<text class="ts" x="818" y="294">← 공급원</text>
+<line class="w" x1="670" y1="440" x2="930" y2="440"/>
+<line class="w" x1="670" y1="470" x2="930" y2="470"/>
+<text class="lbl" x="860" y="434" text-anchor="middle">SCL</text>
+<text class="lbl" x="860" y="486" text-anchor="middle">SDA</text>
+<circle class="dot" cx="800" cy="440" r="4"/>
+<line class="w" x1="800" y1="440" x2="800" y2="428"/>
+<rect class="res" x="794" y="392" width="12" height="36"/>
+<text class="t" x="814" y="407" text-anchor="start">R4</text><text class="ts" x="814" y="423" text-anchor="start">4.7 kΩ</text>
+<line class="w" x1="800" y1="392" x2="800" y2="382"/>
+<rect class="pill" x="775" y="364" width="50" height="18" rx="9"/><text class="pilltx" x="800" y="377">+3V3</text>
+<circle class="dot" cx="760" cy="470" r="4"/>
+<line class="w" x1="760" y1="470" x2="760" y2="482"/>
+<rect class="res" x="754" y="482" width="12" height="36"/>
+<text class="t" x="774" y="497" text-anchor="start">R3</text><text class="ts" x="774" y="513" text-anchor="start">4.7 kΩ</text>
+<line class="w" x1="760" y1="518" x2="760" y2="528"/>
+<rect class="pill" x="735" y="528" width="50" height="18" rx="9"/><text class="pilltx" x="760" y="541">+3V3</text>
+<circle class="step" cx="862" cy="455" r="10"/><text class="steptx" x="862" y="459">③</text>
+<rect class="chip" x="930" y="410" width="160" height="130" rx="6"/>
+<text class="t" x="938" y="445">SCL</text>
+<text class="t" x="938" y="475">SDA</text>
+<text class="tb" x="1030" y="442" text-anchor="middle">U1 AS5600</text>
+<text class="ts" x="1030" y="459" text-anchor="middle">breakout</text>
+<text class="ts" x="1030" y="476" text-anchor="middle">I²C 주소 0x36</text>
+<text class="t" x="960" y="532" text-anchor="middle">VCC</text>
+<text class="t" x="1055" y="532" text-anchor="middle">GND</text>
+<line class="w" x1="960" y1="540" x2="960" y2="556"/>
+<rect class="pill" x="935" y="556" width="50" height="18" rx="9"/><text class="pilltx" x="960" y="569">+3V3</text>
+<line class="w" x1="1055" y1="540" x2="1055" y2="554"/>
+<g class="w"><line x1="1045" y1="554" x2="1065" y2="554"/><line x1="1048.5" y1="558" x2="1061.5" y2="558"/><line x1="1052" y1="562" x2="1058" y2="562"/></g>
+<path class="mN" d="M1140 448 A22 22 0 0 0 1140 492 Z"/>
+<path class="mS" d="M1140 448 A22 22 0 0 1 1140 492 Z"/>
+<text class="mtx" x="1131" y="474">N</text><text class="mtx" x="1149" y="474">S</text>
+<text class="ts" x="1140" y="440" text-anchor="middle">자석</text>
+<circle class="step" cx="1140" cy="510" r="10"/><text class="steptx" x="1140" y="514">④</text>
+<line x1="30" y1="1040" x2="1160" y2="1040" stroke="#d0d7de" stroke-width="1"/>
+<text class="tb" x="30" y="1066">핀 색</text>
+<circle class="hU" cx="40" cy="1082" r="5"/><text class="t" x="54" y="1086">지금 연결 (Stage 0)</text>
+<circle class="hL" cx="40" cy="1104" r="5"/><text class="t" x="54" y="1108">다음 단계에서 사용 — 지금은 연결 안 함</text>
+<circle class="hD" cx="40" cy="1126" r="5"/><text class="t" x="54" y="1130">내장 LED (연결 없음, 루프마다 깜빡임)</text>
+<circle class="hN" cx="40" cy="1148" r="5"/><text class="t" x="54" y="1152">사용 안 함</text>
+<text class="t" x="30" y="1186">핀 2·3은 1500 µs, 21은 LOW로 펌웨어가 고정해 둔다.</text>
+<text class="t" x="30" y="1208">왼쪽 아래 3.3V 핀과 오른쪽 가운데 GND 핀도 같은 전원이지만 이 배치에서는 쓰지 않는다.</text>
+<text class="t" x="30" y="1274">C3·C4 100 nF는 래치 바로 옆, VCC–GND 사이 (데이터시트·§3.5.4). C1·C2 1 nF(신호)와 다른 역할.</text>
+<text class="t" x="30" y="1252">DRV5013(TO-92): 인쇄면(사다리꼴의 좁은 쪽)을 보고 다리를 아래로 두면 왼쪽부터 1 VCC · 2 GND · 3 OUT.</text>
+<text class="t" x="30" y="1230">브레드보드에서는 Teensy 양쪽의 전원 레일을 점퍼 2개로 이어 3.3 V·GND를 양쪽에 보낸다 (§3.5.3).</text>
+<text class="tb" x="640" y="1066">기호와 확인 순서 (가이드 7.3)</text>
+<rect class="pill" x="640" y="1076" width="50" height="18" rx="9"/><text class="pilltx" x="665" y="1089">+3V3</text>
+<text class="t" x="700" y="1090">모두 오른쪽 3.3V 핀 한 곳에 연결</text>
+<g class="w"><line x1="655" y1="1104" x2="675" y2="1104"/><line x1="658.5" y1="1108" x2="671.5" y2="1108"/><line x1="662" y1="1112" x2="668" y2="1112"/></g>
+<text class="t" x="700" y="1112">GND, 모두 공통 · ● 연결점</text>
+<text class="t" x="650" y="1138">① 멀티미터: +3V3 레일 3.3 V</text>
+<text class="t" x="650" y="1158">② 멀티미터+자석: OUT 0↔3.3 V로 바뀌고 유지</text>
+<text class="t" x="650" y="1178">③ i2c_scan: 0x36 하나만</text>
+<text class="t" x="650" y="1198">④ as5600_check: AGC 40–90, wrap 없음</text>
+<text class="t" x="650" y="1218">⑤ quad_count: 허브 한 바퀴 ±36</text>
+</svg>
