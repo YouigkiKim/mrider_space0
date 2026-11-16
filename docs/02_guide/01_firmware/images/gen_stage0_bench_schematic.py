@@ -3,6 +3,8 @@
 
 Usage (from this folder):  python3 gen_stage0_bench_schematic.py stage0_bench_schematic.svg
 Edit ROLE below to recolour pins for a later stage, then regenerate.
+Reference designators follow docs/images/signal-board-perfboard-layout.svg:
+R1/R2 = 4.7k on SCL/SDA, R3/R4 = 10k on drive A/B, C1/C2 = 1nF on drive A/B.
 
 Teensy 4.1, top (component) side, USB at the top:
   left edge,  top->bottom: GND 0 1 2 3 4 5 6 7 8 9 10 11 12 3.3V 24 25 26 27 28 29 30 31 32
@@ -169,12 +171,12 @@ line(BX0, y1, 385, y1); line(385, y1, 385, B_ROW); line(385, B_ROW, 190, B_ROW)
 a(f'<text class="lbl" x="360" y="{y0-6}">A</text>')
 a(f'<text class="lbl" x="395" y="{y1-6}">B</text>')
 step(420, 345, "⑤")
-# R1 / C1 on row A
-dot(300, A_ROW); line(300, A_ROW, 300, A_ROW - 12); res_v(300, A_ROW - 48, "R1", "10 kΩ")
+# R3 / C1 on row A
+dot(300, A_ROW); line(300, A_ROW, 300, A_ROW - 12); res_v(300, A_ROW - 48, "R3", "10 kΩ")
 line(300, A_ROW - 48, 300, A_ROW - 58); pill(300, A_ROW - 76)
 dot(250, A_ROW); cap_down(250, A_ROW, "C1", "1 nF")
-# R2 / C2 on row B
-dot(300, B_ROW); line(300, B_ROW, 300, B_ROW - 12); res_v(300, B_ROW - 48, "R2", "10 kΩ")
+# R4 / C2 on row B
+dot(300, B_ROW); line(300, B_ROW, 300, B_ROW - 12); res_v(300, B_ROW - 48, "R4", "10 kΩ")
 line(300, B_ROW - 48, 300, B_ROW - 58); pill(300, B_ROW - 76)
 dot(250, B_ROW); cap_down(250, B_ROW, "C2", "1 nF")
 
@@ -226,11 +228,11 @@ line(BX1, R_SCL, AS_X0, R_SCL)
 line(BX1, R_SDA, AS_X0, R_SDA)
 a(f'<text class="lbl" x="860" y="{R_SCL-6}" text-anchor="middle">SCL</text>')
 a(f'<text class="lbl" x="860" y="{R_SDA+16}" text-anchor="middle">SDA</text>')
-# R4 on SCL, upwards
-dot(800, R_SCL); line(800, R_SCL, 800, R_SCL - 12); res_v(800, R_SCL - 48, "R4", "4.7 kΩ")
+# R1 on SCL, upwards
+dot(800, R_SCL); line(800, R_SCL, 800, R_SCL - 12); res_v(800, R_SCL - 48, "R1", "4.7 kΩ")
 line(800, R_SCL - 48, 800, R_SCL - 58); pill(800, R_SCL - 76)
-# R3 on SDA, downwards
-dot(760, R_SDA); line(760, R_SDA, 760, R_SDA + 12); res_v(760, R_SDA + 12, "R3", "4.7 kΩ")
+# R2 on SDA, downwards
+dot(760, R_SDA); line(760, R_SDA, 760, R_SDA + 12); res_v(760, R_SDA + 12, "R2", "4.7 kΩ")
 line(760, R_SDA + 48, 760, R_SDA + 58); pill(760, R_SDA + 58)
 step(862, (R_SCL + R_SDA) // 2, "③")
 # AS5600
