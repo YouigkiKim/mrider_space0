@@ -61,12 +61,12 @@ Laptop ──▶ its own internal battery (NOT wired to traction in v1)
 > [!IMPORTANT]
 > **Three things that diagram fixes, all of which this page used to get wrong**
 >
-> ![The logic side of MRider: the logic battery feeding two UBECs and a direct 12 V tap, the Teensy's own 3.3 V pin feeding the AS5600 and the Hall latches, the Teensy and receiver both feeding the Pololu signal MUX into the motor driver, and the E-stop's two NC contacts breaking the contactor coil and the relay MUX coil separately](../images/logic-signal-wiring.svg)
+> ![The logic side of MRider: the logic battery feeding two UBECs and a direct 12 V tap, the Teensy's own 3.3 V pin feeding the AS5600, the Hall latches and the BNO085 IMU, the IMU on a second I2C bus with its own line to the Teensy, the Teensy and receiver both feeding the Pololu signal MUX into the motor driver, and the E-stop's two NC contacts breaking the contactor coil and the relay MUX coil separately](../images/logic-signal-wiring.svg)
 >
 > **1. There is no 3.3 V rail.** This page used to say the angle sensor takes *"3.3 V from the logic
 > rail"* — but **the logic rail is 5 V.** The 3.3 V comes from the **Teensy's own regulator**, which
 > is correct and also a budget: everything on it shares the Teensy's 3.3 V pin, so the AS5600, both
-> Hall latches and their pull-ups all draw from one source. None of them is hungry, but it has to be
+> Hall latches, their pull-ups and (since 2026-11-16) the IMU all draw from one source. None of them is hungry, but it has to be
 > counted rather than assumed.
 >
 > **2. The two UBECs are split by AUTHORITY LAYER, not by current.** **UBEC A carries the Teensy
@@ -1194,13 +1194,28 @@ assumed pin order printed along both rows; a 3.3 V bus above it fed from one 3V3
 bare-wire stubs soldered to the pads of pins 0, 1, 18 and 19 so each can carry more than one
 connection; two 4.7 k pull-ups up to the upper 3.3 V bus from the I2C stubs; two 1 nF down to GND
 and two 10 k up to the lower 3.3 V bus from the drive stubs, the 10 k on the reverse side because
-each crosses the GND bus; a level-shift position R5 and R6 in the i-BUS line; six screw terminals
-along the top and bottom edges and three servo headers whose middle +5 pad is drawn hollow and
+each crosses the GND bus; a level-shift position R5 and R6 in the i-BUS line; eight screw terminals
+along the top and bottom edges, the two added for the IMU in the bottom corners with dashed wires
+from the right-hand one up to pins 16 and 17; and three servo headers whose middle +5 pad is drawn hollow and
 marked n/c; and panels on the pin order, the build order and why each passive sits where it
 does](../images/signal-board-perfboard-layout.svg)
 
 **Generated** — [`scripts/gen_signal_board_figure.py`](https://github.com/jrkwon/mrider/blob/main/scripts/gen_signal_board_figure.py).
 *Edit the script and re-run it; do not edit the SVG.*
+
+> [!NOTE]
+> **`IMUP` and `IMUS` were added on 2026-11-16, and nothing else moved**
+>
+> The IMU is wired to the Teensy's **second** I²C bus — `SDA1` on pin 17, `SCL1` on pin 16 — and
+> takes 3.3 V and GND from this board ([sensors.md §3](../design/sensors.md#3-imu)). Its two
+> terminals sit in the two bottom corners because those were the holes still free: **a board
+> already soldered to the earlier drawing gains two terminals and four wires, and loses nothing.**
+> That is also why its power and its signals are at opposite ends of the edge.
+>
+> There are **no pull-ups on this board for `SDA1`/`SCL1`.** Most BNO085 breakouts carry their own;
+> [build step 4](04-firmware.md#bring-up-the-imu) says how to find out with a meter before
+> anything is powered. And the IMU is one more load on the Teensy's 3.3 V pin — add its datasheet
+> current to the count in item 1 at the top of this page.
 
 > [!IMPORTANT]
 > **A socket pad already has something in it, which is why this board has stubs**
