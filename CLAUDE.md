@@ -142,7 +142,7 @@ docs/
   - `02_guide/01_firmware/03_signal_board_guide.md` — 신호 기판 납땜 순서 (배치도는 원본 생성기 데이터로 생성)
   - `02_guide/03_relay_board/01_relay_board_guide.md` — 릴레이 구동 기판 회로도·배치도, 단계별 납땜과 검사, 신호 기판 연결
   - `03_validation/01_firmware/test_bench.md` — Stage 0 테스트 벤치 검증 방법과 결과
-  - `03_validation/01_firmware/02_steering_bench.md` — 조향 단계 벤치 검증 방법과 결과 (i-BUS 대기 전압, ㅈ수신)
+  - `03_validation/01_firmware/02_steering_bench.md` — 조향 단계 벤치 검증 방법과 결과 (i-BUS 대기 전압, 수신)
   - `03_validation/01_firmware/03_signal_board.md` — 신호 기판 단락·도통·전압 검사와 결과
   - `03_validation/03_relay_board/01_relay_board.md` — 릴레이 구동 기판 단계별 검사, 코일 구동·E-stop 감지 확인과 결과
 
