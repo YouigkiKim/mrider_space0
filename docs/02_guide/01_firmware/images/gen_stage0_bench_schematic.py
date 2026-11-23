@@ -6,6 +6,11 @@ Edit ROLE below to recolour pins for a later stage, then regenerate.
 Reference designators follow docs/images/signal-board-perfboard-layout.svg:
 R1/R2 = 4.7k on SCL/SDA, R3/R4 = 10k on drive A/B, C1/C2 = 1nF on drive A/B.
 
+IMU (added 2026-11-16, docs/design/sensors.md §3, docs/build/04-firmware.md "Bring up the IMU"):
+BNO085 breakout on the Teensy's SECOND I2C bus Wire1 (SDA1 = pin 17, SCL1 = pin 16), 3.3 V and GND
+from the Teensy. The signal board has no pull-ups for Wire1, so RP1/RP2 are fitted on the bench ONLY
+if the breakout carries none (meter SDA1/SCL1 to 3.3 V unpowered: a few kOhm = it has them).
+
 Teensy 4.1, top (component) side, USB at the top:
   left edge,  top->bottom: GND 0 1 2 3 4 5 6 7 8 9 10 11 12 3.3V 24 25 26 27 28 29 30 31 32
   right edge, top->bottom: VIN GND 3.3V 23 22 21 20 19 18 17 16 15 14 13 GND 41 40 39 38 37 36 35 34 33
@@ -15,7 +20,7 @@ edge GND.0.1.2..; rotating USB to the top puts the upper edge on the right.)
 import sys
 
 OUT = sys.argv[1]
-W, H = 1190, 1290
+W, H = 1190, 1350
 
 LEFT = ["GND", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "3.3V",
         "24", "25", "26", "27", "28", "29", "30", "31", "32"]
@@ -35,6 +40,8 @@ ROLE = {
     ("R", "3.3V"): (USED, "3.3V"),
     ("R", "19"): (USED, "SCL 19"),
     ("R", "18"): (USED, "SDA 18"),
+    ("R", "17"): (USED, "SDA1 17"),
+    ("R", "16"): (USED, "SCL1 16"),
     ("R", "21"): (LATER, "릴레이 21"),
     ("R", "20"): (LATER, "E-stop 20"),
     ("R", "15"): (LATER, "i-BUS 15"),
@@ -59,6 +66,8 @@ a("""<style>
 .pcb{stroke:#1f2328;stroke-width:2;fill:#e8f3ec}
 .board{stroke:#8c959f;stroke-width:1.5;fill:none;stroke-dasharray:6 5}
 .res{stroke:#1f2328;stroke-width:2;fill:#fff}
+.resopt{stroke:#1f2328;stroke-width:2;fill:#fff;stroke-dasharray:4 3}
+.wopt{stroke:#1f2328;stroke-width:2;fill:none;stroke-dasharray:4 3}
 .dot{fill:#1f2328}
 .nc{stroke:#1f2328;stroke-width:1.5;fill:#fff}
 .pill{stroke:#cf222e;stroke-width:1.5;fill:#fff5f5}
@@ -85,7 +94,7 @@ a("""<style>
 a(f'<rect x="0" y="0" width="{W}" height="{H}" fill="#fff"/>')
 
 # ---- title
-a('<text class="h1" x="30" y="40">Stage 0 테스트 벤치 회로도 — Teensy 4.1 실제 핀 배치 기준</text>')
+a('<text class="h1" x="30" y="40">Stage 0 테스트 벤치 회로도 + IMU — Teensy 4.1 실제 핀 배치 기준</text>')
 a('<text class="ts" x="30" y="63">Teensy를 윗면(부품면)에서 본 모습, USB가 위쪽. 핀 위치는 실제 보드와 같다. 센서만 연결 (모터·드라이버·RC·E-stop 없음).</text>')
 a('<text class="ts" x="30" y="81">원본: PJRC Teensy 4.1 핀 카드, docs/build/04-firmware.md 핀 표, docs/build/03-electrical.md §3.5.2–3.5.3</text>')
 
@@ -122,6 +131,8 @@ a('<rect class="board" x="216" y="150" width="676" height="870" rx="10"/>')
 a('<text class="ts" x="884" y="1012" text-anchor="end">보드 A — Teensy + 풀업 · 커패시터</text>')
 a('<rect class="board" x="900" y="330" width="278" height="250" rx="10"/>')
 a('<text class="ts" x="1170" y="572" text-anchor="end">보드 C</text>')
+a('<rect class="board" x="900" y="610" width="278" height="230" rx="10"/>')
+a('<text class="ts" x="1170" y="832" text-anchor="end">보드 D — IMU (11/16 추가)</text>')
 
 # ---- laptop + USB (top)
 a('<rect class="box" x="500" y="96" width="140" height="44" rx="8"/>')
@@ -255,6 +266,43 @@ a(f'<text class="mtx" x="{mx-9}" y="{my+4}">N</text><text class="mtx" x="{mx+9}"
 a(f'<text class="ts" x="{mx}" y="{my-30}" text-anchor="middle">자석</text>')
 step(mx, my + 40, "④")
 
+# ================= right side: IMU on Wire1 (added 2026-11-16) =================
+R_SDA1, R_SCL1 = py(RIGHT.index("17")), py(RIGHT.index("16"))
+IMU_SDA, IMU_SCL = 690, 720          # rows where the two lines reach the IMU box
+IM_X0 = 930
+# SDA1 takes the OUTER path (x=725) and SCL1 the inner one (x=705), so the two never cross
+line(BX1, R_SDA1, 725, R_SDA1); line(725, R_SDA1, 725, IMU_SDA); line(725, IMU_SDA, IM_X0, IMU_SDA)
+line(BX1, R_SCL1, 705, R_SCL1); line(705, R_SCL1, 705, IMU_SCL); line(705, IMU_SCL, IM_X0, IMU_SCL)
+a(f'<text class="lbl" x="880" y="{IMU_SDA-6}" text-anchor="middle">SDA1</text>')
+a(f'<text class="lbl" x="880" y="{IMU_SCL+16}" text-anchor="middle">SCL1</text>')
+# optional pull-ups: only if the breakout has none
+dot(800, IMU_SDA); a(f'<line class="wopt" x1="800" y1="{IMU_SDA}" x2="800" y2="{IMU_SDA-12}"/>')
+a(f'<rect class="resopt" x="794" y="{IMU_SDA-48}" width="12" height="36"/>')
+a(f'<text class="t" x="814" y="{IMU_SDA-33}">RP1</text><text class="ts" x="814" y="{IMU_SDA-17}">4.7 kΩ</text>')
+a(f'<line class="wopt" x1="800" y1="{IMU_SDA-48}" x2="800" y2="{IMU_SDA-58}"/>'); pill(800, IMU_SDA - 76)
+dot(780, IMU_SCL); a(f'<line class="wopt" x1="780" y1="{IMU_SCL}" x2="780" y2="{IMU_SCL+12}"/>')
+a(f'<rect class="resopt" x="774" y="{IMU_SCL+12}" width="12" height="36"/>')
+a(f'<text class="t" x="794" y="{IMU_SCL+27}">RP2</text><text class="ts" x="794" y="{IMU_SCL+43}">4.7 kΩ</text>')
+a(f'<line class="wopt" x1="780" y1="{IMU_SCL+48}" x2="780" y2="{IMU_SCL+58}"/>'); pill(780, IMU_SCL + 58)
+a(f'<text class="ts" x="735" y="{IMU_SCL+100}">RP1·RP2(점선): IMU 보드에</text>')
+a(f'<text class="ts" x="735" y="{IMU_SCL+116}">풀업이 없을 때만 단다</text>')
+step(880, (IMU_SDA + IMU_SCL) // 2, "⑥")
+# the IMU breakout
+a(f'<rect class="chip" x="{IM_X0}" y="{IMU_SDA-40}" width="160" height="150" rx="6"/>')
+a(f'<text class="t" x="{IM_X0+8}" y="{IMU_SDA+5}">SDA</text>')
+a(f'<text class="t" x="{IM_X0+8}" y="{IMU_SCL+5}">SCL</text>')
+a(f'<text class="tb" x="{IM_X0+100}" y="{IMU_SDA-14}" text-anchor="middle">U2 BNO085</text>')
+a(f'<text class="ts" x="{IM_X0+100}" y="{IMU_SDA+3}" text-anchor="middle">IMU breakout</text>')
+a(f'<text class="ts" x="{IM_X0+100}" y="{IMU_SDA+20}" text-anchor="middle">주소 0x4A / 0x4B</text>')
+a(f'<text class="ts" x="{IM_X0+100}" y="{IMU_SDA+37}" text-anchor="middle">Wire1</text>')
+yi = IMU_SDA + 110
+a(f'<text class="t" x="{IM_X0+30}" y="{yi-8}" text-anchor="middle">VIN</text>')
+a(f'<text class="t" x="{IM_X0+125}" y="{yi-8}" text-anchor="middle">GND</text>')
+line(IM_X0 + 30, yi, IM_X0 + 30, yi + 16); pill(IM_X0 + 30, yi + 16)
+line(IM_X0 + 125, yi, IM_X0 + 125, yi + 14); gnd(IM_X0 + 125, yi + 14)
+a(f'<text class="ts" x="{IM_X0+80}" y="{IMU_SDA+62}" text-anchor="middle">INT·RST 등 나머지 핀:</text>')
+a(f'<text class="ts" x="{IM_X0+80}" y="{IMU_SDA+78}" text-anchor="middle">비움 *</text>')
+
 # ================= legend =================
 LY = 1040
 a(f'<line x1="30" y1="{LY}" x2="1160" y2="{LY}" stroke="#d0d7de" stroke-width="1"/>')
@@ -269,13 +317,16 @@ a(f'<text class="t" x="30" y="{LY+168}">왼쪽 아래 3.3V 핀과 오른쪽 가�
 a(f'<text class="t" x="30" y="{LY+234}">C3·C4 100 nF는 래치 바로 옆, VCC–GND 사이 (데이터시트·§3.5.4). C1·C2 1 nF(신호)와 다른 역할.</text>')
 a(f'<text class="t" x="30" y="{LY+212}">DRV5013(TO-92): 인쇄면(사다리꼴의 좁은 쪽)을 보고 다리를 아래로 두면 왼쪽부터 1 VCC · 2 GND · 3 OUT.</text>')
 a(f'<text class="t" x="30" y="{LY+190}">브레드보드에서는 Teensy 양쪽의 전원 레일을 점퍼 2개로 이어 3.3 V·GND를 양쪽에 보낸다 (§3.5.3).</text>')
+a(f'<text class="t" x="30" y="{LY+256}">U2 IMU는 조향 센서와 다른 버스(Wire1: 17·16)에 단다 — AS5600 버스(18·19)에 붙이지 않는다 (sensors.md §3).</text>')
+a(f'<text class="t" x="30" y="{LY+278}">* 보드마다 핀 이름이 다르다(VIN/VCC, PS0·PS1 등). I²C 모드 설정 핀이 있으면 보드 설명대로 I²C로 둔다.</text>')
 
 a(f'<text class="tb" x="640" y="{LY+26}">기호와 확인 순서 (가이드 7.3)</text>')
 pill(665, LY + 36); a(f'<text class="t" x="700" y="{LY+50}">모두 오른쪽 3.3V 핀 한 곳에 연결</text>')
 gnd(665, LY + 64); a(f'<text class="t" x="700" y="{LY+72}">GND, 모두 공통 · ● 연결점</text>')
 steps = ["① 멀티미터: +3V3 레일 3.3 V", "② 멀티미터+자석: OUT 0↔3.3 V로 바뀌고 유지",
          "③ i2c_scan: 0x36 하나만", "④ as5600_check: AGC 40–90, wrap 없음",
-         "⑤ quad_count: 허브 한 바퀴 ±36"]
+         "⑤ quad_count: 허브 한 바퀴 ±36",
+         "⑥ Wire1 스캔: 0x4A 또는 0x4B 하나 (i2c_scan은 Wire만 봄)"]
 for k, s in enumerate(steps):
     a(f'<text class="t" x="650" y="{LY+98+k*20}">{s}</text>')
 
