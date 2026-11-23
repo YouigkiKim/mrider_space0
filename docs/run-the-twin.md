@@ -70,6 +70,10 @@ SLAM's `map → odom`.
     ros2 launch mitt_bringup sim.launch.py
     ```
 
+    This is the twin on the **estimated** geometry. Add `vehicle:=1`, `2` or `3` for the twin of
+    that vehicle — its measured values laid over the estimates
+    ([software.md §3.2](design/software.md#32-ackermann-kinematic-parameters)).
+
     **Wait ~80 s.** Ready when the log shows:
 
     ```
@@ -97,7 +101,9 @@ SLAM's `map → odom`.
 
     Give it a **2D Pose Estimate** in RViz first: `set_initial_pose` is
     `false`, so AMCL does not assume where the vehicle is. A particle cloud
-    that never converges is almost always that.
+    that never converges is almost always that. Do it **before starting Nav2**:
+    without a pose there is no `map` frame, and Nav2 waits for one without an
+    error ([software.md §4.8](design/software.md#48-nav2-does-not-come-up-until-amcl-has-a-pose-result-2026-11-20)).
 
     **Do not run both.** Two publishers for `map → odom` is a map that jitters
     against the scan, and it is miserable to diagnose. Each file takes
@@ -108,6 +114,11 @@ SLAM's `map → odom`.
     ```bash
     ros2 launch mitt_navigation nav2.launch.py
     ```
+
+    Running the twin of a vehicle? Give Nav2 the same `vehicle:=<n>` you gave `sim.launch.py`, so
+    it plans with that vehicle's footprint and turning radius. If the two numbers name different
+    bodies, Nav2 prints a block headed `WRONG VEHICLE` in its first screen of output and keeps
+    running: stop it and start it with the twin's number.
 
     **Wait ~45 s.** Ready when the log shows `Managed nodes are active`.
 

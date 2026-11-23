@@ -91,10 +91,10 @@ W0               ROS fundamentals — lecture only, no lab              9/07
 W1 ─────── W3    Foundations — individual, identical labs        9/14 – 9/28
      W4    ○     NO MEETING (개천절) — self-study packet + Lab 4       10/05
 W5               Description to motion + Lab 5                        10/12
-W6 ─────── W10   Subsystem tracks — four teams in parallel      10/19 – 11/16
+W6 ─────── W10   Subsystem tracks — three teams in parallel     10/19 – 11/16
      W6    ↓     Teams announced; charters written                    10/19
-     W8    ★     MID-SEMESTER PRESENTATION                            11/02
 W11 ────── W13   Merge ladder — subsystems combine, pairwise    11/23 – 12/07
+     W12   ★     MID-SEMESTER PRESENTATION (moved from W8)            11/30
 W14              Full integration, then validation                    12/14
      W15   ★     FINAL DEMO + PRESENTATIONS                           12/21
 ```
@@ -105,8 +105,9 @@ course expects, and so a late registrant has one page to start from.
 **Weeks 1–5 are individual.** Everyone does the same five labs and is graded on their own work. This
 is deliberate: in a team project, foundational gaps hide. They will not hide here.
 
-**Weeks 6–15 are team-based.** Four teams of six, each owning a real subsystem, merging into one
-working vehicle. See [Teams & Tracks](teams.md).
+**Weeks 6–15 are team-based.** Three teams, each building its own vehicle. Every team carries all
+four subsystem tracks, which merge into that team's working vehicle. See
+[Teams & Tracks](teams.md).
 
 ### A typical 3-hour session
 
@@ -115,9 +116,9 @@ working vehicle. See [Teams & Tracks](teams.md).
 | 0:00 – 0:50 | Lecture |
 | 0:50 – 1:00 | Break |
 | 1:00 – 2:30 | Lab (W1–W5) or team work (W6–W15) |
-| 2:30 – 3:00 | Standup — each team reports progress, blockers, and what it needs from another team |
+| 2:30 – 3:00 | Standup — each team reports progress, blockers, and what one track needs from another |
 
-The final 30 minutes are not filler. From Week 6 on, that is where cross-team integration actually
+The final 30 minutes are not filler. From Week 6 on, that is where integration between tracks actually
 gets negotiated, and it is where the participation grade is observed.
 
 ---
@@ -137,14 +138,22 @@ Reading keys: **B** = *ROS 2: Zero to Robot* · **M** = [MRider learn module](..
 | [5](weeks/w05.md) | **10/12** | Description to motion: URDF/Xacro, TF2, RViz, Gazebo, `ros2_control` | [Lab 5](labs/lab5.md) — Add a sensor link; break an extrinsic and diagnose it | Lab 4 |
 | [6](weeks/w06.md) | **10/19** | Odometry and sensor fusion. The EKF | **Teams announced.** Kickoff and charter workshop | Lab 5 · preference form (10/16) |
 | [7](weeks/w07.md) | **10/26** | Embedded ROS 2: micro-ROS, the Teensy, `hardware_interface` | Track work | Team charters |
-| [8](weeks/w08.md) | **11/02** | Safety: authority arbitration, failsafe matrices, FSMs | **★ MID-SEMESTER PRESENTATION** | Mid deliverable · peer eval |
+| [8](weeks/w08.md) | **11/02** | Safety: authority arbitration, failsafe matrices, FSMs Track work | — |
 | [9](weeks/w09.md) | **11/09** | Control: PID, pure pursuit, RPP, and the ±22.5° constraint | Track work | — |
 | [10](weeks/w10.md) | **11/16** | Perception: camera and 2D LiDAR, intrinsics and extrinsics | Track work | Track milestone |
 | [11](weeks/w11.md) | **11/23** | SLAM: `slam_toolbox`, loop closure, and how to read a bad map | **Merge 1 — Electrical + Chassis** | — |
-| [12](weeks/w12.md) | **11/30** | Nav2: costmaps, planners, behavior trees, lifecycle nodes | **Merge 2 — Simulation + Software** | — |
-| 13 | **12/07** | Simulation to reality: calibration, QoS/DDS, diagnostics, logging | **Merge 3 — (E+C) + Software** | — |
-| 14 | **12/14** | System architecture, CI, reproducibility. Validation and failure analysis | **Merge 4 — full integration**; measure against the acceptance gates; dress rehearsal | Peer eval 2 |
-| 15 | **12/21** | — | **★ FINAL DEMO + PRESENTATIONS** | Final report · demo |
+| [12](weeks/w12.md) | **11/30** | Nav2: costmaps, planners, behavior trees, lifecycle nodes **★ MID-SEMESTER PRESENTATION**, which carries **Merge 2 — Simulation + Software** | Mid deliverable · peer eval 1 |
+| [13](weeks/w13.md) | **12/07** | Simulation to reality: calibration, QoS/DDS, diagnostics, logging | **Merge 3 — (E+C) + Software** | — |
+| [14](weeks/w14.md) | **12/14** | System architecture, CI, reproducibility. Validation and failure analysis | **Merge 4 — full integration**; measure against the acceptance gates; dress rehearsal | Peer eval 2 |
+| [15](weeks/w15.md) | **12/21** | — | **★ FINAL DEMO + PRESENTATIONS** | Final report · demo |
+
+> [!NOTE]
+> **The mid-semester presentation moved to Week 12 (11/30)**
+>
+> It was scheduled for Week 8 (11/02). The vehicles reached the teams that same week, so a
+> presentation then would have been a plan, which is the one thing its rubric marks down. It is
+> now on 11/30 and **carries the Merge 2 demonstration**: one slot per team, not two. Peer
+> evaluation 1 moves with it. The weight (15%) and the rubric are unchanged. *Decided 2026-11-20.*
 
 > [!NOTE]
 > **Why Week 5 is dense and Week 4 is self-study**
@@ -172,7 +181,7 @@ Reading keys: **B** = *ROS 2: Zero to Robot* · **M** = [MRider learn module](..
 | Component | Weight | What it measures |
 |---|---:|---|
 | **Individual labs** (Labs 1–5) | **30%** | Your own ROS 2 competence, before teams can hide it |
-| **Mid-semester presentation** (W8) | **15%** | Your team's subsystem, demonstrated live |
+| **Mid-semester presentation** (W12) | **15%** | Your team's subsystems, demonstrated live |
 | **Team deliverable** (W15) | **25%** | The subsystem you shipped, and its evidence |
 | **Final demo & presentation** (W15) | **20%** | The integrated vehicle, and how you explain it |
 | **Participation & documentation** | **10%** | Standups, git history, and what you wrote down |
@@ -182,8 +191,9 @@ Full rubrics are in [Grading & Rubrics](grading.md).
 **Participation is not attendance.** It is assessed from standup contributions, commit history, and
 documentation written — evidence of work, not presence in a chair.
 
-**Peer evaluation** runs twice, at Week 8 and Week 15. It can adjust an individual's team-component
-grade by up to ±15%. A team is not a place to be carried.
+**Peer evaluation** runs twice, at Week 12 and Week 14. The second one can adjust an individual's
+**Team deliverable** grade by up to ±15%; the first is a check, and changes no grade. The rule is in
+[Teams & Tracks](teams.md#peer-evaluation). A team is not a place to be carried.
 
 ### Late work
 
@@ -237,7 +247,7 @@ Learn to read it. You will need it after this course ends.
 ## See also
 
 - [Environment Setup](environment.md) — **do this before September 7**
-- [Teams & Tracks](teams.md) — the four subsystem teams and the merge ladder
+- [Teams & Tracks](teams.md) — the three teams, the four tracks and the merge ladder
 - [Grading & Rubrics](grading.md) — how every component is assessed
 - [Submitting Labs](submission.md) — how the five individual labs are handed in
 - [Running the Digital Twin](../run-the-twin.md) — the four-terminal bring-up procedure

@@ -16,6 +16,12 @@
 Bring up the MITT digital twin: Gazebo + robot + controllers + bridge.
 
     ros2 launch mitt_bringup sim.launch.py
+    ros2 launch mitt_bringup sim.launch.py vehicle:=2     # the twin of vehicle 2
+
+vehicle:=0 (the default) is the estimates in mitt_dimensions.yaml. vehicle:=N
+lays config/vehicles/vehicle<N>.yaml over them - in the URDF and in the
+controller's own copy of the geometry (mitt_description/config/
+vehicle_config.py). Nav2 takes the same argument: nav2.launch.py vehicle:=2.
 
 This is Track A of the semester roadmap (docs/design/software.md 8) - the
 software development vehicle. It deliberately cannot test what Track B tests:
@@ -26,15 +32,24 @@ vehicle. Only the ros2_control hardware plugin differs (ADR-SW4).
 """
 
 import os
+import sys
 
 from ament_index_python.packages import get_package_share_directory
+
+# One module for every launch file that needs a vehicle's numbers; it lives
+# beside the files it reads (see its docstring).
+sys.path.insert(0, os.path.join(
+    get_package_share_directory("mitt_description"), "config"))
+import vehicle_config  # noqa: E402
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     LogInfo,
+    OpaqueFunction,
     RegisterEventHandler,
     SetEnvironmentVariable,
+    SetLaunchConfiguration,
     Shutdown,
     TimerAction,
 )
@@ -72,6 +87,27 @@ def _only_if_it_worked(what, why, then):
     return handler
 
 
+def _vehicle_controllers(context):
+    """Resolve the controller file for vehicle:=N before anything reads it.
+
+    Gazebo's ros2_control plugin takes the file's path from the URDF, so it
+    is handed to xacro as `controllers:=`.
+    """
+    vehicle = LaunchConfiguration("vehicle").perform(context)
+    stock = os.path.join(get_package_share_directory("mitt_control"),
+                         "config", "mitt_controllers.yaml")
+    try:
+        path = vehicle_config.controllers_for(
+            vehicle, get_package_share_directory("mitt_description"), stock)
+    except ValueError as e:
+        # Raised, not logged-and-Shutdown: an exception here ends `ros2
+        # launch` with exit status 1 and one error line, before anything is
+        # started. Shutdown ended it with status 0.
+        raise RuntimeError(f"sim.launch.py will not start: {e}") from None
+    return [SetLaunchConfiguration("controllers_file", path),
+            LogInfo(msg=f"vehicle {vehicle}: controller parameters from {path}")]
+
+
 def generate_launch_description():
     desc_pkg = FindPackageShare("mitt_description")
     sim_pkg = FindPackageShare("mitt_sim")
@@ -106,6 +142,12 @@ def generate_launch_description():
     args = [
         DeclareLaunchArgument("world", default_value="depot.sdf"),
         DeclareLaunchArgument(
+            "vehicle", default_value="0",
+            description="0 = the estimates. 1|2|3 = the twin of that vehicle: "
+                        "its measured values (mitt_description/config/vehicles/"
+                        "vehicle<N>.yaml) laid over the estimates."),
+        OpaqueFunction(function=_vehicle_controllers),
+        DeclareLaunchArgument(
             "gz_args", default_value="-r",
             description="Extra gz sim args. Add -s for headless.",
         ),
@@ -129,6 +171,8 @@ def generate_launch_description():
             "xacro ",
             PathJoinSubstitution([desc_pkg, "urdf", "mitt.urdf.xacro"]),
             " sim:=true",
+            " vehicle:=", LaunchConfiguration("vehicle"),
+            " controllers:=", LaunchConfiguration("controllers_file"),
         ]),
         value_type=str,
     )

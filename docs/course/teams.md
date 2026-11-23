@@ -1,7 +1,11 @@
 # Teams & Tracks
 
-From Week 6, the class splits into **four teams of six**, each owning one subsystem of MRider. Over
-Weeks 11–14 those subsystems merge, one pair at a time, into a working vehicle.
+From Week 6, the class splits into **three teams, and each team builds its own vehicle**: team *N*
+builds vehicle *N*. A vehicle is four subsystems, called **tracks** here, and every team carries all
+four. Over Weeks 11–14 a team's four tracks merge, one pair at a time, into its working vehicle.
+
+Thirteen students in three teams is four or five to a team, so **a track inside a team is one or two
+people**, not a group.
 
 > [!TIP]
 > **Every track's deliverable is something that does not exist yet**
@@ -21,13 +25,13 @@ Weeks 11–14 those subsystems merge, one pair at a time, into a working vehicle
 | **10/19 (W6)** | Teams announced; charter workshop in class |
 | **10/26 (W7)** | Team charters due |
 
-Assignment is **by the instructor**, from your ranked preferences plus observed Lab 1–4 work. You
-will usually get your first or second choice.
+Assignment — your team, and your track inside it — is **by the instructor**, from your ranked
+preferences plus observed Lab 1–4 work. You will usually get your first or second choice of track.
 
 It is not self-selection, and the reason is worth stating plainly: left to themselves, the strongest
-programmers concentrate on the Software track and the Chassis track ends up under-resourced. Chassis
-owns the measurements that **every other track is blocked on**. That cannot be the team that got
-whoever was left over.
+programmers concentrate on the Software track and the Chassis track ends up under-resourced, and the
+same happens between teams. Chassis owns the measurements that **every other track is blocked on**.
+That cannot go to whoever was left over, and no team can be the one without it.
 
 ### Preference form
 
@@ -43,6 +47,9 @@ Submit by **Friday 10/16**:
 ---
 
 ## The four tracks
+
+Every team has all four. The tables below say what each track owns **on your team's vehicle**; the
+person or pair holding a track answers for it to the rest of the team.
 
 ### E — Electrical & Firmware
 
@@ -80,7 +87,7 @@ And — this is the part that matters most — **the numbers.**
 
 | Deliverable | Today |
 |---|---|
-| A **measured** `mitt_dimensions.yaml` | Every value in it is `TODO measure`. The file's own header says: *"NOTHING IN THIS FILE HAS BEEN MEASURED"* |
+| A **measured** `config/vehicles/vehicle<n>.yaml` — your vehicle's numbers, laid over the estimates | **Empty.** Every value the stack runs on is still an estimate from `mitt_dimensions.yaml`, whose own header says: *"NOTHING IN THIS FILE HAS BEEN MEASURED"* |
 | Verification gates V1, V2, V3 | Steering-motor stall current, sensor shaft travel, shaft diameter — all blocking. *(V1's torque question closed 2026-10-01: the vehicle's rated 25 kg occupant load already demonstrates the margin.)* |
 | [Build step 2](../build/02-mechanical.md) validated | Draft, never run |
 | Calibration constants recorded | [calibration.md](../design/calibration.md) specifies the procedure |
@@ -148,7 +155,7 @@ everyone else assumed was fine. Highest leverage track in the course, and the le
 > Without it, the twin is a demo. With it, the twin is a test rig. Merge 3 exists to prove it.
 
 **Good fit if** you want the deepest ROS 2 work. Most code, most C++, and the track most dependent on
-other teams delivering on time.
+the other tracks delivering on time.
 
 **Read first:** [software.md §2–4](../design/software.md) ·
 [architecture.md](../design/architecture.md) · [M4](../learn/m4-perception.md) ·
@@ -158,13 +165,14 @@ other teams delivering on time.
 
 ## The merge ladder
 
-Subsystems do not merge all at once at the end. They merge in pairs, and **each merge is a live
-demonstration of a specific claim** — not a meeting, not a status update.
+Subsystems do not merge all at once at the end. Inside each team they merge in pairs, and **each
+merge is a live demonstration of a specific claim** on that team's vehicle — not a meeting, not a
+status update. All three teams merge on the same dates.
 
 | Week | Date | Merge | The claim it proves |
 |---|---|---|---|
 | **11** | 11/23 | **E + C** | The vehicle steers to a commanded angle under firmware control, wheels off the ground. Closes bring-up Stage 1: ≤ 1° steady-state error, no sustained oscillation |
-| **12** | 11/30 | **S + W** | The twin runs *measured* geometry and the functional test suite is green in CI |
+| **12** | 11/30 | **S + W** | The twin runs *measured* geometry and the functional test suite is green in CI. Shown inside the [mid-semester presentation](grading.md#mid-semester-presentation-15) |
 | **13** | 12/07 | **(E+C) + W** | `mitt_hardware` talks to the real Teensy. **The ADR-SW4 gate:** the identical teleop launch runs in sim and on hardware, differing only in the plugin |
 | **14** | 12/14 | **all four** | Full stack on the vehicle — teleop, then a hallway map, then a Nav2 goal. Then measured against the acceptance gates in [software.md §8](../design/software.md) |
 | **15** | 12/21 | — | **★ Final demo and presentations** |
@@ -172,7 +180,7 @@ demonstration of a specific claim** — not a meeting, not a status update.
 > [!CAUTION]
 > **A merge date cannot slip**
 >
-> A merge that does not happen on its date blocks three other teams. Merge 1 is in Week 11 and full
+> A merge that does not happen on its date blocks the other three tracks of your own team. Merge 1 is in Week 11 and full
 > integration is Week 14, which leaves exactly **one week** before the demo — and Week 14 is already
 > carrying validation against the acceptance gates.
 >
@@ -184,18 +192,107 @@ demonstration of a specific claim** — not a meeting, not a status update.
 
 ---
 
+## Where your work lives
+
+Three teams write the same deliverables. `firmware/` is one path, `mitt_hardware` is one package,
+and three teams cannot each fill it on the same `main`. So the repository is split along the line
+that is actually there: **numbers that differ per vehicle** go to `main` now, and **code** stays in
+your team's fork until the semester ends.
+
+*Decided 2026-11-17.*
+
+### 1. One fork per team — all your code goes there
+
+Your team works in **one fork** of [`jrkwon/mrider`](https://github.com/jrkwon/mrider), at the same
+paths this repository uses: `firmware/`, `ros2_ws/src/mitt_hardware/`, `ros2_ws/src/mitt_bench/`,
+your charter. Every member commits there, under their own name. **Your fork's history is what is
+graded** — both the deliverables and the individual commit record.
+
+Keep the fork current. `main` keeps moving, and a fork that falls behind stops building against the
+interfaces below:
+
+```bash
+git remote add upstream https://github.com/jrkwon/mrider.git   # once
+git fetch upstream
+git merge upstream/main                                        # every week, and before every merge demo
+```
+
+### 2. Interfaces change on `main`, never in a fork
+
+Three implementations stay interchangeable only while they agree on what crosses between them. These
+are **frozen in your fork**:
+
+| Interface | Where it is defined |
+|---|---|
+| Message types — `mitt_msgs` | `ros2_ws/src/mitt_msgs/` |
+| Topic names, rates, frames | [software.md §3.1](../design/software.md#31-topic-interface-contract), [§3.3](../design/software.md#33-tf-tree) |
+| Teensy pin assignments | [build step 4](../build/04-firmware.md) |
+| ROS domain, vehicle *N* → 10 + *N* | [software.md §3.4](../design/software.md#34-ros-domain-one-per-vehicle) |
+| Key names in `mitt_dimensions.yaml` | `ros2_ws/src/mitt_description/config/` |
+| Arguments of `sim.launch.py`, `real.launch.py` and `nav2.launch.py` | `ros2_ws/src/mitt_bringup/launch/`, `ros2_ws/src/mitt_navigation/launch/` |
+
+If one of them is wrong or missing something — and some will be; none of this has met hardware —
+**open a pull request against `main`** that changes the interface and says why. When it is merged,
+all three teams pull it. Changing it only in your fork means your vehicle works and nobody else's
+code runs on it.
+
+### 3. Your vehicle's numbers go to `main` as you measure them
+
+`mitt_dimensions.yaml` stays what it is: the estimates every vehicle starts from. What your team
+has **measured** goes in an overlay,
+
+```
+ros2_ws/src/mitt_description/config/vehicles/vehicle<n>.yaml
+```
+
+where a key replaces the estimate for your vehicle only, and a key you have not written is still an
+estimate. Measured values only — no `TODO` lives in that file.
+
+This is the **one file of yours that lands on `main` during the semester.** Open a pull request
+from your fork that touches that file and nothing else, with how each value was measured in a
+comment beside it. `python3 scripts/check_vehicle_dims.py` must pass.
+
+It is used by naming the vehicle:
+
+```bash
+ros2 launch mitt_bringup sim.launch.py vehicle:=<n>     # the twin of YOUR vehicle
+ros2 launch mitt_bringup real.launch.py vehicle:=<n>    # the vehicle itself
+```
+
+Both hand the URDF and the controller your measured geometry — checked in the twin on 2026-11-17;
+`real.launch.py` cannot run until `mitt_hardware` exists. `vehicle:=0`, the twin's default, is
+the estimates.
+
+### 4. After the final demo, one implementation of each deliverable is merged
+
+`main` ends the semester with one `firmware/`, one `mitt_hardware`, one `mitt_bench`. For each
+deliverable the implementation with the strongest acceptance-gate evidence is merged from its
+team's fork, **with its commit history**, so the record of who built it stays.
+
+Which one is merged is not a grade. Your grade comes from your own fork and your own vehicle.
+
+> [!NOTE]
+> **Why the interfaces are worth the trouble**
+>
+> If all three teams hold the same pin table, the same messages and the same domain rule, then one
+> team's firmware runs on another team's vehicle. That is the strongest reproducibility test this
+> course has — *could another team rebuild this from what you wrote down* — and it only exists
+> because nobody changed an interface privately.
+
+---
+
 ## Team charters
 
-Due **Week 7 (10/26)**. One page, committed to the repository at
-`docs/course/charters/<track>.md`. It contains:
+Due **Week 7 (10/26)**. One page per team, committed to the repository at
+`docs/course/charters/vehicle<n>.md`. It contains:
 
-1. **Who owns what.** Every deliverable in your track table, with a name against it. Not "the team
-   will" — a person.
+1. **Who owns what.** Every deliverable in all four track tables, with a name against it. Not "the
+   team will" — a person.
 2. **Your definition of done.** For each deliverable, the observable evidence that it works. "The
    encoder is mounted" is not evidence. "The encoder reports monotonic counts through a full
    steering sweep, logged, plotted, committed" is.
-3. **What you need from other tracks, and by when.** This is the dependency contract. Software needs
-   measured geometry from Chassis; put a date on it.
+3. **What each track needs from the others, and by when.** This is the dependency contract, and it
+   is inside your own team. Software needs measured geometry from Chassis; put a date on it.
 4. **Your risks.** Two or three things that could stop you, and what you would do instead.
 
 The charter is a working document. Update it when reality changes — that is not failure, it is the
@@ -205,7 +302,8 @@ point. An unchanged charter in Week 14 means nobody was reading it.
 
 ## Peer evaluation
 
-Runs twice: **Week 8** and **Week 14**. Confidential; only I see individual responses.
+Runs twice: **Week 12** and **Week 14**. *(The first was planned for Week 8 and moved with the
+mid-semester presentation, 2026-11-20.)* Confidential; only I see individual responses.
 
 For each teammate including yourself, on a 1–5 scale:
 
@@ -217,14 +315,28 @@ Plus, in free text: *what did this person do that the git history would not show
 debugging someone else's problem, and asking the question that saved a week are all real work that
 leaves no commit.
 
-**Effect on grade:** peer evaluation can adjust your personal team-component grade by up to **±15%**.
+### Effect on grade
+
+*Decided 2026-11-20.*
+
+- **Only the Team deliverable (25%) is adjusted**, by up to **±15%** of your share of it. The
+  mid-semester presentation and the final demo are graded per team and stay as they are.
+- **Only the Week 14 evaluation adjusts a grade.** The Week 12 one is a check: it tells me, and
+  through me your team, where something is going wrong while there are weeks left to fix it.
+- **How the number is computed.** Your score is the mean of what your teammates gave you; your own
+  rating of yourself is not in it. That score divided by your team's mean is your ratio. A ratio
+  between **0.90 and 1.10 changes nothing**, because four or five people cannot measure a
+  difference that small. Outside that band the ratio is your multiplier, limited to 0.85–1.15.
+- **No multiplier is applied on numbers alone.** I read it against the free text, your fork's
+  commit history and the standups before using it.
+
 Consistent, evidenced under-contribution can reduce it further.
 
 > [!NOTE]
 > **If your team has a problem**
 >
-> Tell me at Week 8, not Week 14. At Week 8 there are seven weeks left and it is fixable. At Week
-> 14 there is nothing I can do but adjust grades, which helps nobody build anything.
+> Tell me now, not at Week 15. While there are weeks left it is fixable. At Week
+> 15 there is nothing I can do but adjust grades, which helps nobody build anything.
 
 ---
 

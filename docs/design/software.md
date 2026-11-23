@@ -159,6 +159,26 @@ and set once in [`calibration.md`](calibration.md).
 > value that is consistent across three independent files — the **±22.5° steering range** — is
 > adopted as the design target.
 
+**Three vehicles, one set of estimates, three overlays** *(decided 2026-11-17)*. Three teams build
+three vehicles and no two will measure the same wheelbase. `mitt_description/config/
+mitt_dimensions.yaml` stays the estimates. What team *N* has measured is
+`config/vehicles/vehicle<N>.yaml`: a key there replaces the estimate for vehicle *N* only, and a key
+absent from it is still an estimate — so the overlay shows at a glance what has been measured.
+
+| Consumer | How it gets vehicle *N*'s values |
+|---|---|
+| URDF | `xacro … vehicle:=N` merges the overlay (`urdf/mitt_dimensions.xacro`) |
+| `ackermann_steering_controller` | `mitt_controllers.yaml` holds its own copy of five numbers; the launch files generate a copy of that file with the vehicle's values (`mitt_description/config/vehicle_config.py`) |
+| Both launch files | `sim.launch.py vehicle:=N` is the twin of vehicle *N*; `real.launch.py vehicle:=N` is the vehicle. `vehicle:=0`, the twin's default, is the estimates |
+| Nav2 | `nav2.launch.py vehicle:=N` generates a copy of `nav2_params.yaml` with three things replaced: the costmap **footprint** (the outline of that vehicle's body box and wheels, edges rounded outward to a centimetre), the costmaps' **`inflation_radius`** (the distance from `base_link` to that footprint's farthest corner, rounded up to 5 cm; §4.7) and the planner's **`minimum_turning_radius`** (5 % above that vehicle's measured `min_turning_radius`). The committed file stays the estimates. With `use_sim_time:=false` it refuses to start unless `vehicle:=` is 1, 2 or 3, the shell is in that vehicle's ROS domain (§3.4), and that vehicle's `min_turning_radius` has been measured |
+
+Verified 2026-11-17 in the twin with a test overlay: the controller reported the overlay's
+wheelbase and wheel radius, and both controllers activated. Verified 2026-11-18, again with a test
+overlay and without the twin running: the generated Nav2 file differed from the committed one in
+the two footprints and the planner radius and nowhere else, `planner_server` and both costmaps
+reported the generated values, and each of the three real-vehicle refusals fired. Nav2 has not
+planned a path on it. No vehicle has measured values yet.
+
 ### 3.3 TF tree
 
 MRider follows REP-105: `map` → `odom` → `base_link` → sensor frames. The `map`→`odom`
@@ -356,8 +376,8 @@ manual command.
 This is the safety model working as designed rather than a defect — `safety.md §1.2` already
 states recovery is an operator taking the RC sticks — but it is now *demonstrated*, and it
 sets a real operational constraint: **an autonomous run that noses into an obstacle is over
-until a human intervenes.** Whether to enable reverse is a hardware question, not a tuning
-one: there is no rear sensing (`sensors.md`), so reversing is currently blind.
+until a human intervenes.** *(This paragraph ended, until 2026-11-19, by calling reverse a
+hardware question because the vehicle had no rear sensing. It has: see the correction in §4.5.)*
 
 **Method note.** Two goals were rejected before a valid test was possible — one 0.05 m from
 a wall, one in free space not *connected* to the robot. Goals for this vehicle must be
@@ -393,29 +413,205 @@ impossible forward-only at a 1.6 m turning radius. The vehicle reversed 2.1 m in
 line, heading unchanged at ~3°, and arrived 0.40 m from the goal. Before this change that
 manoeuvre had no solution at all.
 
-**Reverse is deliberately expensive, not merely permitted** (`reverse_penalty: 2.5`), and
-this is the constraint to carry into Track B: **the vehicle has no rear sensing.** The LiDAR
-faces forward; there is no rear camera or bumper. Autonomous reverse is therefore *blind*,
-relying on costmap memory of what was seen driving in. In simulation that is free; on the
-real vehicle it is not.
+**Reverse is deliberately expensive, not merely permitted** (`reverse_penalty: 2.5`): a
+manoeuvre of last resort, used to leave a dead end and not to shortcut a turn. 2.5 is the value
+the run above was verified with, and it is a tuning value.
 
-This is the twin doing its job — it has surfaced a hardware requirement before the vehicle
-exists. Track B must choose one of: add rear sensing, hard-cap reverse distance and speed in
-firmware, or forbid autonomous reverse on hardware and accept the manual-recovery model of
-F-N4. **Until that is decided, autonomous reverse on the real car is unproven** and must not
-be enabled by inheriting this config unchanged.
+**Autonomous reverse on a real vehicle is unproven**, because it has been driven in the twin
+only. The first reverse goals on a vehicle are a team's test to run, at walking speed with the
+operator on the sticks, like every first run in [build step 8](../build/08-autonomous.md).
+
+*CORRECTED 2026-11-19. Until then this section said the vehicle had no rear sensing: that the
+LiDAR faced forward, that reverse was blind and ran on costmap memory, and that Track B had to
+choose between adding rear sensing, capping reverse in firmware, and forbidding autonomous
+reverse on hardware. The premise was wrong, and it was never checked against this repo's own
+sensor pages. The LiDAR is a 360° unit on a cap on top of the mast, above the roofline
+([sensors.md §5](sensors.md#5-mounting-mast-concept), `mitt_sensors.xacro`), so the costmap behind the vehicle is updated
+from live scans as the costmap ahead is. `BackUp` was excluded on the same premise; Nav2's
+`BackUp` also checks the local costmap before it moves. Neither parameter has been changed: the
+reason given for them has.*
+
+*What is true, in every direction and not only behind: a 2D LiDAR sees one slice at mast height
+and nothing lower, the camera looks forward and Nav2 does not use it, and there is no bumper or
+contact sensor.*
 
 `minimum_turning_radius` is the one place the turning circle enters Nav2. Its 1.6 is the derived
 `0.63 / tan(22.5°) = 1.52 m` plus margin, and the real figure is **measured by each team on its
 own vehicle** ([calibration.md §1.5](calibration.md#15-minimum-turning-radius-measured-not-derived)),
-recorded as `min_turning_radius` in `mitt_dimensions.yaml`, and enforced as a floor by
-`scripts/check_vehicle_dims.py`.
+recorded as `min_turning_radius` in that vehicle's overlay (`config/vehicles/vehicle<N>.yaml`,
+§3.2). `nav2.launch.py vehicle:=N` then plans at 5 % above that vehicle's own figure; the 1.6 in
+the committed file is checked against the estimate only (`scripts/check_vehicle_dims.py`).
 
 *Until 2026-11-16 this paragraph named a second parameter, `min_turning_radius` on `FollowPath`,
 and the config carried it. Nav2 1.1.20's RPP declares no such parameter — the name is absent from
 the installed library — so the key was ignored at runtime. It has been removed. RPP stays inside
 the turning circle because the path it follows was planned inside it, not because of a setting of
 its own.*
+
+### 4.6 Does the vehicle need `BackUp`? — RESULT 2026-11-19
+
+`BackUp` was left out of the behavior trees in August for a reason that §4.5 now records as
+wrong. That does not make it needed. This is the trial that asked.
+
+**Setup.** Twin, headless (`sim.launch.py gz_args:="-r -s"`), estimates (`vehicle:=0`), AMCL on
+the committed `maps/depot.yaml`, Nav2 from `nav2.launch.py`. Repo at `9e5406a` plus the
+`map_server` block that became `6099516`. The vehicle was driven on the joystick input until its
+nose was pressed 3–5 cm into an obstacle, and then given a goal on `/goal_pose`. "With `BackUp`"
+is the same parameter file with `backup` added to `behavior_plugins` and
+`<BackUp backup_dist="0.30" backup_speed="0.05"/>` after `Wait` in the recovery `RoundRobin`,
+the stock Nav2 values.
+
+| # | Config | Pressed into | Goal | Outcome |
+|---|---|---|---|---|
+| 1 | committed | post, 2 cm short | 3.6 m behind | reversed 3.1 m, **succeeded** |
+| 2 | committed | post | beyond the post | reversed, went round, **succeeded** |
+| 3 | committed | wall, at ~59° | (4.0, 1.5) | **never moved**: RPP `detected collision ahead!`, three waits, failed |
+| 4 | with `BackUp` | same pose as 3, vehicle not moved | (4.0, 1.5) | `backup completed`, left the wall, drove 3.4 m, then stalled near (5.0, 3.1) and failed; a second `BackUp` there was refused: `Collision Ahead - Exiting DriveOnHeading` |
+| 5 | with `BackUp` | wall, ~98° | 2 m straight behind | **succeeded**, `BackUp` never called |
+| 6 | with `BackUp` | wall, ~97° | (4.0, 1.5) | **succeeded**, no recovery at all |
+| 7 | with `BackUp` | wall, ~89° | (4.0, 1.5) | six RPP refusals, one `BackUp`, **succeeded** |
+| 8 | committed | wall, ~86° | (4.0, 1.5) | left the wall unaided, then stalled near (4.8, 2.4) and failed |
+
+**What it shows.**
+
+- **The committed configuration usually frees itself.** The planner plans a reverse segment and
+  RPP follows it (runs 1, 2 and 8, and 5 and 6 where `BackUp` was available and unused).
+  *Corrected the same day by §4.7: it freed itself because the planner did not see the wall it
+  was pressed into. With the inflation radius fixed, the planner refuses a start pose that is in
+  collision, which is the right answer.*
+- **It does not always.** In run 3 the vehicle never moved, and in run 4 `BackUp` freed it from
+  that same pose. That pair is the only direct comparison, and the oblique pose of run 3 was not
+  reproduced.
+- **`BackUp` is not blind.** In run 4 it refused to reverse towards an obstacle behind the
+  vehicle. That is the costmap check §4.5 describes, observed.
+- **Runs 4 and 8 stalled mid-route, not at the wall**, both while reversing near (5, 2.4–3.1),
+  with RPP refusing on every retry. `BackUp` did not clear it. Diagnosed in §4.7.
+
+**Decision: `BackUp` stays out.** One direct comparison is thin evidence for a change to what a
+real vehicle does unprompted, the case it fixes is rare and is already covered by the operator
+on the RC sticks ([safety.md §1.2](safety.md)), and `backup_speed: 0.05` has never been tried on
+a real motor. Putting it back needs the plugin in `behavior_server` and the node in both trees.
+§4.7 changes one of the reasons and not the decision: a vehicle pressed into a wall is now
+refused by the planner, but a vehicle stopped 5 cm short of it, which is where Nav2 itself
+stops, drove out in every run.
+
+**Limits.** Eight runs, one world, one map, no fixed seed; runs 6 and 7 differ under the same
+conditions. Why RPP refused in run 3 is not known. The logs and the two modified files are in
+`.omc/artifacts/backup-trial-2026-11-19/` on the instructor's machine, which is not in this
+repository.
+
+**Found on the way.** `localization.launch.py` had never loaded a map: `nav2_params.yaml` had no
+`map_server` block for `nav2_bringup` to rewrite `yaml_filename` in. Fixed in `6099516`.
+
+### 4.7 The planner did not see the front corners — RESOLVED 2026-11-19
+
+**Symptom.** The mid-route stall of §4.6: reversing past a 0.2 m post near (5.3, 2.5) in the
+depot map, the vehicle stopped and RPP logged `detected collision ahead!` on every retry until
+the goal failed. Reproduced on the first attempt, at (4.83, 2.34), yaw 70°.
+
+**What was there.** The post was 0.13 m outside the right edge of the footprint, level with the
+LiDAR. The planned path reversed along a minimum-radius arc, and on that arc the front-right
+corner sweeps a circle about 1 cm larger than the post's distance from the turning centre. RPP,
+checking the footprint against the local costmap, was right to refuse. The planner had returned
+a path it should not have.
+
+**Cause.** `inflation_radius` was **0.55 m** in both costmaps, under a footprint whose farthest
+corner is **0.857 m** from `base_link`. `SmacPlannerHybrid` saves time by skipping the footprint
+collision check wherever the cost under `base_link` is below the cost at the circumscribed radius
+(`findCircumscribedCost`, `nav2_smac_planner/utils.hpp`). That shortcut assumes inflation reaches
+the circumscribed radius. Here the cost is zero from 0.55 m outward, so an obstacle between
+0.55 m and 0.857 m from `base_link` was never checked, and that band is exactly where the front
+corners are. The planner's internal values were not printed; the trial below is the evidence.
+
+**Fix.** `inflation_radius: 0.90` in both costmaps: the circumscribed radius rounded up to 5 cm.
+It is now derived, not typed: `vehicle_config.inflation_radius()` computes it from the
+footprint, `nav2.launch.py vehicle:=N` generates it for a vehicle whose measured body differs,
+and `scripts/check_vehicle_dims.py` fails if the committed value is not the rule applied to the
+estimates.
+
+**Trial.** Same twin setup as §4.6. "Stuck pose" runs change only the parameter file, with the
+vehicle not moved in between.
+
+| Test | 0.55 (before) | 0.90 (after) |
+|---|---|---|
+| Stuck beside the post at (4.83, 2.34), goal (4.0, 1.5) | 28 refusals over two goals, failed | reached |
+| Stuck beside the post at (4.56, 1.91), goal (4.0, 1.5) | 28 refusals over two goals, failed | reached, no refusal |
+| Nose 5 cm from the wall, then goal (4.0, 1.5) | stuck in 1 of 3 | reached in 7 of 7; one run logged two refusals on the way |
+| Nose pressed 3–5 cm into the wall | drove out in most runs (§4.6) | refused in 3 of 3: `Starting point in lethal space!` |
+
+The first four of the seven "after" runs changed the global costmap only; the last three, and
+the committed file, change both. The committed file was then run through `nav2.launch.py`
+itself, three more times from the wall: reached in 3 of 3, one run logging four refusals on the
+way. `local_costmap` reported `inflation_radius` 0.9; the same query to `global_costmap`
+answered `Node not found` and was not repeated.
+
+**What changes for a team.** Paths keep further from obstacles, and a gap that was planned
+through at 0.55 may now be refused. A path that is returned is one the controller will follow.
+A vehicle that has been pushed into contact with an obstacle is not planned out of it: that is
+the operator's recovery, as before.
+
+**Limits.** One world, one stretch of one route, no fixed seed. 0.90 is the rule's value, not
+the best of several tried. Logs are in `.omc/artifacts/inflation-trial-2026-11-19/` on the
+instructor's machine, not in this repository. Twice in two days Nav2's lifecycle bring-up hung
+at `configure` with `failed to send response to /controller_server/change_state (timeout)` and
+came up on a relaunch. Not diagnosed, and not connected to this finding by any evidence.
+*(§4.8 finds one cause of a bring-up that does not finish. It is not shown to be this one.)*
+
+### 4.8 Nav2 does not come up until AMCL has a pose — RESULT 2026-11-20
+
+**Symptom.** `localization.launch.py` is running, `nav2.launch.py` is started, and bring-up never
+finishes. `Managed nodes are active` does not appear, no goal is accepted, and there is no error.
+`controller_server` and `smoother_server` report `active`; `planner_server` sits in its
+activation, and everything after it stays `inactive`.
+
+**Cause.** AMCL here has `set_initial_pose: false`, so until it is given a pose it publishes no
+`map` → `odom`, and the `map` frame does not exist. `planner_server` activates its global costmap,
+which waits for `base_link` in `map`, and the lifecycle manager waits for the planner. The only
+sign is an `INFO` line, repeated about twice a second:
+
+```
+[global_costmap.global_costmap]: Timed out waiting for transform from base_link to map to become available
+```
+
+It is not a fault and nothing has to be restarted: Nav2 is waiting for the pose.
+
+**Trial, in the twin, depot world and map, commit `787c4b7`.** One simulator; for each cycle
+`localization.launch.py`, then `nav2.launch.py`, then up to 150 s for `Managed nodes are active`.
+
+| Initial pose | Cycles | Came up | Time to active |
+|---|---:|---:|---|
+| Never given | 10 | **0** | not within 150 s; 311 of the lines above in the first cycle |
+| Published to `/initialpose` before Nav2 was started | 8 | **8** | 12–14 s |
+| Published 45 s after Nav2 was started | 4 | **4** | 54–55 s, that is about 10 s after the pose |
+
+**What changes for a team.** Give AMCL its **2D Pose Estimate before starting Nav2**, or give it
+afterwards and wait: Nav2 finishes on its own. With `slam.launch.py` this does not arise, because
+`slam_toolbox` publishes `map` → `odom` from its first scan.
+
+**Limits.** 22 cycles on one machine, twin only. The pose was published from the command line at
+the spawn point, not set in RViz. The `change_state (timeout)` error recorded in §4.7 did **not**
+occur in any of the 22 cycles, so this explains a bring-up that never finishes and does not
+explain that error. It may be the same event seen differently, since a pose published before AMCL
+is active is dropped and leaves this state; that is a guess, not a result. Logs are in
+`.omc/artifacts/lifecycle-trial-2026-11-20/` on the instructor's machine.
+
+**A second way into the same state: the EKF died.** In one of 24 starts of
+`localization.launch.py` that day, `ekf_node` exited with code -11 (a segmentation fault) within
+seconds of starting. The EKF is the only publisher of `odom` → `base_link`, so AMCL accepted the
+pose and still could not place the vehicle in `map`, and Nav2 waited exactly as above. The one line
+that tells the two apart is in the **localization** terminal:
+
+```
+[ERROR] [ekf_node-1]: process has died [pid ..., exit code -11, ...]
+```
+
+Relaunching localization cleared it. Seen once, not reproduced, cause unknown.
+
+**Follow-up on §4.7, same day, commit `8aa18e8`.** Eight goals alternating between (4.0, 1.5) and
+(0.5, 0.0), both in open floor, with the committed parameters: **8 of 8 reached.** RPP printed
+`detected collision ahead!` three times in all, in two of the four runs back towards (0.5, 0.0),
+which ends about 1.2 m from a wall, and never on the way out. So the refusals that remain after
+§4.7 are brief, come near a wall, and did not fail a goal here. Eight runs, one pair of points.
 
 ---
 
