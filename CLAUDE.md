@@ -113,12 +113,15 @@ pio run -e i2c_scan -t upload && pio device monitor
 docs/
 ├── 01_development/      개발 기록 — 무엇을, 왜 이렇게 만들었나
 │   ├── 01_firmware/
-│   └── 02_power_wire/
+│   ├── 02_power_wire/
+│   └── 03_relay_board/
 ├── 02_guide/            가이드 — 개념과 사용법, 어떻게 하나
 │   ├── 01_firmware/
-│   └── 02_power_wire/
+│   ├── 02_power_wire/
+│   └── 03_relay_board/
 └── 03_validation/       검증 — 확인 방법과 결과
-    └── 01_firmware/
+    ├── 01_firmware/
+    └── 03_relay_board/
 ```
 
 | 폴더 | 읽는 사람 | 넣을 내용 | 넣지 않을 내용 |
@@ -127,18 +130,21 @@ docs/
 | `02_guide/` | 처음 배우는 사람 | 개념("왜"), 단계별 방법("어떻게": 명령, 기대 출력, 막혔을 때), 그림, 명령어 설명 | 실험 기록, 측정 결과 |
 | `03_validation/` | 검토자, merge 데모 | **간단한 검증 방법**, 통과 기준, 결과 기록표(측정값, 날짜, 펌웨어 커밋 해시) | 긴 설명(가이드로 링크) |
 
-- **주제 폴더:** `01_firmware`는 Teensy 펌웨어, bench 스케치, micro-ROS, 신호 기판(벤치를 옮긴 Teensy 소켓 기판)을 다룬다. `02_power_wire`는 전원 레일, 하네스, E-stop·릴레이, 신호 배선을 다룬다.
+- **주제 폴더:** `01_firmware`는 Teensy 펌웨어, bench 스케치, micro-ROS, 신호 기판(벤치를 옮긴 Teensy 소켓 기판)을 다룬다. `02_power_wire`는 전원 레일, 하네스, E-stop·릴레이, 신호 배선을 다룬다. `03_relay_board`는 릴레이 MUX 코일 구동 기판(GA6, 전원 박스)을 다룬다.
 - 새 주제가 생기면 다음 번호(`03_…`)로 세 폴더에 필요한 만큼 만든다. 빈 폴더에는 `.gitkeep`을 둔다.
 - 현재 문서
   - `01_development/01_firmware/01_firmware_development.md` — 펌웨어 구조와 개발 기록
   - `01_development/01_firmware/02_steering_design.md` — 조향 펌웨어 설계 (1차 RC 조향 → 2차 컴퓨터 조향), 결정 대기 항목
   - `01_development/01_firmware/03_signal_board_design.md` — 신호 기판(Teensy 소켓 만능기판) 설계, 원본과 다른 점
+  - `01_development/03_relay_board/01_relay_board_design.md` — 릴레이 구동 기판 설계, 원칙의 이유, 원본과 다른 점
   - `02_guide/01_firmware/01_teensy_guide.md` — Teensy 개념과 단계별 bring-up 방법
   - `02_guide/01_firmware/02_rc_receiver_guide.md` — RC 수신기(FS-iA6B) 핀 구조, 연결, 바인딩, `ibus_monitor`
   - `02_guide/01_firmware/03_signal_board_guide.md` — 신호 기판 납땜 순서 (배치도는 원본 생성기 데이터로 생성)
+  - `02_guide/03_relay_board/01_relay_board_guide.md` — 릴레이 구동 기판 회로도·배치도, 단계별 납땜과 검사, 신호 기판 연결
   - `03_validation/01_firmware/test_bench.md` — Stage 0 테스트 벤치 검증 방법과 결과
-  - `03_validation/01_firmware/02_steering_bench.md` — 조향 단계 벤치 검증 방법과 결과 (i-BUS 대기 전압, 수신)
+  - `03_validation/01_firmware/02_steering_bench.md` — 조향 단계 벤치 검증 방법과 결과 (i-BUS 대기 전압, ㅈ수신)
   - `03_validation/01_firmware/03_signal_board.md` — 신호 기판 단락·도통·전압 검사와 결과
+  - `03_validation/03_relay_board/01_relay_board.md` — 릴레이 구동 기판 단계별 검사, 코일 구동·E-stop 감지 확인과 결과
 
 ### 작성 규칙
 
