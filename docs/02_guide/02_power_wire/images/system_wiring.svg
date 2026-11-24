@@ -1,0 +1,577 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="3186" viewBox="0 0 1400 3186" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<rect width="1400" height="3186" fill="#ffffff"/>
+<text x="30" y="38" font-size="21" fill="#0f172a" font-weight="bold" text-anchor="start">MRider 전체 배선 연결도 — 단자·핀마다 어디로 가는가</text>
+<text x="30" y="62" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">출처: 03-electrical.md (전원 구조, §3.4 E-stop·릴레이, §3.5.1 수신기·MUX, §3.5.2 센서 케이블, §3.5.4 신호 기판), sensors.md §3 (IMU), dbw.md §4.1 (MDDS30), 팀 배치도 (신호 기판 IMU판, 릴레이 구동 기판)</text>
+<text x="30" y="80" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">선 색: 빨강 = 전원, 회색 = GND, 파랑 = 신호, 주황 = 모터 전류, 점선 = 일부러 연결하지 않음. 핀 위치·좌표는 각 기판 배치도를 본다.</text>
+<rect x="20" y="104" width="1360" height="34" rx="6" fill="#1d4ed8" opacity="0.12"/>
+<text x="34" y="127" font-size="16" fill="#1d4ed8" font-weight="bold" text-anchor="start">① 신호 기판 (로직 박스) — 단자·헤더 → 상대편</text>
+<rect x="30" y="152" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="152" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="170" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">PWR</text>
+<text x="260" y="170" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="710" y="170" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">UBEC A</text>
+<text x="980" y="170" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">로직 배터리 12 V 입력</text>
+<text x="256" y="196" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">+5 V</text>
+<text x="714" y="196" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">5 V 출력</text>
+<circle cx="270" cy="192" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="192" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="192" x2="694" y2="192" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="220" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="220" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="216" r="4.5" fill="#334155"/>
+<circle cx="700" cy="216" r="4.5" fill="#334155"/>
+<line x1="276" y1="216" x2="694" y2="216" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="154" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="170" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">2선 · 로직 AWG 18–20 (빨강/검정)</text>
+<text x="1010" y="172" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">→ Teensy Vin. UBEC A는 Teensy만 먹인다</text>
+<text x="1010" y="192" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">Teensy VUSB–VIN 패드 절단 필수</text>
+<rect x="30" y="254" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="254" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="272" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">RELAY</text>
+<text x="260" y="272" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="710" y="272" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">TEENSY</text>
+<text x="980" y="272" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">릴레이 구동 기판</text>
+<text x="256" y="298" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">GATE</text>
+<text x="714" y="298" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">GATE</text>
+<circle cx="270" cy="294" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="294" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="294" x2="694" y2="294" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="322" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">SENSE</text>
+<text x="714" y="322" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SENSE</text>
+<circle cx="270" cy="318" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="318" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="318" x2="694" y2="318" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="256" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="272" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">2선 · 신호 AWG 22–24 · GND 선 없음</text>
+<text x="1010" y="274" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">GATE ← 핀 21, SENSE → 핀 20</text>
+<text x="1010" y="294" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">로직 박스 → 전원 박스. GND는 스타 접지로</text>
+<rect x="30" y="356" width="240" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="356" width="290" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="374" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">STRS + STRP</text>
+<text x="260" y="374" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="710" y="374" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">AS5600</text>
+<text x="980" y="374" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">킹핀 브래킷 (조향각)</text>
+<text x="256" y="400" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">SDA</text>
+<text x="714" y="400" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SDA</text>
+<circle cx="270" cy="396" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="396" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="396" x2="694" y2="396" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="424" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">SCL</text>
+<text x="714" y="424" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SCL</text>
+<circle cx="270" cy="420" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="420" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="420" x2="694" y2="420" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="448" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">3.3 V</text>
+<text x="714" y="448" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">VCC</text>
+<circle cx="270" cy="444" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="444" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="444" x2="694" y2="444" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="472" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="472" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="468" r="4.5" fill="#334155"/>
+<circle cx="700" cy="468" r="4.5" fill="#334155"/>
+<line x1="276" y1="468" x2="694" y2="468" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="358" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="374" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">4선 케이블 약 1 m · 신호선</text>
+<text x="1010" y="376" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">SDA → 핀 18, SCL → 핀 19 (Wire, 0x36)</text>
+<text x="1010" y="396" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">3.3 V는 Teensy 3V3 핀에서 (5 V 금지)</text>
+<rect x="30" y="506" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="506" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="524" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">i-BUS</text>
+<text x="260" y="524" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판 3핀 헤더</text>
+<text x="710" y="524" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">FS-iA6B</text>
+<text x="980" y="524" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">i-BUS SERVO 포트</text>
+<text x="256" y="550" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">신호</text>
+<text x="714" y="550" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">위 (신호)</text>
+<circle cx="270" cy="546" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="546" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="546" x2="694" y2="546" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="574" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="end">n/c</text>
+<text x="714" y="574" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">가운데 +5 V</text>
+<circle cx="270" cy="570" r="4.5" fill="#94a3b8"/>
+<circle cx="700" cy="570" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="570" x2="694" y2="570" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+<path d="M478.0 563 L492.0 577 M478.0 577 L492.0 563" stroke="#dc2626" stroke-width="2.4"/>
+<text x="256" y="598" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="598" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">아래 (GND)</text>
+<circle cx="270" cy="594" r="4.5" fill="#334155"/>
+<circle cx="700" cy="594" r="4.5" fill="#334155"/>
+<line x1="276" y1="594" x2="694" y2="594" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="508" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="524" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">3선 서보 케이블</text>
+<text x="1010" y="526" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">신호 → R5 점퍼 → 핀 15 (3.3 V 측정)</text>
+<text x="1010" y="546" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">가운데 +5 V는 기판에서 연결 안 됨</text>
+<rect x="30" y="632" width="240" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="632" width="290" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="650" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">DRVS + DRVP</text>
+<text x="260" y="650" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="710" y="650" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">홀센서 브래킷</text>
+<text x="980" y="650" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">허브 (DRV5013 × 2)</text>
+<text x="256" y="676" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">A</text>
+<text x="714" y="676" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">H1 OUT</text>
+<circle cx="270" cy="672" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="672" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="672" x2="694" y2="672" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="700" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">B</text>
+<text x="714" y="700" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">H2 OUT</text>
+<circle cx="270" cy="696" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="696" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="696" x2="694" y2="696" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="724" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">3.3 V</text>
+<text x="714" y="724" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">VCC ×2</text>
+<circle cx="270" cy="720" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="720" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="720" x2="694" y2="720" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="748" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="748" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND ×2</text>
+<circle cx="270" cy="744" r="4.5" fill="#334155"/>
+<circle cx="700" cy="744" r="4.5" fill="#334155"/>
+<line x1="276" y1="744" x2="694" y2="744" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="634" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="650" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">4선 케이블 약 1 m · 신호선</text>
+<text x="1010" y="652" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">A → 핀 0, B → 핀 1 (풀업·1 nF는 신호 기판)</text>
+<text x="1010" y="672" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">각 래치 VCC–GND에 100 nF (브래킷 쪽)</text>
+<rect x="30" y="782" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="782" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="800" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">PWM 1</text>
+<text x="260" y="800" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판 3핀 헤더</text>
+<text x="710" y="800" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">M1</text>
+<text x="980" y="800" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 MUX (Pololu 2806)</text>
+<text x="256" y="826" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">신호</text>
+<text x="714" y="826" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">신호</text>
+<circle cx="270" cy="822" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="822" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="822" x2="694" y2="822" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="850" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="end">n/c</text>
+<text x="714" y="850" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">VM (+5 V)</text>
+<circle cx="270" cy="846" r="4.5" fill="#94a3b8"/>
+<circle cx="700" cy="846" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="846" x2="694" y2="846" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+<path d="M478.0 839 L492.0 853 M478.0 853 L492.0 839" stroke="#dc2626" stroke-width="2.4"/>
+<text x="256" y="874" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="874" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="870" r="4.5" fill="#334155"/>
+<circle cx="700" cy="870" r="4.5" fill="#334155"/>
+<line x1="276" y1="870" x2="694" y2="870" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="784" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="800" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">3선 서보 케이블</text>
+<text x="1010" y="802" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">핀 2 → 조향 펄스 (MASTER 1)</text>
+<text x="1010" y="822" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">가운데는 기판에서 n/c — UBEC A·B를 잇지 않음</text>
+<rect x="30" y="908" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="908" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="926" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">PWM 2</text>
+<text x="260" y="926" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판 3핀 헤더</text>
+<text x="710" y="926" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">M2</text>
+<text x="980" y="926" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 MUX (Pololu 2806)</text>
+<text x="256" y="952" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">신호</text>
+<text x="714" y="952" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">신호</text>
+<circle cx="270" cy="948" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="948" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="948" x2="694" y2="948" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="976" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="end">n/c</text>
+<text x="714" y="976" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">VM (+5 V)</text>
+<circle cx="270" cy="972" r="4.5" fill="#94a3b8"/>
+<circle cx="700" cy="972" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="972" x2="694" y2="972" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+<path d="M478.0 965 L492.0 979 M478.0 979 L492.0 965" stroke="#dc2626" stroke-width="2.4"/>
+<text x="256" y="1000" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="1000" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="996" r="4.5" fill="#334155"/>
+<circle cx="700" cy="996" r="4.5" fill="#334155"/>
+<line x1="276" y1="996" x2="694" y2="996" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="910" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="926" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">3선 서보 케이블</text>
+<text x="1010" y="928" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">핀 3 → 구동 펄스 (MASTER 2)</text>
+<rect x="30" y="1034" width="240" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1034" width="290" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1052" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">IMUP + IMUS</text>
+<text x="260" y="1052" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="710" y="1052" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">BNO085</text>
+<text x="980" y="1052" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">IMU 보드</text>
+<text x="256" y="1078" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">3.3 V</text>
+<text x="714" y="1078" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">VIN</text>
+<circle cx="270" cy="1074" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1074" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1074" x2="694" y2="1074" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="1102" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="1102" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="1098" r="4.5" fill="#334155"/>
+<circle cx="700" cy="1098" r="4.5" fill="#334155"/>
+<line x1="276" y1="1098" x2="694" y2="1098" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="1126" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">위: SCL1</text>
+<text x="714" y="1126" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SCL</text>
+<circle cx="270" cy="1122" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1122" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1122" x2="694" y2="1122" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="1150" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">아래: SDA1</text>
+<text x="714" y="1150" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SDA</text>
+<circle cx="270" cy="1146" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1146" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1146" x2="694" y2="1146" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="1036" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1052" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">4선 · 수십 cm 이내 (I²C)</text>
+<text x="1010" y="1054" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">SCL1 → 핀 16, SDA1 → 핀 17 (Wire1, 0x4A)</text>
+<text x="1010" y="1074" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">IMUS 위·아래는 1호 기판 납땜대로 (11/23)</text>
+<text x="1010" y="1094" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">풀업은 IMU 보드에 있음 (SCL 10 k, SDA 5 k)</text>
+<rect x="20" y="1194" width="1360" height="34" rx="6" fill="#b45309" opacity="0.12"/>
+<text x="34" y="1217" font-size="16" fill="#b45309" font-weight="bold" text-anchor="start">② 릴레이 구동 기판 (전원 박스) — 단자 → 상대편</text>
+<rect x="30" y="1242" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1242" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1260" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">PWR</text>
+<text x="260" y="1260" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">릴레이 구동 기판</text>
+<text x="710" y="1260" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">E-stop NC ②</text>
+<text x="980" y="1260" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">← 5 A 퓨즈 ← 로직 배터리 12 V</text>
+<text x="256" y="1286" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">+12 V</text>
+<text x="714" y="1286" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">NC ② 출력</text>
+<circle cx="270" cy="1282" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1282" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1282" x2="694" y2="1282" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="1310" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="1310" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">스타 접지</text>
+<circle cx="270" cy="1306" r="4.5" fill="#334155"/>
+<circle cx="700" cy="1306" r="4.5" fill="#334155"/>
+<line x1="276" y1="1306" x2="694" y2="1306" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="1244" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1260" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">2선 · 로직 AWG 18–20 (빨강/검정)</text>
+<text x="1010" y="1262" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">E-stop을 누르면 코일 4개 전원이 끊김 → STOCK</text>
+<text x="1010" y="1282" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">GND 선은 이것 하나 (접지 고리 방지)</text>
+<rect x="30" y="1344" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1344" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1362" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">TEENSY</text>
+<text x="260" y="1362" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">릴레이 구동 기판</text>
+<text x="710" y="1362" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">RELAY</text>
+<text x="980" y="1362" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판</text>
+<text x="256" y="1388" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">GATE</text>
+<text x="714" y="1388" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">GATE</text>
+<circle cx="270" cy="1384" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1384" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1384" x2="694" y2="1384" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="1412" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">SENSE</text>
+<text x="714" y="1412" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SENSE</text>
+<circle cx="270" cy="1408" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1408" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1408" x2="694" y2="1408" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="1346" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1362" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">① RELAY와 같은 케이블</text>
+<text x="1010" y="1364" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">SENSE 약 2.6 V(12 V)·0 V(E-stop) → 핀 20</text>
+<text x="1010" y="1384" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">핀 20에 잇기 전에 전압을 잰다</text>
+<rect x="30" y="1446" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1446" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1464" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">K1–K4</text>
+<text x="260" y="1464" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">릴레이 구동 기판 (각 2핀)</text>
+<text x="710" y="1464" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">릴레이 코일</text>
+<text x="980" y="1464" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">릴레이 소켓 K1–K4 (85·86)</text>
+<text x="256" y="1490" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">86</text>
+<text x="714" y="1490" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">86 (+12 V 쪽)</text>
+<circle cx="270" cy="1486" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1486" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1486" x2="694" y2="1486" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="1514" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">85</text>
+<text x="714" y="1514" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">85 (DRAIN 쪽)</text>
+<circle cx="270" cy="1510" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1510" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1510" x2="694" y2="1510" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="1448" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1464" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">릴레이마다 2선 (× 4)</text>
+<text x="1010" y="1466" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">86 → +12 V, 85 → DRAIN: 12개 모두 같게</text>
+<text x="1010" y="1486" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">소켓 전선 색은 실측. 소켓에 K1–K4 표시</text>
+<rect x="20" y="1558" width="1360" height="34" rx="6" fill="#9a3412" opacity="0.12"/>
+<text x="34" y="1581" font-size="16" fill="#9a3412" font-weight="bold" text-anchor="start">③ 모터 드라이버 MDDS30 — 단자 → 상대편</text>
+<rect x="30" y="1606" width="240" height="256" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1606" width="290" height="256" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1624" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">MDDS30</text>
+<text x="260" y="1624" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">Cytron SmartDriveDuo-30</text>
+<text x="710" y="1624" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">상대편</text>
+<text x="980" y="1624" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">전원·릴레이 MUX·신호 MUX</text>
+<text x="256" y="1650" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">B+</text>
+<text x="714" y="1650" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">컨택터 87 → T 분기</text>
+<circle cx="270" cy="1646" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1646" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1646" x2="694" y2="1646" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="1674" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">B−</text>
+<text x="714" y="1674" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">팩 − (스타 접지점)</text>
+<circle cx="270" cy="1670" r="4.5" fill="#334155"/>
+<circle cx="700" cy="1670" r="4.5" fill="#334155"/>
+<line x1="276" y1="1670" x2="694" y2="1670" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="1698" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">MLA</text>
+<text x="714" y="1698" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">K1 87 (조향 A)</text>
+<circle cx="270" cy="1694" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="1694" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="1694" x2="694" y2="1694" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="1722" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">MLB</text>
+<text x="714" y="1722" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">K2 87 (조향 B)</text>
+<circle cx="270" cy="1718" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="1718" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="1718" x2="694" y2="1718" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="1746" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">MRA</text>
+<text x="714" y="1746" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">K3 87 (구동 A)</text>
+<circle cx="270" cy="1742" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="1742" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="1742" x2="694" y2="1742" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="1770" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">MRB</text>
+<text x="714" y="1770" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">K4 87 (구동 B)</text>
+<circle cx="270" cy="1766" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="1766" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="1766" x2="694" y2="1766" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="1794" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">RC1</text>
+<text x="714" y="1794" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">MUX OUT1 (신호·GND만)</text>
+<circle cx="270" cy="1790" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1790" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1790" x2="694" y2="1790" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="1818" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">RC2</text>
+<text x="714" y="1818" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">MUX OUT2 (신호·GND만)</text>
+<circle cx="270" cy="1814" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="1814" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="1814" x2="694" y2="1814" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="1842" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="end">AN1·AN2·IN1·IN2</text>
+<text x="714" y="1842" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="start">R/C 모드에서 안 씀</text>
+<circle cx="270" cy="1838" r="4.5" fill="#94a3b8"/>
+<circle cx="700" cy="1838" r="4.5" fill="#94a3b8"/>
+<line x1="276" y1="1838" x2="694" y2="1838" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+<path d="M478.0 1831 L492.0 1845 M478.0 1845 L492.0 1831" stroke="#dc2626" stroke-width="2.4"/>
+<rect x="335.0" y="1608" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1624" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">트랙션 AWG 14 · RC는 3핀 (빨간 선 빼기)</text>
+<text x="1010" y="1626" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">B+가 드라이버 로직 전원도 겸함 → E-stop이면 드라이버도 꺼짐</text>
+<text x="1010" y="1646" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">Left(MLA·MLB) = 조향 = 원본 표의 M1</text>
+<text x="1010" y="1666" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">Right(MRA·MRB) = 구동 = 원본 표의 M2</text>
+<text x="1010" y="1686" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">DIP: SW1·2=00, SW3·4=11, SW5=0, SW6=0, SW7·8=10</text>
+<text x="1010" y="1706" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">켜는 순서: 수신기·Teensy·MUX 먼저, 드라이버 마지막</text>
+<text x="1010" y="1726" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">B+·B−·모터 4선은 전원 팀, RC1·RC2는 Track E</text>
+<rect x="20" y="1886" width="1360" height="34" rx="6" fill="#15803d" opacity="0.12"/>
+<text x="34" y="1909" font-size="16" fill="#15803d" font-weight="bold" text-anchor="start">④ 기판을 거치지 않는 연결 — 전원 분배</text>
+<rect x="30" y="1934" width="240" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="1934" width="290" height="136" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="1952" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">로직 배터리</text>
+<text x="260" y="1952" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">12 V LiFePO4 → 5 A 퓨즈</text>
+<text x="710" y="1952" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">분배</text>
+<text x="980" y="1952" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">퓨즈 뒤에서 세 갈래</text>
+<text x="256" y="1978" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">+12 V</text>
+<text x="714" y="1978" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">UBEC A 입력</text>
+<circle cx="270" cy="1974" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1974" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1974" x2="694" y2="1974" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2002" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">+12 V</text>
+<text x="714" y="2002" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">UBEC B 입력</text>
+<circle cx="270" cy="1998" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="1998" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="1998" x2="694" y2="1998" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2026" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">+12 V</text>
+<text x="714" y="2026" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">12 V 직결 → E-stop NC ①·② 입력</text>
+<circle cx="270" cy="2022" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="2022" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2022" x2="694" y2="2022" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2050" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">−</text>
+<text x="714" y="2050" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">스타 접지</text>
+<circle cx="270" cy="2046" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2046" r="4.5" fill="#334155"/>
+<line x1="276" y1="2046" x2="694" y2="2046" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="1936" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="1952" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">로직 AWG 18 (퓨즈까지)</text>
+<text x="1010" y="1954" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">UBEC A → Teensy만, UBEC B → 수신기·MUX만</text>
+<text x="1010" y="1974" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">12 V 직결 → E-stop 거쳐 코일들 (컨택터, 릴레이 4개)</text>
+<text x="1010" y="1994" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">UBEC 입력 GND도 배터리 −로</text>
+<rect x="30" y="2084" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2084" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2102" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">E-stop NC ①</text>
+<text x="260" y="2102" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">MRE-RR2R 버튼</text>
+<text x="710" y="2102" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">컨택터 코일</text>
+<text x="980" y="2102" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">KKA-B4 (85·86)</text>
+<text x="256" y="2128" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">NC ① 출력</text>
+<text x="714" y="2128" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">85</text>
+<circle cx="270" cy="2124" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="2124" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2124" x2="694" y2="2124" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2152" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">로직 GND (스타)</text>
+<text x="714" y="2152" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">86</text>
+<circle cx="270" cy="2148" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2148" r="4.5" fill="#334155"/>
+<line x1="276" y1="2148" x2="694" y2="2148" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="2086" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2102" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">로직 AWG 18–20</text>
+<text x="1010" y="2104" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">NC ①·NC ②는 서로 다른 접점 블록에 (2a2b = 1a1b × 2)</text>
+<text x="1010" y="2124" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">E-stop을 누르면 컨택터가 열려 트랙션 전원이 끊김</text>
+<rect x="30" y="2186" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2186" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2204" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">트랙션 팩 · 컨택터</text>
+<text x="260" y="2204" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">AWG 14</text>
+<text x="710" y="2204" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">트랙션 전원</text>
+<text x="980" y="2204" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">전원 팀</text>
+<text x="256" y="2230" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">팩 +</text>
+<text x="714" y="2230" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">25 A 퓨즈 → 컨택터 30</text>
+<circle cx="270" cy="2226" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="2226" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2226" x2="694" y2="2226" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2254" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">컨택터 87</text>
+<text x="714" y="2254" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">T 분기 → 순정 ECU + · MDDS30 B+</text>
+<circle cx="270" cy="2250" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="2250" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2250" x2="694" y2="2250" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2278" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">팩 −</text>
+<text x="714" y="2278" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">스타 접지 (끊지 않음)</text>
+<circle cx="270" cy="2274" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2274" r="4.5" fill="#334155"/>
+<line x1="276" y1="2274" x2="694" y2="2274" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="2188" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2204" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">트랙션 AWG 14 (빨강/검정)</text>
+<text x="1010" y="2206" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">T 분기는 퓨즈·컨택터 둘 다 뒤에</text>
+<text x="1010" y="2226" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">로직 레일과는 스타 접지에서만 만난다</text>
+<rect x="30" y="2312" width="240" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2312" width="290" height="88" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2330" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">UBEC B</text>
+<text x="260" y="2330" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">로직 배터리 12 V 입력</text>
+<text x="710" y="2330" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">FS-iA6B</text>
+<text x="980" y="2330" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">B/VCC 줄</text>
+<text x="256" y="2356" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="end">5 V 출력</text>
+<text x="714" y="2356" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">가운데 (+)</text>
+<circle cx="270" cy="2352" r="4.5" fill="#dc2626"/>
+<circle cx="700" cy="2352" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2352" x2="694" y2="2352" stroke="#dc2626" stroke-width="2.6"/>
+<text x="256" y="2380" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">GND</text>
+<text x="714" y="2380" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">GND</text>
+<circle cx="270" cy="2376" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2376" r="4.5" fill="#334155"/>
+<line x1="276" y1="2376" x2="694" y2="2376" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="2314" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2330" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">2선 · 로직</text>
+<text x="1010" y="2332" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">수신기와 MUX만 먹인다 (Teensy와 분리)</text>
+<text x="1010" y="2352" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">UBEC A가 죽어도 수신기·MUX는 산다</text>
+<rect x="20" y="2424" width="1360" height="34" rx="6" fill="#0f766e" opacity="0.12"/>
+<text x="34" y="2447" font-size="16" fill="#0f766e" font-weight="bold" text-anchor="start">⑤ 기판을 거치지 않는 연결 — 신호·모터·접지</text>
+<rect x="30" y="2472" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2472" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2490" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">FS-iA6B</text>
+<text x="260" y="2490" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">수신기 채널 포트</text>
+<text x="710" y="2490" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">신호 MUX</text>
+<text x="980" y="2490" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">Pololu 2806</text>
+<text x="256" y="2516" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">CH1 (3선)</text>
+<text x="714" y="2516" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">S1 (SLAVE 1)</text>
+<circle cx="270" cy="2512" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="2512" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="2512" x2="694" y2="2512" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="2540" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">CH2 (3선)</text>
+<text x="714" y="2540" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">S2 (SLAVE 2)</text>
+<circle cx="270" cy="2536" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="2536" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="2536" x2="694" y2="2536" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="2564" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">CH5 (3선)</text>
+<text x="714" y="2564" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">SEL</text>
+<circle cx="270" cy="2560" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="2560" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="2560" x2="694" y2="2560" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="2474" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2490" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">서보 케이블 3선 × 3 (+ 포함)</text>
+<text x="1010" y="2492" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">수신기·MUX 모두 UBEC B → 3선 그대로</text>
+<text x="1010" y="2512" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">MUX 전원(VM·VS)도 이 선으로 들어감</text>
+<text x="1010" y="2532" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">CH5는 2단 스위치에 배정 (송신기 Aux. channels)</text>
+<rect x="30" y="2598" width="240" height="160" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2598" width="290" height="160" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2616" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">신호 MUX</text>
+<text x="260" y="2616" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">Pololu 2806 출력</text>
+<text x="710" y="2616" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">MDDS30</text>
+<text x="980" y="2616" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">RC 입력 헤더</text>
+<text x="256" y="2642" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">OUT1 신호</text>
+<text x="714" y="2642" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">RC1 신호 (조향)</text>
+<circle cx="270" cy="2638" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="2638" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="2638" x2="694" y2="2638" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="2666" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">OUT1 GND</text>
+<text x="714" y="2666" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">RC1 GND</text>
+<circle cx="270" cy="2662" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2662" r="4.5" fill="#334155"/>
+<line x1="276" y1="2662" x2="694" y2="2662" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="2690" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">OUT2 신호</text>
+<text x="714" y="2690" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">RC2 신호 (구동)</text>
+<circle cx="270" cy="2686" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="2686" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="2686" x2="694" y2="2686" stroke="#2563eb" stroke-width="2.6"/>
+<text x="256" y="2714" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">OUT2 GND</text>
+<text x="714" y="2714" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">RC2 GND</text>
+<circle cx="270" cy="2710" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2710" r="4.5" fill="#334155"/>
+<line x1="276" y1="2710" x2="694" y2="2710" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="2738" font-size="12.5" fill="#94a3b8" font-weight="bold" text-anchor="end">(빨간 선)</text>
+<text x="714" y="2738" font-size="12.5" fill="#dc2626" font-weight="bold" text-anchor="start">RC 가운데 5 V</text>
+<circle cx="270" cy="2734" r="4.5" fill="#94a3b8"/>
+<circle cx="700" cy="2734" r="4.5" fill="#dc2626"/>
+<line x1="276" y1="2734" x2="694" y2="2734" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+<path d="M478.0 2727 L492.0 2741 M478.0 2741 L492.0 2727" stroke="#dc2626" stroke-width="2.4"/>
+<rect x="335.0" y="2600" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2616" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">신호·GND만 — 빨간 선 빼기</text>
+<text x="1010" y="2618" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">MDDS30 RC 가운데는 드라이버 자체 5 V</text>
+<text x="1010" y="2638" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">이으면 UBEC B와 드라이버 5 V가 맞붙음</text>
+<rect x="30" y="2772" width="240" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2772" width="290" height="112" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2790" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">릴레이 접점</text>
+<text x="260" y="2790" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">K1–K4 (각 30·87a·87)</text>
+<text x="710" y="2790" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">모터 선</text>
+<text x="980" y="2790" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">authority tap (§3.4 표)</text>
+<text x="256" y="2816" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">30 (COM)</text>
+<text x="714" y="2816" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">모터 쪽 (K1·K2 조향, K3·K4 구동)</text>
+<circle cx="270" cy="2812" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="2812" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="2812" x2="694" y2="2812" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="2840" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">87a (NC)</text>
+<text x="714" y="2840" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">순정 ECU 쪽 = STOCK</text>
+<circle cx="270" cy="2836" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="2836" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="2836" x2="694" y2="2836" stroke="#ea580c" stroke-width="2.6"/>
+<text x="256" y="2864" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="end">87 (NO)</text>
+<text x="714" y="2864" font-size="12.5" fill="#ea580c" font-weight="bold" text-anchor="start">MDDS30 MLA·MLB·MRA·MRB = DBW</text>
+<circle cx="270" cy="2860" r="4.5" fill="#ea580c"/>
+<circle cx="700" cy="2860" r="4.5" fill="#ea580c"/>
+<line x1="276" y1="2860" x2="694" y2="2860" stroke="#ea580c" stroke-width="2.6"/>
+<rect x="335.0" y="2774" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2790" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">모터 전류 선 (전원 팀)</text>
+<text x="1010" y="2792" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">한 쌍의 87a·87을 바꾸면 DBW만 반대로 돈다</text>
+<text x="1010" y="2812" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">→ 선을 고친다 (펌웨어 부호 X)</text>
+<rect x="30" y="2898" width="240" height="160" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="2898" width="290" height="160" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="2916" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">스타 접지</text>
+<text x="260" y="2916" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">모터 드라이버(MDDS30) 한 점</text>
+<text x="710" y="2916" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">모이는 GND</text>
+<text x="980" y="2916" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 GND</text>
+<text x="256" y="2942" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">●</text>
+<text x="714" y="2942" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">신호 기판 (Teensy)</text>
+<circle cx="270" cy="2938" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2938" r="4.5" fill="#334155"/>
+<line x1="276" y1="2938" x2="694" y2="2938" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="2966" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">●</text>
+<text x="714" y="2966" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">수신기</text>
+<circle cx="270" cy="2962" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2962" r="4.5" fill="#334155"/>
+<line x1="276" y1="2962" x2="694" y2="2962" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="2990" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">●</text>
+<text x="714" y="2990" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">신호 MUX</text>
+<circle cx="270" cy="2986" r="4.5" fill="#334155"/>
+<circle cx="700" cy="2986" r="4.5" fill="#334155"/>
+<line x1="276" y1="2986" x2="694" y2="2986" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="3014" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">●</text>
+<text x="714" y="3014" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">릴레이 구동 기판</text>
+<circle cx="270" cy="3010" r="4.5" fill="#334155"/>
+<circle cx="700" cy="3010" r="4.5" fill="#334155"/>
+<line x1="276" y1="3010" x2="694" y2="3010" stroke="#334155" stroke-width="2.6"/>
+<text x="256" y="3038" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="end">●</text>
+<text x="714" y="3038" font-size="12.5" fill="#334155" font-weight="bold" text-anchor="start">MDDS30 (팩 −)</text>
+<circle cx="270" cy="3034" r="4.5" fill="#334155"/>
+<circle cx="700" cy="3034" r="4.5" fill="#334155"/>
+<line x1="276" y1="3034" x2="694" y2="3034" stroke="#334155" stroke-width="2.6"/>
+<rect x="335.0" y="2900" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="2916" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">한 점에서만 묶기</text>
+<text x="1010" y="2918" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">여러 경로로 이으면 접지 고리 (FMEA row 5)</text>
+<text x="1010" y="2938" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">→ 모터가 엉뚱하게 움직이는데 펌웨어 버그처럼 보임</text>
+<rect x="30" y="3072" width="240" height="64" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<rect x="700" y="3072" width="290" height="64" rx="8" fill="#ffffff" stroke="#334155" stroke-width="1.8"/>
+<text x="40" y="3090" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">노트북</text>
+<text x="260" y="3090" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">ROS 2 + micro-ROS agent</text>
+<text x="710" y="3090" font-size="13.5" fill="#0f172a" font-weight="bold" text-anchor="start">Teensy 4.1</text>
+<text x="980" y="3090" font-size="11" fill="#64748b" font-weight="normal" text-anchor="end">신호 기판 소켓</text>
+<text x="256" y="3116" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="end">USB</text>
+<text x="714" y="3116" font-size="12.5" fill="#2563eb" font-weight="bold" text-anchor="start">USB (데이터)</text>
+<circle cx="270" cy="3112" r="4.5" fill="#2563eb"/>
+<circle cx="700" cy="3112" r="4.5" fill="#2563eb"/>
+<line x1="276" y1="3112" x2="694" y2="3112" stroke="#2563eb" stroke-width="2.6"/>
+<rect x="335.0" y="3074" width="300" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="485.0" y="3090" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="middle">USB 케이블</text>
+<text x="1010" y="3092" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">VUSB–VIN 절단 후에는 데이터만</text>
+<text x="1010" y="3112" font-size="12" fill="#334155" font-weight="normal" text-anchor="start">전원은 PWR 단자(UBEC A)로</text>
+</svg>
