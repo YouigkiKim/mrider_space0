@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1737" viewBox="0 0 1180 1737" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
-<rect width="1180" height="1737" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1755" viewBox="0 0 1180 1755" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<rect width="1180" height="1755" fill="#ffffff"/>
 <text x="24" y="36" font-size="19" font-weight="bold" fill="#0f172a">신호 기판 배치도 — Teensy 4.1 소켓 기판 (IMU 추가, 2026-11-16)</text>
 <text x="24" y="58" font-size="12.5" fill="#475569">[GA2] 80 × 80 mm 양면, 2.54 mm 간격: 29 × 29 구멍, 가장자리 한 줄을 비워 쓰는 영역 27 × 27. 원본: docs/images/signal-board-perfboard-layout.svg (03-electrical.md §3.5.4)</text>
 <text x="24" y="77" font-size="12.5" fill="#475569">연결은 원본 생성기 scripts/gen_signal_board_figure.py의 데이터 그대로. <tspan font-weight="bold" fill="#be123c">팀 변경: R5 = 점퍼선 · 단자대 가로 · 피복선은 모두 뒷면, 직각으로 꺾음 · IMU는 기존 배치 그대로 두고 추가</tspan></text>
@@ -987,10 +987,10 @@
 <polyline points="160,800 238,800 238,748" fill="none" stroke="#dc2626" stroke-width="2.6" stroke-linejoin="round"/>
 <polyline points="160,852 290,852 290,670" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linejoin="round" opacity="0.9"/>
 <polyline points="160,852 290,852 290,670" fill="none" stroke="#334155" stroke-width="2.6" stroke-linejoin="round"/>
-<polyline points="755.5,797.5 807.5,797.5 807.5,433.5 391.5,433.5 391.5,407.5" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linejoin="round" opacity="0.9"/>
-<polyline points="755.5,797.5 807.5,797.5 807.5,433.5 391.5,433.5 391.5,407.5" fill="none" stroke="#0369a1" stroke-width="2.6" stroke-linejoin="round"/>
-<polyline points="760.5,854.5 812.5,854.5 812.5,438.5 422.5,438.5 422.5,412.5" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linejoin="round" opacity="0.9"/>
-<polyline points="760.5,854.5 812.5,854.5 812.5,438.5 422.5,438.5 422.5,412.5" fill="none" stroke="#0369a1" stroke-width="2.6" stroke-linejoin="round"/>
+<polyline points="755.5,797.5 807.5,797.5 807.5,433.5 417.5,433.5 417.5,407.5" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linejoin="round" opacity="0.9"/>
+<polyline points="755.5,797.5 807.5,797.5 807.5,433.5 417.5,433.5 417.5,407.5" fill="none" stroke="#0369a1" stroke-width="2.6" stroke-linejoin="round"/>
+<polyline points="760.5,854.5 812.5,854.5 812.5,438.5 396.5,438.5 396.5,412.5" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linejoin="round" opacity="0.9"/>
+<polyline points="760.5,854.5 812.5,854.5 812.5,438.5 396.5,438.5 396.5,412.5" fill="none" stroke="#0369a1" stroke-width="2.6" stroke-linejoin="round"/>
 <rect x="283" y="329" width="14" height="6" fill="#fdf6e3"/>
 <path d="M283 332 A7 7 0 0 1 297 332" fill="none" stroke="#0f766e" stroke-width="2.6"/>
 <rect x="283" y="381" width="14" height="6" fill="#fdf6e3"/>
@@ -1184,8 +1184,8 @@
 <text x="160.0" y="771.0" font-size="10.5" font-weight="bold" fill="#dc2626" text-anchor="middle" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">IMUP</text>
 <circle cx="758" cy="800" r="4" fill="#0369a1"/>
 <circle cx="758" cy="852" r="4" fill="#0369a1"/>
-<text x="750" y="803.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">SDA1</text>
-<text x="750" y="855.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">SCL1</text>
+<text x="750" y="803.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">SCL1</text>
+<text x="750" y="855.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">SDA1</text>
 <text x="758.0" y="771.0" font-size="10.5" font-weight="bold" fill="#0369a1" text-anchor="middle" paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin="round">IMUS</text>
 <circle cx="680" cy="176" r="4" fill="#be123c"/>
 <circle cx="706" cy="176" r="4.5" fill="#ffffff" stroke="#be123c" stroke-width="1.8"/>
@@ -1251,9 +1251,9 @@
 <circle cx="160" cy="852" r="3.2" fill="#334155" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="290" cy="670" r="3.2" fill="#334155" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="758" cy="800" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
-<circle cx="394" cy="410" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
-<circle cx="758" cy="852" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="420" cy="410" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
+<circle cx="758" cy="852" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
+<circle cx="394" cy="410" r="3.2" fill="#0369a1" stroke="#ffffff" stroke-width="1.2"/>
 <circle cx="589.0" cy="657.0" r="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.6"/>
 <text x="589.0" y="660.5" font-size="9.5" font-weight="bold" fill="#7c3aed" text-anchor="middle">21</text>
 <circle cx="459.0" cy="631.0" r="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.6"/>
@@ -1298,10 +1298,10 @@
 <text x="771.0" y="192.5" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">2</text>
 <circle cx="680" cy="202" r="8" fill="#ffffff" stroke="#be123c" stroke-width="1.6"/>
 <text x="680" y="205.5" font-size="9.5" font-weight="bold" fill="#be123c" text-anchor="middle">1</text>
-<circle cx="812.5" cy="464.5" r="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.6"/>
-<text x="812.5" y="468.0" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">26</text>
-<circle cx="807.5" cy="537.5" r="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.6"/>
-<text x="807.5" y="541.0" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">24</text>
+<circle cx="812.5" cy="438.5" r="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.6"/>
+<text x="812.5" y="442.0" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">26</text>
+<circle cx="807.5" cy="511.5" r="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.6"/>
+<text x="807.5" y="515.0" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">24</text>
 <circle cx="303.0" cy="761.0" r="8" fill="#ffffff" stroke="#334155" stroke-width="1.6"/>
 <text x="303.0" y="764.5" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">25</text>
 <circle cx="225.0" cy="813.0" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.6"/>
@@ -1348,7 +1348,7 @@
 <text x="880" y="372" font-size="11.5" font-weight="bold" fill="#0f172a">IMUP</text>
 <text x="932" y="372" font-size="11.5" fill="#334155">IMU 3.3 V, GND (왼쪽 아래)</text>
 <text x="880" y="392" font-size="11.5" font-weight="bold" fill="#0f172a">IMUS</text>
-<text x="932" y="392" font-size="11.5" fill="#334155">SDA1 → 17, SCL1 → 16</text>
+<text x="932" y="392" font-size="11.5" fill="#334155">위 SCL1 → 16, 아래 SDA1 → 17</text>
 <text x="880" y="420" font-size="11.5" fill="#7c3aed">헤더 가운데(+5 V) = n/c:</text>
 <text x="880" y="437" font-size="11.5" fill="#7c3aed">수신기·MUX는 UBEC B,</text>
 <text x="880" y="454" font-size="11.5" fill="#7c3aed">이 기판은 UBEC A.</text>
@@ -1469,43 +1469,44 @@
 <text x="1152" y="1175" font-size="11.5" fill="#dc2626" font-weight="bold" text-anchor="end">IMUP 3.3 V → 3.3 V(아래) 버스</text>
 <circle cx="612" cy="1190" r="8" fill="#fff" stroke="#0369a1" stroke-width="1.6"/>
 <text x="612" y="1193.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">24</text>
-<text x="628" y="1194" font-size="11.5" fill="#0f172a">(26, 26) → (28, 26) → (28, 12) → (12, 12) → (12, 11)</text>
-<text x="1152" y="1194" font-size="11.5" fill="#0369a1" font-weight="bold" text-anchor="end">IMUS SDA1 → 핀 17</text>
+<text x="628" y="1194" font-size="11.5" fill="#0f172a">(26, 26) → (28, 26) → (28, 12) → (13, 12) → (13, 11)</text>
+<text x="1152" y="1194" font-size="11.5" fill="#0369a1" font-weight="bold" text-anchor="end">IMUS 위 SCL1 → 핀 16 (납땜대로)</text>
 <circle cx="612" cy="1209" r="8" fill="#fff" stroke="#334155" stroke-width="1.6"/>
 <text x="612" y="1212.5" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">25</text>
 <text x="628" y="1213" font-size="11.5" fill="#0f172a">(3, 28) → (8, 28) → (8, 21)</text>
 <text x="1152" y="1213" font-size="11.5" fill="#334155" font-weight="bold" text-anchor="end">IMUP GND → GND 버스</text>
 <circle cx="612" cy="1228" r="8" fill="#fff" stroke="#0369a1" stroke-width="1.6"/>
 <text x="612" y="1231.5" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">26</text>
-<text x="628" y="1232" font-size="11.5" fill="#0f172a">(26, 28) → (28, 28) → (28, 12) → (13, 12) → (13, 11)</text>
-<text x="1152" y="1232" font-size="11.5" fill="#0369a1" font-weight="bold" text-anchor="end">IMUS SCL1 → 핀 16</text>
-<rect x="24" y="1275" width="1132" height="226" rx="8" fill="#fff1f2" stroke="#be123c" stroke-width="2"/>
+<text x="628" y="1232" font-size="11.5" fill="#0f172a">(26, 28) → (28, 28) → (28, 12) → (12, 12) → (12, 11)</text>
+<text x="1152" y="1232" font-size="11.5" fill="#0369a1" font-weight="bold" text-anchor="end">IMUS 아래 SDA1 → 핀 17 (납땜대로)</text>
+<rect x="24" y="1275" width="1132" height="244" rx="8" fill="#fff1f2" stroke="#be123c" stroke-width="2"/>
 <text x="44" y="1305" font-size="14" font-weight="bold" fill="#881337">팀 변경 사항 — 원본 배치도와 다른 점</text>
 <text x="44" y="1331" font-size="12" fill="#9f1239"><tspan font-weight="bold">R5 = 점퍼선, R6 생략.</tspan> FS-iA6B i-BUS 신호 대기 전압 3.3 V 측정(2026-11-14) → 03-electrical.md §3.5.4 표의 3.3 V 경우. R6 구멍은 비워 둔다.</text>
 <text x="44" y="1349" font-size="12" fill="#9f1239"><tspan font-weight="bold">피복선은 모두 뒷면, 직각으로 꺾음.</tspan> 선 끝이 모두 소켓·단자·헤더 핀인데, 앞면 패드는 플라스틱 몸체 아래라 인두가 닿지 않는다. 연결은 원본과 같다.</text>
 <text x="44" y="1367" font-size="12" fill="#9f1239"><tspan font-weight="bold">단자대 가로.</tspan> 두 핀을 같은 행에 두어 전선이 기판 바깥(▲▼)으로 나가게 했다. 원본의 위 핀 = 왼쪽 핀. 몸체 4 × 3칸·핀은 가운데 줄로 가정 — 실측 후 TERM_* 수정.</text>
 <text x="44" y="1385" font-size="12" fill="#9f1239"><tspan font-weight="bold">버스에 붙는 선은 같은 버스의 가장 가까운 빈 구멍에.</tspan> 같은 구리선이라 전기적으로 같다. 두 3.3 V 버스는 서로 다른 선으로 본다.</text>
 <text x="44" y="1403" font-size="12" fill="#9f1239"><tspan font-weight="bold">IMU(11/16 원본 추가)는 기존 1–22번을 그대로 두고 더했다.</tspan> IMUP·IMUS는 원본 위치 그대로 세로 — 모서리라 옆이 곧 기판 바깥(◀▶).</text>
-<text x="44" y="1421" font-size="12" fill="#9f1239"><tspan font-weight="bold">SDA1·SCL1(24·26번)은 한 길로 나란히.</tspan> 오른쪽 위로 가는 길은 28열뿐(27열은 GND 세로선). 핀 16·17 위쪽 구멍은 7번이 써서 Teensy 밑(뒷면)으로 들어가 아래에서 닿는다.</text>
+<text x="44" y="1421" font-size="12" fill="#9f1239"><tspan font-weight="bold">SDA1·SCL1(26·24번)은 한 길로 나란히.</tspan> 오른쪽 위로 가는 길은 28열뿐(27열은 GND 세로선). 핀 16·17 위쪽 구멍은 7번이 써서 Teensy 밑(뒷면)으로 들어가 아래에서 닿는다.</text>
 <text x="44" y="1439" font-size="12" fill="#9f1239"><tspan font-weight="bold">Wire1 풀업은 이 기판에 없다.</tspan> IMU 보드에서 SDA1·SCL1–3.3 V 저항을 재고, 열려 있으면 IMU 쪽에 4.7 kΩ (04-firmware.md, Bring up the IMU).</text>
-<text x="44" y="1457" font-size="12" fill="#9f1239"><tspan font-weight="bold">핀 순서 확인.</tspan> 원본의 '핀 순서 미확인' 경고 → PJRC 핀 카드, Stage 0 벤치 배선(핀 0·1·18·19 동작 확인)과 같다.</text>
-<text x="44" y="1475" font-size="12" fill="#9f1239"><tspan font-weight="bold">납땜 전 확인할 것:</tspan> 실제 기판이 29 × 29 구멍·양면인지 센다. Teensy의 VUSB–VIN 패드를 잘랐는지 확인한다(04-firmware.md 13행).</text>
-<rect x="24" y="1517" width="556" height="190" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
-<text x="44" y="1547" font-size="14" font-weight="bold" fill="#14532d">납땜 순서 — 첫 단계는 부품이 아니다</text>
-<text x="44" y="1573" font-size="12" fill="#166534"><tspan font-weight="bold">1.</tspan> 암 헤더 — Teensy를 꽂은 채로 양 끝 핀만 먼저 납땜해 수평 확인.</text>
-<text x="44" y="1591" font-size="12" fill="#166534"><tspan font-weight="bold">2.</tspan> 앞면 버스 3개와 GND 세로선을 <tspan font-weight="bold">끊김 없는 맨 구리선</tspan>으로.</text>
-<text x="44" y="1609" font-size="12" fill="#166534"><tspan font-weight="bold">3.</tspan> 뒷면 스텁(핀 0·1·18·19, R5 노드).</text>
-<text x="44" y="1627" font-size="12" fill="#166534"><tspan font-weight="bold">4.</tspan> 부품: R1·R2·C1·C2 앞면, <tspan font-weight="bold">R3·R4 뒷면</tspan>, <tspan font-weight="bold">R5 자리에 점퍼선.</tspan></text>
-<text x="44" y="1645" font-size="12" fill="#166534"><tspan font-weight="bold">5.</tspan> 가장자리에 단자·헤더.</text>
-<text x="44" y="1663" font-size="12" fill="#166534"><tspan font-weight="bold">6.</tspan> 뒷면 피복선 — 목록 순서대로, 몇 가닥마다 도통 검사.</text>
-<text x="44" y="1681" font-size="12" fill="#166534"><tspan font-weight="bold">7.</tspan> Teensy를 <tspan font-weight="bold">뺀 채로</tspan> 단락·도통 검사. 마지막에 Teensy를 꽂는다.</text>
-<rect x="600" y="1517" width="556" height="190" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
-<text x="620" y="1547" font-size="14" font-weight="bold" fill="#92400e">부품이 그 자리에 있는 이유</text>
-<text x="620" y="1573" font-size="11.5" fill="#b45309"><tspan font-weight="bold">3.3 V 버스 두 개는 Teensy의 3V3 핀에서</tspan> 받는다. Teensy를 뺀</text>
-<text x="620" y="1591" font-size="11.5" fill="#b45309">      기판이 0 V로 읽히는 것은 <tspan font-weight="bold">정상</tspan>이다.</text>
-<text x="620" y="1609" font-size="11.5" fill="#b45309"><tspan font-weight="bold">R3·R4 10 kΩ 풀업:</tspan> DRV5013 출력은 오픈 드레인. GND 버스를</text>
-<text x="620" y="1627" font-size="11.5" fill="#b45309">      건너가므로 뒷면.</text>
-<text x="620" y="1645" font-size="11.5" fill="#b45309"><tspan font-weight="bold">C1·C2 1 nF:</tspan> 같은 두 선에서 GND로. 모터 잡음이 카운트가 되는 것을 막는다.</text>
-<text x="620" y="1663" font-size="11.5" fill="#b45309"><tspan font-weight="bold">R1·R2 4.7 kΩ:</tspan> SCL·SDA 풀업. AS5600 보드의 풀업과 병렬.</text>
-<text x="620" y="1681" font-size="11.5" fill="#b45309"><tspan font-weight="bold">헤더 가운데(+5 V)는 비운다</tspan> — UBEC A와 B를 잇지 않기 위해.</text>
+<text x="44" y="1457" font-size="12" fill="#9f1239"><tspan font-weight="bold">IMUS 표기를 납땜된 대로 바꿈(11/23).</tspan> 원본은 위 = SDA1·아래 = SCL1인데, 1호 기판은 선이 엇갈려 납땜됐다. 다시 납땜하지 않고 <tspan font-weight="bold">위 = SCL1(→ 핀 16), 아래 = SDA1(→ 핀 17)</tspan> 로 적는다. IMU 케이블은 이 표기대로 꽂는다.</text>
+<text x="44" y="1475" font-size="12" fill="#9f1239"><tspan font-weight="bold">핀 순서 확인.</tspan> 원본의 '핀 순서 미확인' 경고 → PJRC 핀 카드, Stage 0 벤치 배선(핀 0·1·18·19 동작 확인)과 같다.</text>
+<text x="44" y="1493" font-size="12" fill="#9f1239"><tspan font-weight="bold">납땜 전 확인할 것:</tspan> 실제 기판이 29 × 29 구멍·양면인지 센다. Teensy의 VUSB–VIN 패드를 잘랐는지 확인한다(04-firmware.md 13행).</text>
+<rect x="24" y="1535" width="556" height="190" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+<text x="44" y="1565" font-size="14" font-weight="bold" fill="#14532d">납땜 순서 — 첫 단계는 부품이 아니다</text>
+<text x="44" y="1591" font-size="12" fill="#166534"><tspan font-weight="bold">1.</tspan> 암 헤더 — Teensy를 꽂은 채로 양 끝 핀만 먼저 납땜해 수평 확인.</text>
+<text x="44" y="1609" font-size="12" fill="#166534"><tspan font-weight="bold">2.</tspan> 앞면 버스 3개와 GND 세로선을 <tspan font-weight="bold">끊김 없는 맨 구리선</tspan>으로.</text>
+<text x="44" y="1627" font-size="12" fill="#166534"><tspan font-weight="bold">3.</tspan> 뒷면 스텁(핀 0·1·18·19, R5 노드).</text>
+<text x="44" y="1645" font-size="12" fill="#166534"><tspan font-weight="bold">4.</tspan> 부품: R1·R2·C1·C2 앞면, <tspan font-weight="bold">R3·R4 뒷면</tspan>, <tspan font-weight="bold">R5 자리에 점퍼선.</tspan></text>
+<text x="44" y="1663" font-size="12" fill="#166534"><tspan font-weight="bold">5.</tspan> 가장자리에 단자·헤더.</text>
+<text x="44" y="1681" font-size="12" fill="#166534"><tspan font-weight="bold">6.</tspan> 뒷면 피복선 — 목록 순서대로, 몇 가닥마다 도통 검사.</text>
+<text x="44" y="1699" font-size="12" fill="#166534"><tspan font-weight="bold">7.</tspan> Teensy를 <tspan font-weight="bold">뺀 채로</tspan> 단락·도통 검사. 마지막에 Teensy를 꽂는다.</text>
+<rect x="600" y="1535" width="556" height="190" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+<text x="620" y="1565" font-size="14" font-weight="bold" fill="#92400e">부품이 그 자리에 있는 이유</text>
+<text x="620" y="1591" font-size="11.5" fill="#b45309"><tspan font-weight="bold">3.3 V 버스 두 개는 Teensy의 3V3 핀에서</tspan> 받는다. Teensy를 뺀</text>
+<text x="620" y="1609" font-size="11.5" fill="#b45309">      기판이 0 V로 읽히는 것은 <tspan font-weight="bold">정상</tspan>이다.</text>
+<text x="620" y="1627" font-size="11.5" fill="#b45309"><tspan font-weight="bold">R3·R4 10 kΩ 풀업:</tspan> DRV5013 출력은 오픈 드레인. GND 버스를</text>
+<text x="620" y="1645" font-size="11.5" fill="#b45309">      건너가므로 뒷면.</text>
+<text x="620" y="1663" font-size="11.5" fill="#b45309"><tspan font-weight="bold">C1·C2 1 nF:</tspan> 같은 두 선에서 GND로. 모터 잡음이 카운트가 되는 것을 막는다.</text>
+<text x="620" y="1681" font-size="11.5" fill="#b45309"><tspan font-weight="bold">R1·R2 4.7 kΩ:</tspan> SCL·SDA 풀업. AS5600 보드의 풀업과 병렬.</text>
+<text x="620" y="1699" font-size="11.5" fill="#b45309"><tspan font-weight="bold">헤더 가운데(+5 V)는 비운다</tspan> — UBEC A와 B를 잇지 않기 위해.</text>
 </svg>

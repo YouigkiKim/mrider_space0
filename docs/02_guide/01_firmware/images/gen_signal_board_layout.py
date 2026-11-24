@@ -81,6 +81,29 @@ IMU0 = [w for w in ALL0 if w[0] in IMU_HOLES0 or w[1] in IMU_HOLES0]
 IMU_END_HOLES = {h for w in IMU0 for h in w[:2]} - IMU_HOLES0
 G.TERMINALS = [t for t in ORIG_TERMINALS if t[0] not in IMU_TERM_NAMES]
 G.USED = [u for u in ORIG_USED if G.pin(u[1], u[2]) not in IMU_END_HOLES]
+
+# ------------------------------------------------ team change 7 (2026-11-23): IMUS as actually soldered
+# On the board built for vehicle #1 the two IMUS wires were soldered crossed: the terminal's UPPER pin
+# went to pin 16 and the LOWER pin to pin 17. Rather than resolder, the terminal is RELABELLED to match
+# the copper - upper = SCL1, lower = SDA1. Electrically the same bus; it only changes which screw takes
+# which wire of the IMU cable. Set False to draw the original's labelling again.
+IMUS_AS_SOLDERED = True
+PIN17, PIN16 = G.pin("17", G.T_TOP), G.pin("16", G.T_TOP)
+if IMUS_AS_SOLDERED:
+    _t = next(t for t in IMU_TERMS0 if t[0] == "IMUS")
+    _up, _lo = (_t[1], _t[2]), (_t[1], _t[2] + 2)
+    _swapped = []
+    for _a, _b, _col in IMU0:
+        if (_a, _b) == (_up, PIN17):
+            _swapped.append((_a, PIN16, _col))
+        elif (_a, _b) == (_lo, PIN16):
+            _swapped.append((_a, PIN17, _col))
+        else:
+            _swapped.append((_a, _b, _col))
+    assert _swapped != IMU0, "the original's IMUS wiring changed - revisit the as-soldered relabel"
+    IMU0 = _swapped
+    IMU_TERMS0 = [(d, c, r, lo, up, col) if d == "IMUS" else (d, c, r, up, lo, col)
+                  for d, c, r, up, lo, col in IMU_TERMS0]
 USED_BASE = {(name, row) for _, name, row, _ in G.USED}
 USED_ALL = {(name, row) for _, name, row, _ in ORIG_USED}
 
@@ -89,7 +112,8 @@ I_BUS = "#be123c"
 G.PARTS = [p for p in G.PARTS if p[0] not in ("R5", "R6")]
 R5_LINK = ((23, 4), (23, 8))                  # the two holes the original gives R5
 R6_FREE = ((23, 10), (27, 10))                # the holes the original gives R6, left empty
-ORIG = [w for w in ALL0 if w not in IMU0]     # the original's wires, without the IMU's
+ORIG = [w for w in ALL0                         # the original's wires, without the IMU's
+        if w[0] not in IMU_HOLES0 and w[1] not in IMU_HOLES0]
 
 hx, hy, P = G.hx, G.hy, G.P
 COLS, ROWS, BORDER = G.COLS, G.ROWS, G.BORDER
@@ -125,6 +149,8 @@ IMU_ROLE_BY_HOLES = {
     ((3, 28), (6, 21)): "IMUP GND → GND 버스",
     ((26, 26), G.pin("17", G.T_TOP)): "IMUS SDA1 → 핀 17",
     ((26, 28), G.pin("16", G.T_TOP)): "IMUS SCL1 → 핀 16",
+    ((26, 26), G.pin("16", G.T_TOP)): "IMUS 위 SCL1 → 핀 16 (납땜대로)",
+    ((26, 28), G.pin("17", G.T_TOP)): "IMUS 아래 SDA1 → 핀 17 (납땜대로)",
 }
 for a, b, _ in ORIG:
     assert (a, b) in ROLE_BY_HOLES, f"the original has a wire {a}->{b} this figure does not name"
@@ -498,6 +524,8 @@ HALO = 'paint-order="stroke" stroke="#fdf6e3" stroke-width="3.5" stroke-linejoin
 BUS_NAME = {"V33T": "3.3 V (위)", "GND": "GND", "V33B": "3.3 V (아래)"}
 HEADER_KO = {"IBUS": "i-BUS 입력 ← 수신기", "PWM1": "PWM 1 · 조향", "PWM2": "PWM 2 · 구동"}
 PAIR_OFF = {PAIR[0]: (-2.5, -2.5), PAIR[1]: (2.5, 2.5)}
+SDA_J = next(j for j in PAIR if IMU_W[j][1] == PIN17)
+SCL_J = next(j for j in PAIR if IMU_W[j][1] == PIN16)
 
 BASE_V = dict(
     imu=False, terms=TERMS, routes=ROUTES, wires=dict(enumerate(WIRES0)), roles=dict(enumerate(ROLES)),
@@ -812,7 +840,8 @@ def draw(Vr):
         ("PWM 2", "신호 ← 3 → MUX M2"),
     ]
     if Vr["imu"]:
-        CONN += [("IMUP", "IMU 3.3 V, GND (왼쪽 아래)"), ("IMUS", "SDA1 → 17, SCL1 → 16")]
+        CONN += [("IMUP", "IMU 3.3 V, GND (왼쪽 아래)"),
+                 ("IMUS", "위 SCL1 → 16, 아래 SDA1 → 17" if IMUS_AS_SOLDERED else "SDA1 → 17, SCL1 → 16")]
     e(f'<text x="{SX}" y="{SY}" font-size="13" font-weight="bold" fill="#0f172a">단자 · 헤더 → Teensy 핀</text>')
     yy = SY + 24
     for k, v in CONN:
@@ -904,11 +933,16 @@ def draw(Vr):
         team += [
             "**IMU(11/16 원본 추가)는 기존 1–22번을 그대로 두고 더했다.** IMUP·IMUS는 원본 위치 그대로 세로 — 모서리라 옆이 곧 "
             "기판 바깥(◀▶).",
-            f"**SDA1·SCL1({NUM_I[PAIR[0]]}·{NUM_I[PAIR[1]]}번)은 한 길로 나란히.** 오른쪽 위로 가는 길은 28열뿐(27열은 GND "
+            f"**SDA1·SCL1({NUM_I[SDA_J]}·{NUM_I[SCL_J]}번)은 한 길로 나란히.** 오른쪽 위로 가는 길은 28열뿐(27열은 GND "
             "세로선). 핀 16·17 위쪽 구멍은 7번이 써서 Teensy 밑(뒷면)으로 들어가 아래에서 닿는다.",
             "**Wire1 풀업은 이 기판에 없다.** IMU 보드에서 SDA1·SCL1–3.3 V 저항을 재고, 열려 있으면 IMU 쪽에 4.7 kΩ "
             "(04-firmware.md, Bring up the IMU).",
         ]
+        if IMUS_AS_SOLDERED:
+            team += [
+                "**IMUS 표기를 납땜된 대로 바꿈(11/23).** 원본은 위 = SDA1·아래 = SCL1인데, 1호 기판은 선이 엇갈려 납땜됐다. "
+                "다시 납땜하지 않고 **위 = SCL1(→ 핀 16), 아래 = SDA1(→ 핀 17)** 로 적는다. IMU 케이블은 이 표기대로 꽂는다.",
+            ]
     team += [
         "**핀 순서 확인.** 원본의 '핀 순서 미확인' 경고 → PJRC 핀 카드, Stage 0 벤치 배선(핀 0·1·18·19 동작 확인)과 같다.",
         "**납땜 전 확인할 것:** 실제 기판이 29 × 29 구멍·양면인지 센다. Teensy의 VUSB–VIN 패드를 잘랐는지 확인한다(04-firmware.md 13행).",
