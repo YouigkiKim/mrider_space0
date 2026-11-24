@@ -60,7 +60,7 @@
 |---|---|---|
 | A1 | i-BUS를 **하드웨어 시리얼** Serial3 RX(**핀 15**)로 받는다. 115200 8N1, **반전 없음** | `04-firmware.md` 핀 표·§4.5 |
 | A2 | 수신기는 5 V로 동작하고 Teensy는 5 V를 견디지 못한다. **i-BUS 대기 전압을 먼저 재고**, 그 결과로 R5·R6(점퍼 또는 분압)을 정한다 | `03-electrical.md` §3.5.4, `04-firmware.md` §4.3 |
-| A3 | 채널: **CH1 = 조향(오른쪽 스틱 좌우)**, CH2 = 스로틀(오른쪽 스틱 상하), **CH5 또는 CH6 = 신호 MUX SEL**(2단 스위치) | `order-log.md` 267–269행 |
+| A3 | 채널: **CH1 = 조향(오른쪽 스틱 좌우)**, CH2 = 스로틀(오른쪽 스틱 상하), **CH5 또는 CH6 = 신호 MUX SEL**(2단 스위치). 송신기 설정(2026-11-23): **CH5 = SwA → MUX SEL**, CH6 = SwC(모드, [D1] 임시). FS-i6 기본값은 CH5 = VrA, CH6 = VrB 다이얼이라 Aux. channels에서 바꿨다(4.2) | `order-log.md` 267–269행 |
 | A4 | 모드 스위치로 `MANUAL_RC`에 들어간다. **스틱은 각도를 명령**하고, 위치 루프는 닫힌 상태를 유지한다 | `04-firmware.md` §4.5, `safety.md` §1.2 |
 | A5 | ESTOP에서 나오는 길은 **RC arm**뿐이다 | `dbw.md` §10.3 |
 | A6 | **RC override는 어느 상태에서든 200 ms 이내**에 걸린다 | `dbw.md` §10.3, §12 |
@@ -139,6 +139,24 @@ Stage 0 구조를 그대로 두고, 판단 코드와 입출력을 더한다.
   - 결과에 `kRcSteerSign · 22.5°`를 곱해 목표각으로 쓴다. 스틱을 오른쪽으로 밀면 어느 쪽 각도가 되는지는 `[MEASURE]`이며, 왼쪽이 +다(`calibration.md` §1).
 - **모드 스위치:** 3단 스위치 KILL / MANUAL / AUTO (**[D1]**)
 - **신호 MUX SEL:** 수신기가 드라이버에 직접 연결된 상태(Layer B)를 Teensy가 알 수 있다. 처리 방법은 **[D5]**.
+  - **SEL 극성 (Pololu 2806 기본 설정):** SEL 펄스가 약 **1700 µs보다 길 때만 SLAVE**(수신기 CH1·CH2)가 선택된다. 히스테리시스는 ±64 µs다.
+    출처: [제품 페이지](https://www.pololu.com/product/2806), 2026-11-23 확인. 원문: "By default, the threshold is approximately 1700 μs and the slave inputs are only selected when the pulses on SEL are above this threshold."
+
+    | SwA (CH5) | 펄스 | 선택 | MDDS30에 가는 것 |
+    |---|---|---|---|
+    | LOW | 약 1000 µs | **MASTER** | Teensy 핀 2·3. 조작은 SwC 모드를 따른다(Layer A) |
+    | HIGH | 약 2000 µs | **SLAVE** | 수신기 CH1·CH2 그대로. 스틱 = effort, 개루프(Layer B) |
+    | 신호 끊김 | — | MASTER | `FAILMODE` 점퍼가 없을 때. Teensy가 RC 끊김 처리로 ESTOP(A7) |
+
+  - **기준값과 방향은 기본값으로 둔다.** MUX의 학습 모드 점퍼로 기준값과 방향을 바꿀 수 있지만 바꾸지 않는다.
+    바꾸면 위 표와 송신기 라벨이 모두 틀어진다.
+  - **SEL에는 다이얼이 아니라 2단 스위치를 쓴다.** FS-i6 기본 배정(VrA 다이얼)에서 CH5는 **1727**로 측정됐다(2026-11-14).
+    기준값 1700 µs 바로 위라서, 다이얼이 조금만 움직여도 MASTER와 SLAVE가 바뀔 수 있다.
+  - 위 표는 MUX 사양에서 나온 결론이다. 실제 동작은 7.1의 9번(Teensy를 멈춘 상태에서 전환)에서 확인한다.
+    - 2026-11-24 벤치: SwA LOW에서는 Teensy 펄스가, HIGH에서는 송신기 스틱이 모터를 움직여 극성이 표와 같았다(Teensy는 켜진 상태,
+      [조향 벤치 검증](../../03_validation/01_firmware/02_steering_bench.md) §3). Teensy를 멈춘 상태의 시험은 남았다.
+    확인한 뒤 송신기 SwA 옆에 "LOW = Teensy / HIGH = 수동" 라벨을 붙인다.
+  - **릴레이 MUX가 DBW일 때만 의미가 있다.** STOCK이면 모터가 순정 ECU에 물려 있어서, SwA·SwC 위치와 관계없이 모터에 닿지 않는다.
 
 ### 4.3 위치 루프
 
@@ -197,7 +215,7 @@ Stage 0 구조를 그대로 두고, 판단 코드와 입출력을 더한다.
 
 | ID | 항목 | 문제 | 선택지 | 추천 | 상태 |
 |---|---|---|---|---|---|
-| **D1** | **모드 스위치 채널과 arm 동작** | 문서는 "RC arm"과 "RC mode switch"를 요구하지만 **채널과 동작은 정하지 않았다.** MUX SEL이 CH5 또는 CH6이니 남은 하나를 써야 한다 | (a) 3단 스위치(SwC) 하나에 KILL/MANUAL/AUTO, KILL→MANUAL로 올릴 때 arm (b) arm과 모드를 2단 스위치 두 개로 나눔 | (a) — FS-i6 기본 6채널 안에서 해결된다. 스틱 중앙 조건을 붙여 갑자기 꺾이는 것을 막는다 | 결정 대기 |
+| **D1** | **모드 스위치 채널과 arm 동작** | 문서는 "RC arm"과 "RC mode switch"를 요구하지만 **채널과 동작은 정하지 않았다.** MUX SEL이 CH5 또는 CH6이니 남은 하나를 써야 한다 | (a) 3단 스위치(SwC) 하나에 KILL/MANUAL/AUTO, KILL→MANUAL로 올릴 때 arm (b) arm과 모드를 2단 스위치 두 개로 나눔 | (a) — FS-i6 기본 6채널 안에서 해결된다. 스틱 중앙 조건을 붙여 갑자기 꺾이는 것을 막는다 | 결정 대기 (송신기는 (a)로 임시 설정: CH6 = SwC, 2026-11-23) |
 | **D2** | 송신기 failsafe | FS-iA6B는 송신기가 꺼져도 failsafe 값으로 프레임을 계속 보낼 수 있다 | 모드 채널 failsafe = KILL로 송신기 설정 | 설정하고 `ibus_monitor`로 확인 | 결정 대기 |
 | **D3** | 수치 기준값 | RC 끊김 100 ms, 데드밴드 5%, override 기준(스틱 30%), stall(0.25·2°/s·2°·0.5 s·0.15), 중앙 복귀(1°·150 ms·1.5 s), 한계 여유 0.5°, effort 시작값 0.6 | — | `[POLICY]`/`[TUNE]`로 두고 측정해 확정, 기록 | 결정 대기 |
 | **D4** | debug 토픽 | 튜닝에는 effort·P·I·D가 필요하다. 그런데 문서는 진단을 "파라미터·서비스로, **별도 채널 없이**" 하라고 한다(`dbw.md` §10.1) | (a) 튜닝 동안 유지하고 이후 빌드 옵션으로 끔 (b) 빼고 status만으로 튜닝 (c) `DbwStatus`에 필드 추가 | (a) — 인터페이스 계약은 건드리지 않고 이유를 기록 | 결정 대기 |
@@ -219,6 +237,9 @@ Stage 0 구조를 그대로 두고, 판단 코드와 입출력을 더한다.
 - **신호 MUX 실물 핀 배치 (Pololu `rcm01b`, 2026-11-14 보드 확인)**
   - `SEL`·`M1~M4`·`OUT1~OUT4`는 가운데 핀이 **VM**, `S1~S4`는 가운데 핀이 **VS**로 서로 다른 전원선이다.
     문서의 "SEL·MASTER·OUT은 VM 하나"(`03-electrical.md` §3.5.1)와 일치한다.
+  - **MUX는 VM에서 전원을 받고, VS는 쓰지 않는다**([제품 페이지](https://www.pololu.com/product/2806)).
+    원문: "the mux draws its power from those pins", "connected to each other on the VS rail but are not used by the board".
+    - M 쪽 가운데는 신호 기판에서 비어 있고 OUT 쪽 빨간 선은 뺀다. 그래서 **MUX 전원은 수신기 CH5 → `SEL` 케이블의 +5로만 들어온다.** 이 케이블은 3선을 모두 잇는다.
   - 앞면(부품면)에서 보면 두 블록 모두 **신호 핀이 보드 안쪽, GND가 바깥 가장자리**다.
   - 연결:
     - 수신기 CH5 → `SEL`(3선, VM 전원도 여기서), 수신기 CH1 → `S1`(3선, VS 전원도 여기서)
@@ -249,6 +270,7 @@ Stage 0 구조를 그대로 두고, 판단 코드와 입출력을 더한다.
     결과는 [조향 벤치 검증](../../03_validation/01_firmware/02_steering_bench.md) §1.
   - 연결할 때는 **신호와 GND만** Teensy 쪽으로 보낸다. 가운데 +5 V는 Teensy에 연결하지 않는다.
 - **신호 MUX SEL ← CH5 또는 CH6, MUX slave ← 수신기 CH1·CH2:** Layer B 배선이다(`03-electrical.md` §3.5.1).
+  - 이 팀은 **CH5(SwA) → `SEL`**로 정했다. 극성(LOW = MASTER)은 4.2에 있다.
 
 ---
 

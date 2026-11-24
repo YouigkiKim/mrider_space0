@@ -13,10 +13,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - MRider: 아이용 전동차를 DBW(drive-by-wire) 자율주행 플랫폼으로 바꾸는 연구·교육 프로젝트. 원본은 교수님 저장소
   `jrkwon/mrider`이고 문서 사이트(MkDocs)가 `main` push 때 배포된다.
 - 이 클론은 **Track E(전장·펌웨어) 팀 작업용**이다.
-  - `origin` = 교수님 저장소(읽기 전용, push 차단 `no_push`), `team` = 팀 저장소.
+  - 이 클론은 팀 저장소를 fork해 받은 것이다: `origin` = **팀 저장소**(`YouigkiKim/mrider_space0`, 우리 작업을 push하는 곳),
+    `upstream` = **교수님 저장소**(`jrkwon/mrider`, 읽기 전용 — push 차단 권장: `git remote set-url --push upstream no_push`).
   - `main` = **팀 통합 브랜치**로, 교수님 원본과 다르다. 검증이 끝난 기능 브랜치를 PR로 합친다.
   - 작업은 기능 브랜치를 앞 단계 위에 쌓는다: `firmware/sensing`(Stage 0) → `firmware/steering`(Stage 1) → …
-  - 교수님 업데이트는 **pull만** 받는다: `git switch main && git pull origin main && git push team main`.
+  - 교수님 업데이트는 **pull만** 받는다: `git switch main && git pull upstream main && git push origin main`.
+  - 기능 브랜치는 `git push origin <브랜치>`로 올린다.
     충돌은 그 부분만 정리하고, push한 `main`은 다시 쓰지 않는다(`rebase`, `push --force` 금지).
   - push와 PR 생성은 사용자가 직접 한다(이 환경에는 GitHub 인증과 `gh`가 없다).
   - `main`에 push하면 교수님 저장소에서 따라온 GitHub Actions(문서 배포 등)가 팀 저장소에서 돌아 실패 메일이 갈 수 있다.
