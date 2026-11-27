@@ -142,6 +142,7 @@ docs/
   - `02_guide/01_firmware/01_teensy_guide.md` — Teensy 개념과 단계별 bring-up 방법
   - `02_guide/01_firmware/02_rc_receiver_guide.md` — RC 수신기(FS-iA6B) 핀 구조, 연결, 바인딩, `ibus_monitor`
   - `02_guide/01_firmware/03_signal_board_guide.md` — 신호 기판 납땜 순서 (배치도는 원본 생성기 데이터로 생성)
+  - `02_guide/01_firmware/04_setup_guide.md` — 새 PC 개발 환경 설정: WSL2·usbipd, PlatformIO·udev, ROS 2·micro-ROS agent, Docker·micro-ROS 라이브러리, 설치 확인
   - `02_guide/02_power_wire/01_system_wiring_guide.md` — 전체 배선 연결도: 두 기판·MDDS30의 단자·헤더와 기판 밖 선이 핀마다 어디로 가는지, 잇지 않는 핀, 배선 순서
   - `02_guide/03_relay_board/01_relay_board_guide.md` — 릴레이 구동 기판 회로도·배치도, 단계별 납땜과 검사, 신호 기판 연결
   - `03_validation/01_firmware/test_bench.md` — Stage 0 테스트 벤치 검증 방법과 결과
