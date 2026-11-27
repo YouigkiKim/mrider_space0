@@ -8,7 +8,7 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
   `docs/02_guide/01_firmware/01_teensy_guide.md`에 있다. 이 문서는 그 내용을 반복하지 않는다.
 - **설계의 원본:** `docs/design/dbw.md` §9–12, `docs/design/safety.md`. **절차의 원본:** `docs/build/04-firmware.md`.
   이 문서와 원본이 다르면 원본이 맞다.
-- **마지막 갱신:** 2026-11-14 · 브랜치 `firmware/sensing` (테스트 벤치 검증 반영)
+- **마지막 갱신:** 2026-11-24 · 브랜치 `firmware/steering` · `pwm_effort_check` `71c236e` (Teensy → 모터 구동 확인, 7.9·7.10)
 - **경로 표기:** 모든 경로는 **저장소 루트** 기준이다. 저장소 밖 경로는 출처(공식 문서의 설치 위치, 도구 기본값)를 함께 적었다.
 
 ---
@@ -23,6 +23,7 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
   - Teensy 4.1 실기 확인(센서 미연결 상태): 안정 동작, `/mitt/dbw/status` 200 Hz, 고장 비트·서비스 거부 정상
   - **책상 위 테스트 벤치 검증 완료 (2026-11-14):** 홀센서 래치·카운트, AS5600 I²C·공극·각도 (7.7절)
   - **차량 장착 후 확인은 아직 안 함** → 다음 작업: 장착, wrap 검사, k·c0 보정, USB 30분 안정성
+  - **Teensy → MUX → MDDS30 → 조향·구동 모터 열린 루프 구동 확인 (2026-11-24, 7.10)**: bench 스케치 `pwm_effort_check`
 - **개발 방식:** 기능 하나 = 브랜치 하나. 앞 브랜치 위에 쌓는다.
   `main`(교수님 원본) → `firmware/sensing`(지금) → `firmware/steering` → …
 - **다음 단계:** 센서 배선·보정(Stage 0 gate) → 조향 위치 루프(Stage 1)
@@ -55,6 +56,7 @@ MRider DBW 펌웨어(Teensy 4.1)의 **현재 구조, 개발 환경, 개발 과�
 ## 3. 개발 환경과 버전
 
 문서(`software.md` §6.3)가 요구하는 버전 기록이다. 바꿀 때는 이 표와 함께 커밋한다.
+새 PC에 설치하는 순서와 확인 방법은 [개발 환경 설정 가이드](../../02_guide/01_firmware/04_setup_guide.md)에 있다.
 
 | 구성 요소 | 버전 | 어디에 고정되어 있나 |
 |---|---|---|
@@ -101,11 +103,11 @@ firmware/
 ```
 
 - **커밋된 것:** 위 트리 전체(산출물 제외)
+  - `bench/src/ibus_monitor.cpp` — `firmware/steering`에서 커밋. 수신기로 하드웨어 검증(2026-11-14, 7.8절)
 - **아직 커밋하지 않은 것 (해당 단계에서 커밋 예정)**
   - `bench/src/pwm_effort_check.cpp` — Stage 1 (출력 부호, PWM 주기, hang 테스트)
-  - `bench/src/ibus_monitor.cpp` — Stage 2 (RC 수신기)
   - `bench/src/estop_relay_check.cpp` — E-stop 단계
-  - 세 파일 모두 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
+  - 두 파일 모두 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
 - **저장소 밖에 보관 중 (개발자 PC)**
   - 저장소 옆 폴더 `../mrider-wip/mitt_dbw_steer_drive_2026-11-13/` — Stage 1 조향 루프 + 구동 채널 코드
     (테스트 104개 통과). **이 PC에만 있고 다른 팀원 PC에는 없다.** 필요하면 해당 단계 브랜치로 옮겨 공유한다.
@@ -336,15 +338,79 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
     `firmware/bench/platformio.ini`에 `monitor_port = /dev/ttyACM*` 추가.
 - **회로도:** `docs/02_guide/01_firmware/images/stage0_bench_schematic.svg` (Teensy 실제 핀 배치 기준, 생성 스크립트 동봉)
 
+### 7.8 RC 수신기 i-BUS 연결 (2026-11-14, firmware/steering 준비)
+
+- **결과:** 검증 기록은 `docs/03_validation/01_firmware/02_steering_bench.md` §1·§2, 설명은 `docs/02_guide/01_firmware/02_rc_receiver_guide.md`
+  - i-BUS SERVO 신호 대기 전압 **3.3 V** → 신호 기판 **R5 = 점퍼선, R6 생략**(`03-electrical.md` §3.5.4 표)
+  - `ibus_monitor`: 128–132 fr/s, bad 0 — 송신기 → 수신기 → 핀 15 경로 동작
+- **겪은 문제와 해결**
+  - **"신호 핀이 5 V":** i-BUS 포트의 가운데 핀을 신호로 알고 잼. 서보 커넥터의 가운데는 항상 **+ 전원**이다.
+    위 핀을 다시 재서 3.3 V 확인. 교훈: 전압을 재기 전에 도통 테스트로 핀 역할부터 확인한다.
+  - **수신기 LED 깜빡임:** 송신기와 연결이 안 된 상태. 송신기 쪽 조치 후 연결됨(시작 경고 해제였는지 바인딩이었는지 기록 필요).
+  - **모니터에 아무 줄도 안 나옴:** 업로드 직후 Claude가 출력을 직접 읽으려고 `stty`로 포트를 열다가 멈췄고, 그 뒤 USB가 다시 붙으면서
+    시리얼이 이상한 상태로 남음. USB를 다시 꽂자 정상. 교훈: 시리얼 포트는 한 프로그램만 쓴다. 확인은 `pio device monitor`로 한다.
+  - **`monitor_port`가 `한`으로 바뀌어 있음:** 한글 입력 중 실수. `/dev/ttyACM*`로 복구.
+- **CH5가 1727(중간값):** 다이얼(VrA)에 연결된 송신기 기본 설정으로 추정. MUX SEL은 2단 스위치여야 하므로 채널 배치 확인 때 정한다(조향 설계 D1).
+  → 7.9에서 정함.
+
+### 7.9 신호 기판·MUX 연결 후 i-BUS 재확인, 송신기 채널 배정 (2026-11-23, firmware/steering)
+
+- **연결 상태:** 수신기 → 신호 기판 i-BUS 헤더 → 핀 15. 수신기 CH1·CH2·CH5 → MUX S1·S2·SEL(3선). Teensy PWM → MUX M1·M2.
+- **겪은 문제: 핀 15가 −0.64 V, 프레임 0개**
+  - 진단: 신호선이 GND보다 낮다. 이 값은 Teensy 핀 보호 다이오드 하나의 전압이다. 수신기 GND가 핀 15에 물려 핀을 아래로 끌고 있다는 뜻이다.
+  - 원인: 수신기 SERVO 포트 쪽 3핀 케이블을 **신호·GND가 바뀌게** 꽂음. 7.8의 −0.5 V와 같은 실수다.
+  - 해결: 돌려 꽂은 뒤 핀 15가 평균 2.6 V가 됐고, `ibus_monitor`(`6e23500`)에서 128–132 fr/s, bad 0.
+  - 교훈:
+    - 3핀 서보 커넥터는 방향이 정해져 있지 않다. 양쪽 끝의 GND 자리에 표시한다.
+    - 뒤집혔는데 0 V가 아니라 음수가 나왔다면, 그 순간 수신기 GND와 Teensy GND가 다른 경로로는 이어져 있지 않았다는 뜻이다.
+      정상이라면 MUX를 거쳐 이어져야 하므로, PWM 케이블의 방향도 함께 확인한다.
+- **채널 확인 (60초 기록)**
+  - CH2 1002–1981, 가운데로 돌아옴. 송신기를 끄면 `NO FRAMES`가 나와 시간 초과로 RC 끊김을 감지한다.
+  - CH5·CH6은 스위치를 넘겨도 1000에서 움직이지 않았다.
+- **원인과 조치**
+  - FS-i6 기본 배정이 CH5 = VrA, CH6 = VrB **다이얼**이었다.
+  - Aux. channels에서 **CH5 = SwA(MUX SEL), CH6 = SwC(모드, D1 추천안으로 임시)**로 바꿨다.
+  - 11/24 실제 동작으로 확인: SwA LOW에서는 Teensy 펄스가, HIGH에서는 송신기 스틱이 모터를 움직인다(7.10).
+- **MUX SEL 극성:** Pololu 2806 기본값은 SEL이 약 1700 µs보다 길 때만 SLAVE다. 따라서 SwA LOW = MASTER(Teensy).
+  - 다이얼 값 1727이 기준값 바로 위였다는 것도 스위치를 써야 하는 이유다.
+  - 자세한 내용은 [조향 설계](02_steering_design.md) 4.2에 있다.
+
+### 7.10 Teensy → 모터 구동 확인 (2026-11-23–24, firmware/steering)
+
+- **이번 단계의 범위:** Teensy가 내보내는 펄스가 신호 MUX와 MDDS30을 거쳐 **조향·구동 모터를 각각** 움직이는지까지.
+  위치 루프는 없고 effort(모터 세기)만 준다. 센서를 차량에 다는 것은 다음 단계다(9장).
+- **결과:** 통과. 측정값은 [조향 벤치 검증](../../03_validation/01_firmware/02_steering_bench.md) §3,
+  스케치는 `firmware/bench/src/pwm_effort_check.cpp`(`71c236e`).
+  - 경로: 핀 2 → PWM 1 → MUX M1 → OUT1 → RC1 → MLA·MLB → 조향, 핀 3 → PWM 2 → M2 → OUT2 → RC2 → MRA·MRB → 구동
+  - 배선 전체는 [전체 배선 가이드](../../02_guide/02_power_wire/01_system_wiring_guide.md)를 본다.
+- **겪은 문제와 해결** (일어난 순서)
+
+| # | 증상 | 원인 | 해결 | 교훈 |
+|---|---|---|---|---|
+| 1 | 모터가 제대로 안 돌고 드라이버가 재시작하는 듯함 | MDDS30 전원을 순정 ECU 전원선, 즉 **10 A 자동 복귀 차단기(LINE/LOAD 표시) 뒤**에서 땀 | 배터리에서 바로 25 A 퓨즈를 거쳐 `B+`·`B−` | DBW 전원은 순정 보호기 **앞**(배터리)에서 딴다(`03-electrical.md` §3.3). 그 차단기는 조향과 무관 |
+| 2 | 송신기 CH1·CH2 어느 쪽이든 구동 모터가 돎 | MDDS30 DIP이 출고값(모두 0) → `SW3·4 = 00` = **MIXED** | `0 0 1 1 0 0 1 0`으로 맞추고 드라이버를 다시 켬 | "Five off, three on. Not eight off."(§3.5). 스위치를 바꾸면 전원을 다시 켜야 반영 |
+| 3 | 조향만 안 돎, MLA·MLB 전압은 변함, 플러그 쪽 저항 OL | 조향 플러그를 잘못 찾음. 암 플러그 구멍에 벗긴 선이나 프로브를 넣어 접점에 안 닿음 | 원본 표(`02-mechanical.md` 2단계: `M2M3`, 작은 흰색 2핀, 갈색·파랑)로 찾아 다시 연결 | 순정 ECU로는 된다면 모터와 선은 정상. 커넥터 **위치**로 찾고 색으로 찾지 않는다 |
+| 4 | Teensy가 몇 초마다 재부팅 | bench 스케치 버그 두 가지: ① 워치독을 켠 뒤 `Serial.begin()`(최대 2초 대기) ② WDT_T4가 `window = 0`을 1틱(약 31 µs) 창으로 바꿔서, 쉬지 않는 루프에서 매번 먹이면 "너무 이른 먹이기"로 즉시 리셋 | `mitt_dbw`와 같은 구조: `begin()`·포트 대기 없음, **5 ms 틱마다 한 번** 먹임 | bench 스케치도 본 펌웨어의 **검증된 구조**를 따른다. `hal.cpp` 주석에 이미 적혀 있던 함정 |
+| 5 | Teensy가 PC에서 아예 사라짐(어떤 케이블·포트로도), 빨간 LED 오류 깜빡임 | 4의 재부팅 반복과 그동안 usbipd 자동 연결이 수십 번 붙였다 떼면서 **PC 쪽 USB 상태가 꼬인 것**으로 추정 | 15초 복구로 플래시 초기화, 다음 날 다시 연결하자 정상 인식 | 처음에 "Teensy USB 고장"으로 **잘못 결론 냈다.** 하드웨어 고장으로 보기 전에 PC 재시작과 다른 PC로 확인한다. 빨간 LED 표: 2번 = 메인 칩 응답 없음, 7번 = 통신 오류, 1초 간격 = USB 통신 없음(PJRC `ic_mkl02_t4`) |
+| 6 | SwA LOW(Teensy)에서만 MDDS30 ERR 2번 깜빡임 | MUX 쪽 PWM 케이블 신호·GND가 반대 → **핀 2·3이 GND에 단락** | 케이블 방향 교정 | 진단: 핀을 HIGH로 내보내고 칩이 다시 읽으면 0 → 바깥에서 GND로 눌림. 이 단계에서 같은 실수(3핀 방향)가 세 번째 |
+| 7 | 조향 명령에 구동 모터가 돎 | PWM 1·2 케이블이 MUX에서 **서로 바뀜**(M1↔M2) | 교정, 케이블에 라벨 | 중립에서는 두 핀 파형이 같아 측정으로 못 가린다. **채널마다 따로** 명령해서 확인한다 |
+| 8 | 사인파 effort에 조향이 한쪽으로만 나갔다 돌아옴, 중간에 멈칫 | effort는 각도가 아니라 **속도**. 사인을 누적하면 한쪽으로 치우침. 작은 effort(±0.05)는 마찰·불감대로 안 움직임 | 사각파 effort(+0.15 1초 → −0.15 2초 → +0.15 1초)로 좌우 확인 | 각도를 맞추는 건 다음 단계의 위치 루프다 |
+
+- **측정 요령 (300 Hz):** 50 Hz·1500 µs 펄스는 평균 0.25 V라 멀티미터로 보기 어렵다.
+  - `f`로 300 Hz로 올리면 평균이 Teensy 쪽 약 1.5 V, MUX 출력 이후 약 2.2 V가 된다. MUX가 자기 VM(5 V)으로 다시 만들어 내보내기 때문이다.
+  - 끝나면 **50 Hz로 되돌린 뒤** 드라이버를 켠다.
+- **켜는 순서:** Teensy(1500 µs) → 수신기·MUX → **드라이버 마지막**. 드라이버가 켜질 때 정지가 아닌 입력을 보면 ERR 2번 깜빡이며 거부한다(`03-electrical.md` §3.5).
+
 ---
 
 ## 8. 브랜치와 커밋 규칙
 
-- **원격 저장소**
-  - `origin` = 교수님 저장소(`jrkwon/mrider`). 읽기 전용, push 차단(`no_push`).
-  - `team` = 팀 저장소. 우리 작업을 올리는 곳.
+- **원격 저장소** (2026-11-24 갱신: 팀 저장소를 fork해 받은 클론 기준)
+  - `origin` = 팀 저장소(`YouigkiKim/mrider_space0`). 우리 작업을 올리는 곳.
+  - `upstream` = 교수님 저장소(`jrkwon/mrider`). 읽기 전용. push 차단 권장: `git remote set-url --push upstream no_push`
+  - 이전 기록의 `origin`(교수님)·`team`(팀)은 fork 전 클론의 이름이다.
 - **브랜치**
-  - `main` = **팀 통합 브랜치.** 검증이 끝난 기능 브랜치를 PR로 합친다. 교수님 원본(`origin/main`)과는 다르다.
+  - `main` = **팀 통합 브랜치.** 검증이 끝난 기능 브랜치를 PR로 합친다. 교수님 원본(`upstream/main`)과는 다르다.
   - 기능 브랜치를 앞 단계 위에 쌓는다.
     ```
     main  ← PR로 합침
@@ -354,9 +420,9 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
     ```
   - 다음 브랜치 시작: 앞 단계가 `main`에 합쳐졌으면 `git switch -c firmware/steering main`,
     아직이면 `git switch -c firmware/steering firmware/sensing`
-  - 기능이 검증되면 그 브랜치를 `team`에 push하고 `main`으로 PR을 만든다.
+  - 기능이 검증되면 그 브랜치를 `origin`(팀)에 push하고(`git push origin <브랜치>`) `main`으로 PR을 만든다.
 - **교수님 업데이트 받기 (pull만)**
-  - `git switch main && git pull origin main && git push team main`
+  - `git switch main && git pull upstream main && git push origin main`
   - 교수님이 우리가 고친 파일(예: `firmware/bench/platformio.ini`)을 함께 고쳤다면 충돌이 난다. 그 부분만 정리해서 커밋한다.
   - 이미 push한 `main`은 되돌리거나 다시 쓰지 않는다(`rebase`, `push --force` 금지). 팀원이 받은 기록과 어긋나기 때문이다.
   - 진행 중인 기능 브랜치는 필요하면 새 `main`을 합친다(`git merge main`).
@@ -373,18 +439,21 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
 
 ## 9. 다음 단계 로드맵
 
+- **지금 위치 (2026-11-24):** 수신기 → Teensy(i-BUS), Teensy → 모터(열린 루프) 확인 완료.
+- **바로 다음 단계: 센서를 차량에 장착** — AS5600(킹핀), 홀센서(구동 허브), IMU. 그 뒤에 아래를 한다.
+  - Stage 0 gate(차량): wrap 검사, k·c0 보정, USB 30분 안정성
+  - `pwm_effort_check`로 effort 부호(`kSteerEffortSign`), 펄스 끊김 시 정지(리셋 버튼), hang 시험(`H`), 프레임 속도 측정
+  - 조향 위치 루프(아래 `firmware/steering` 행)
+
 | 브랜치 | 추가할 것 | 함께 할 배선 | 통과 기준 (gate) |
 |---|---|---|---|
 | `firmware/sensing` (지금) | — | AS5600, Hall 래치 2개, 풀업 | wrap 없음, k·c0 측정, 센서 뽑으면 고장 비트, 엔코더 방향, USB 30분 끊김 0 |
-| `firmware/steering` | 명령 수신, 조향 PID, 파라미터(게인·`enable`), 한계·stall·끊김 규칙, hang 테스트 빌드 | MDDS30(RC1), 조향 모터, 전류 제한 전원, 신호 MUX | 정상상태 오차 ≤ 1°, 스텝·RMS·드리프트 기준, 안전 동작, hang 테스트 → **Merge 1 (11/23)** |
-| `firmware/drive` | 구동 채널(속도 상한·가감속 제한), 바퀴 속도 활용 | RC2, 후륜 모터 (바퀴 띄움) | 명령 속도 추종, 끊김 시 즉시 정지 |
-| `firmware/rc` | i-BUS 해석, MANUAL_RC 모드, RC arm | RC 수신기(전압 확인 후), 신호 MUX SEL | Layer A 200 ms 이내 전환, RC 상실 → ESTOP, Layer B는 Teensy 정지 상태로 시험 |
+| `firmware/steering` | **1차: RC 조향**(i-BUS 해석, RC arm, MANUAL_RC, 스틱 = 조향각) → **2차: 컴퓨터 조향**(명령 수신, AUTONOMOUS). 공통: 조향 PID, 게인 파라미터, 한계·stall·끊김 규칙, hang 테스트 빌드 | MDDS30(RC1), 조향 모터, 전류 제한 전원, 신호 MUX, RC 수신기(전압 확인 후) | 1차: RC arm·override·RC 상실 → ESTOP, Layer B는 Teensy 정지 상태로 시험. 2차: 정상상태 오차 ≤ 1° 등 6가지 측정 → **Merge 1 (11/23)** |
+| `firmware/drive` | 구동 채널(속도 상한·가감속 제한), 바퀴 속도 활용, 스로틀 스틱(CH2) | RC2, 후륜 모터 (바퀴 띄움) | 명령 속도 추종, 끊김 시 즉시 정지 |
 | `firmware/estop` | E-stop 감지, hold-off, 재허가 규칙, 릴레이 | E-stop 분압 회로, 릴레이 MUX | 눌림/해제/선 빠짐 동작, 해제 시 움직임 없음 (`06-bench-test.md` row 5a) |
 
-- **단계별로 결정이 필요한 것**
-  - steering: Stage 1에서 RC 없이 무엇으로 허가할지 → 보관 코드는 `enable` 파라미터 사용
-  - steering: 신호 MUX가 RC 수신기 없이 어느 입력을 고르는지(Pololu 2806 설명서 확인) — 문서에 없음
-  - rc: 모드 스위치 채널과 arm 동작(`[POLICY]`), 송신기 failsafe 설정
+- **조향 설계와 결정 대기 항목:** `02_steering_design.md` (모드 스위치·arm 동작, 송신기 failsafe, debug 토픽, Layer B 처리, 수치 기준값 등)
+- **단계별로 결정이 필요한 것 (그 밖)**
   - estop: 릴레이를 DBW로 붙이는 조건, `DbwStatus.msg`에 E-stop 비트 추가 여부
 
 ---
@@ -393,6 +462,9 @@ AS5600 (I²C, 핀 18/19) ──raw 0..4095──▶ calib::RawToRad ──θ─�
 
 - **업로드 첫 시도 실패**: WSL에서 program 모드로 바뀌는 순간 usbipd 재연결 때문. 다시 실행하면 된다.
 - **usbipd auto-attach가 `Failed to attach`를 반복**: 실행 중인 attach를 멈추고 다시 실행.
+  - `--auto-attach`는 시작할 때 장치가 없으면 바로 끝난다("no device with busid"). 장치가 보일 때 시작한다.
+  - 장치가 몇 초마다 끊겼다 붙으면(재부팅 반복) 먼저 그 원인을 고친다. 그대로 두면 PC 쪽 USB 상태가 꼬일 수 있다(7.10 #5).
+- **bench 스케치의 워치독**: 쉬지 않는 루프에서 매번 먹이면 즉시 리셋된다(WDT_T4 창 모드). 5 ms 틱마다 한 번만 먹인다(7.10 #4).
 - **`VUSB`–`VIN` 분리 후**: USB만으로는 Teensy가 켜지지 않는다. UBEC 5 V를 `VIN`에 넣어야 한다.
 - **bench 스케치의 보정값 복사본**: `pwm_effort_check.cpp`는 `kSteerDegPerCount`를 따로 들고 있다. 측정값을 바꾸면
   두 곳을 같이 바꾼다.

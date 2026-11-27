@@ -319,6 +319,10 @@ D는 오차가 아니라 **실제 각도의 변화 속도**에 거는데, 목표
 이 절의 조작은 뒤의 모든 단계에서 반복해서 쓴다. 처음 한 번 천천히 익혀 두자.
 명령 하나하나의 뜻(`pio`가 무엇인지, `-e`·`-t`가 무엇인지 등)은 **7.7절**에 모아 두었다.
 
+> [!NOTE]
+> **처음 쓰는 PC라면** 먼저 [개발 환경 설정 가이드](04_setup_guide.md)로 usbipd, PlatformIO, udev 규칙, ROS 2,
+> micro-ROS agent와 라이브러리를 설치한다. 이 절은 설치가 끝났다고 가정한다.
+
 **(1) 터미널 열기.** VS Code에서 `` Ctrl+` ``로 터미널을 연다. 프롬프트가 `사용자이름@컴퓨터이름:…$`처럼 보이면 WSL(리눅스)
 터미널이다. VS Code 터미널은 열려 있는 폴더, 즉 **저장소 루트**(git clone한 `mrider` 폴더)에서 시작한다. 이 문서의 명령은 모두 이 터미널에 입력한다. 여러 프로그램을 동시에 띄워야 할 때는 터미널 오른쪽 위의
 `+`로 터미널을 더 연다.
@@ -513,6 +517,17 @@ UBEC 5 V를 `VIN`에 넣어야 Teensy가 켜진다. "USB만 꽂았더니 Teensy�
 
 ### 7.4 Stage 1: 조향 모터, 전류 제한 전원으로
 
+![조향 벤치 회로도: RC 수신기의 CH1·CH5가 신호 MUX의 SLAVE 1·SEL로, Teensy 핀 2가 MASTER 1로 들어가고, MUX OUT 1이 MDDS30 RC1로, MDDS30 M1이 조향 모터로 간다. i-BUS는 R5·R6를 거쳐 Teensy 핀 15로, 모터 전원은 전류 제한 실험용 전원에서 온다](images/steer_bench_schematic.svg)
+
+- 위 그림은 **조향 출력과 RC 입력을 더한 벤치 회로도**다(Stage 0 센서 회로는 그대로). 조향 펌웨어의 설계는
+  `docs/01_development/01_firmware/02_steering_design.md`를 본다.
+- 그림 아래쪽 패널은 **신호 MUX를 앞면(부품면)에서 본 실제 핀 배치**다. 단자마다 핀이 3개(신호 · + · GND)이고,
+  앞에서 보면 신호 핀이 보드 안쪽, GND가 바깥 가장자리다. **Teensy → `M1`, `OUT1` → MDDS30 RC1은 신호·GND만** 연결하고
+  가운데 + 핀은 비운다. 수신기에서 오는 `SEL`·`S1`은 3선 모두 연결한다.
+- 실제로 납땜할 **신호 보드(PCB)의 구멍 단위 배치**는 공식 그림 `docs/images/signal-board-perfboard-layout.svg`
+  (`03-electrical.md` §3.5.4)에 있다. 조향 펄스는 그 보드의 `PWM 1 · steer` 헤더, i-BUS는 `i-BUS in` 단자와 R5·R6로 나간다.
+  수신기·MUX·드라이버의 연결 관계는 `docs/images/rc-mux-estop.svg`(`03-electrical.md` §3.5.1)에 있다.
+
 > **현재 저장소의 펌웨어는 Stage 0(센싱만)이다.** 이 절에서 쓰는 `mitt_dbw`의 기능(명령 추종, `enable`·게인
 > 파라미터, effort·P/I/D 디버그 값, `mitt_dbw_hangtest`)은 Stage 1을 시작할 때 펌웨어에 추가한다.
 > 아래 설명은 그 기능이 들어온 뒤의 사용법이다. debug 값의 번호도 그때 기준이다.
@@ -611,7 +626,7 @@ E4 전환 여부 결정과 기록. 이것이 Week 11 (11/23) Merge 1의 내용�
 드라이버에 직접 연결하는 방식이라 Teensy가 죽어도 동작한다. 한 칩이 모든 것을 맡는 설계가 허용된 조건이 바로
 Layer B이므로, **Teensy를 일부러 멈춘 상태에서** 시험한다.
 
-**어떻게 (준비 단계):**
+**어떻게 (준비 단계):** 수신기 핀 구조, 연결, 바인딩, 출력 읽는 법은 [RC 수신기 가이드](02_rc_receiver_guide.md)에 정리했다.
 1. **전압부터 잰다.** 수신기(FS-iA6B)는 5 V로 동작하고 Teensy는 5 V를 못 견딘다. 수신기의 i-BUS 출력이 쉬고 있을
    때의 전압을 잰다. 3.3 V 근처면 그대로, 5 V 근처면 분압 저항을 넣는다(`03-electrical.md` §3.5.4). 그다음에 핀 15에 연결.
 2. `pio run -e ibus_monitor -t upload` 후 `pio device monitor`. 확인할 것: 프레임이 초당 약 130개 들어오는가, 체크섬
@@ -761,6 +776,8 @@ PlatformIO가 받아 둔 도구는 `~/.platformio/`에, 빌드 결과물은 각 
 
 ### 9.1 빌드 도구
 
+설치 순서와 확인 방법은 [개발 환경 설정 가이드](04_setup_guide.md)에 있다.
+
 - **PlatformIO**: 컴파일·업로드 도구. `platformio.ini`에 보드와 플랫폼 버전(`teensy@6.0.0`)이 고정되어 있다.
   버전을 고정하는 이유는 같은 코드가 다음 학기에도 같은 결과를 내도록 하기 위해서다(`software.md` §6.3).
 - **micro-ROS 라이브러리**: `scripts/build_microros_lib.sh`가 Docker로 만든다. 결과물은 빌드 산출물이라 git에
@@ -768,10 +785,11 @@ PlatformIO가 받아 둔 도구는 `~/.platformio/`에, 빌드 결과물은 각 
 
 ### 9.2 git과 협업
 
-- `origin`(교수님 저장소 `jrkwon/mrider`)은 학생에게 읽기 전용이다. 업데이트를 받는 용도로만 쓴다.
-- 팀 코드는 팀이 함께 쓰는 **fork**에 올리고, 작업은 `main`이 아닌 브랜치(예: `firmware/sensing`)에서 한다.
-  `main`은 교수님 원본과 똑같이 두고, 교수님 업데이트를 받는 용도로만 쓴다.
-  팀 코드가 본 저장소에 들어가는 방식(PR 등)은 교수님/조교에게 확인한다.
+- 저장소는 팀 저장소를 fork해 받은 클론이다(2026-11-24 갱신. 설정 방법은 [개발 환경 설정 가이드](04_setup_guide.md) 4단계).
+  - `origin` = 팀 저장소. 우리 작업을 올리는 곳.
+  - `upstream` = 교수님 저장소(`jrkwon/mrider`). 학생에게 읽기 전용이라 업데이트를 받는 용도로만 쓴다.
+- 작업은 `main`이 아닌 기능 브랜치(예: `firmware/sensing`)에서 한다. `main`은 **팀 통합 브랜치**로, 검증이 끝난
+  기능 브랜치를 PR로 합친다. 브랜치 규칙은 [펌웨어 개발 문서](../../01_development/01_firmware/01_firmware_development.md) §8에 있다.
 - **단계마다 커밋한다.** 측정 기록에는 그때 쓴 펌웨어의 커밋 번호를 적어야 하므로(`06-bench-test.md`),
   측정하기 전에 커밋해 둔다.
 - 빌드 산출물(`.pio/`, `.host_build/`, `lib/micro_ros_arduino/`)은 `firmware/.gitignore`로 제외되어 있다.

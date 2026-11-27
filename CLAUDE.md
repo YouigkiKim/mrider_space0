@@ -13,10 +13,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - MRider: 아이용 전동차를 DBW(drive-by-wire) 자율주행 플랫폼으로 바꾸는 연구·교육 프로젝트. 원본은 교수님 저장소
   `jrkwon/mrider`이고 문서 사이트(MkDocs)가 `main` push 때 배포된다.
 - 이 클론은 **Track E(전장·펌웨어) 팀 작업용**이다.
-  - `origin` = 교수님 저장소(읽기 전용, push 차단 `no_push`), `team` = 팀 저장소.
+  - 이 클론은 팀 저장소를 fork해 받은 것이다: `origin` = **팀 저장소**(`YouigkiKim/mrider_space0`, 우리 작업을 push하는 곳),
+    `upstream` = **교수님 저장소**(`jrkwon/mrider`, 읽기 전용 — push 차단 권장: `git remote set-url --push upstream no_push`).
   - `main` = **팀 통합 브랜치**로, 교수님 원본과 다르다. 검증이 끝난 기능 브랜치를 PR로 합친다.
   - 작업은 기능 브랜치를 앞 단계 위에 쌓는다: `firmware/sensing`(Stage 0) → `firmware/steering`(Stage 1) → …
-  - 교수님 업데이트는 **pull만** 받는다: `git switch main && git pull origin main && git push team main`.
+  - 교수님 업데이트는 **pull만** 받는다: `git switch main && git pull upstream main && git push origin main`.
+  - 기능 브랜치는 `git push origin <브랜치>`로 올린다.
     충돌은 그 부분만 정리하고, push한 `main`은 다시 쓰지 않는다(`rebase`, `push --force` 금지).
   - push와 PR 생성은 사용자가 직접 한다(이 환경에는 GitHub 인증과 `gh`가 없다).
   - `main`에 push하면 교수님 저장소에서 따라온 GitHub Actions(문서 배포 등)가 팀 저장소에서 돌아 실패 메일이 갈 수 있다.
@@ -72,7 +74,8 @@ pio run -e i2c_scan -t upload && pio device monitor
 - **DBW 데이터 경로:** 노트북(ROS 2) ↔ micro-ROS agent ↔ USB ↔ Teensy 4.1.
   - 노트북 → Teensy: `/mitt/dbw/command` (`mitt_msgs/DbwCommand`). Teensy → 노트북: `/mitt/dbw/status` (`DbwStatus`).
   - Teensy가 200 Hz 조향 위치 루프를 돌리고 서보 PWM(핀 2·3) → 신호 MUX → MDDS30(RC1 조향, RC2 구동)으로 낸다.
-  - 센서는 AS5600 조향 절대각(I²C 18·19), 구동 엔코더 Hall 래치(QDC 0·1).
+  - 센서는 AS5600 조향 절대각(I²C 18·19), 구동 엔코더 Hall 래치(QDC 0·1), IMU BNO085(두 번째 I²C `Wire1`,
+    SDA1 17·SCL1 16 — 2026-11-16 원본 결정, `docs/design/sensors.md` §3). IMU 읽기는 조향 루프를 늦추면 안 된다.
 - **안전은 겹으로 되어 있다** (`docs/design/safety.md`):
   - 하드웨어가 멈춘다: E-stop, 릴레이 MUX(기본 STOCK), 신호 MUX(Layer B).
   - 펌웨어는 함부로 재출발하지 않는다: E-stop 감지, 재허가(arm), 끊김 감시, 워치독.
@@ -112,12 +115,15 @@ pio run -e i2c_scan -t upload && pio device monitor
 docs/
 ├── 01_development/      개발 기록 — 무엇을, 왜 이렇게 만들었나
 │   ├── 01_firmware/
-│   └── 02_power_wire/
+│   ├── 02_power_wire/
+│   └── 03_relay_board/
 ├── 02_guide/            가이드 — 개념과 사용법, 어떻게 하나
 │   ├── 01_firmware/
-│   └── 02_power_wire/
+│   ├── 02_power_wire/
+│   └── 03_relay_board/
 └── 03_validation/       검증 — 확인 방법과 결과
-    └── 01_firmware/
+    ├── 01_firmware/
+    └── 03_relay_board/
 ```
 
 | 폴더 | 읽는 사람 | 넣을 내용 | 넣지 않을 내용 |
@@ -126,12 +132,23 @@ docs/
 | `02_guide/` | 처음 배우는 사람 | 개념("왜"), 단계별 방법("어떻게": 명령, 기대 출력, 막혔을 때), 그림, 명령어 설명 | 실험 기록, 측정 결과 |
 | `03_validation/` | 검토자, merge 데모 | **간단한 검증 방법**, 통과 기준, 결과 기록표(측정값, 날짜, 펌웨어 커밋 해시) | 긴 설명(가이드로 링크) |
 
-- **주제 폴더:** `01_firmware`는 Teensy 펌웨어, bench 스케치, micro-ROS를 다룬다. `02_power_wire`는 전원 레일, 하네스, E-stop·릴레이, 신호 배선을 다룬다.
+- **주제 폴더:** `01_firmware`는 Teensy 펌웨어, bench 스케치, micro-ROS, 신호 기판(벤치를 옮긴 Teensy 소켓 기판)을 다룬다. `02_power_wire`는 전원 레일, 하네스, E-stop·릴레이, 신호 배선을 다룬다. `03_relay_board`는 릴레이 MUX 코일 구동 기판(GA6, 전원 박스)을 다룬다.
 - 새 주제가 생기면 다음 번호(`03_…`)로 세 폴더에 필요한 만큼 만든다. 빈 폴더에는 `.gitkeep`을 둔다.
 - 현재 문서
   - `01_development/01_firmware/01_firmware_development.md` — 펌웨어 구조와 개발 기록
+  - `01_development/01_firmware/02_steering_design.md` — 조향 펌웨어 설계 (1차 RC 조향 → 2차 컴퓨터 조향), 결정 대기 항목
+  - `01_development/01_firmware/03_signal_board_design.md` — 신호 기판(Teensy 소켓 만능기판) 설계, 원본과 다른 점
+  - `01_development/03_relay_board/01_relay_board_design.md` — 릴레이 구동 기판 설계, 원칙의 이유, 원본과 다른 점
   - `02_guide/01_firmware/01_teensy_guide.md` — Teensy 개념과 단계별 bring-up 방법
+  - `02_guide/01_firmware/02_rc_receiver_guide.md` — RC 수신기(FS-iA6B) 핀 구조, 연결, 바인딩, `ibus_monitor`
+  - `02_guide/01_firmware/03_signal_board_guide.md` — 신호 기판 납땜 순서 (배치도는 원본 생성기 데이터로 생성)
+  - `02_guide/01_firmware/04_setup_guide.md` — 새 PC 개발 환경 설정: WSL2·usbipd, PlatformIO·udev, ROS 2·micro-ROS agent, Docker·micro-ROS 라이브러리, 설치 확인
+  - `02_guide/02_power_wire/01_system_wiring_guide.md` — 전체 배선 연결도: 두 기판·MDDS30의 단자·헤더와 기판 밖 선이 핀마다 어디로 가는지, 잇지 않는 핀, 배선 순서
+  - `02_guide/03_relay_board/01_relay_board_guide.md` — 릴레이 구동 기판 회로도·배치도, 단계별 납땜과 검사, 신호 기판 연결
   - `03_validation/01_firmware/test_bench.md` — Stage 0 테스트 벤치 검증 방법과 결과
+  - `03_validation/01_firmware/02_steering_bench.md` — 조향 단계 벤치 검증 방법과 결과 (i-BUS 대기 전압, 수신)
+  - `03_validation/01_firmware/03_signal_board.md` — 신호 기판 단락·도통·전압 검사와 결과
+  - `03_validation/03_relay_board/01_relay_board.md` — 릴레이 구동 기판 단계별 검사, 코일 구동·E-stop 감지 확인과 결과
 
 ### 작성 규칙
 

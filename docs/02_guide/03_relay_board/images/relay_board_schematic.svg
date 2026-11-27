@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1141" width="1240" height="1141" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+<style>
+.t{font-size:13px;fill:#1e293b}.ts{font-size:12px;fill:#475569}.tb{font-size:13.5px;font-weight:bold;fill:#0f172a}
+.h1{font-size:20px;font-weight:bold;fill:#0f172a}.h2{font-size:15px;font-weight:bold;fill:#0f172a}
+.pn{font-size:13px;font-weight:bold;fill:#0f172a}.pv{font-size:12px;fill:#334155}
+.tl{font-size:12px;font-weight:bold;fill:#1d4ed8;paint-order:stroke;stroke:#fffbeb;stroke-width:4px;stroke-linejoin:round}.red{font-size:12.5px;font-weight:bold;fill:#b91c1c}
+.grn{font-size:12.5px;font-weight:bold;fill:#15803d}.blu{font-size:12.5px;font-weight:bold;fill:#1d4ed8}
+.w12{stroke:#dc2626;stroke-width:3;fill:none}.wg{stroke:#b45309;stroke-width:2.6;fill:none}
+.wr{stroke:#1d4ed8;stroke-width:2.6;fill:none}.wd{stroke:#15803d;stroke-width:2.4;fill:none}
+.wgnd{stroke:#334155;stroke-width:3;fill:none}.wdrn{stroke:#b45309;stroke-width:3;fill:none}
+.pd{stroke:#be123c;stroke-width:2.8;fill:none}.dio{fill:#dcfce7;stroke:#15803d;stroke-width:2}
+.dot{fill:#0f172a}.term{fill:#ffffff;stroke:#1d4ed8;stroke-width:2}
+.board{fill:#fffbeb;stroke:#a16207;stroke-width:2;stroke-dasharray:8 5}
+.box{fill:#ffffff;stroke:#334155;stroke-width:2}.coil{fill:#faf5ff;stroke:#7c3aed;stroke-width:2.2}
+.mos{fill:#e2e8f0;stroke:#0f172a;stroke-width:2.2}.note{fill:#fff1f2;stroke:#be123c;stroke-width:1.8}
+.panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}.wcab{stroke:#64748b;stroke-width:2;fill:none;stroke-dasharray:6 4}
+</style>
+<rect width="1240" height="1141" fill="#ffffff"/>
+<text class="h1" x="30" y="38" text-anchor="start">릴레이 구동 기판 회로도 — MOSFET 하나로 릴레이 코일 4개</text>
+<text class="ts" x="30" y="62" text-anchor="start">출처: 03-electrical.md §3.4, docs/images/relay-driver-board.svg · 부품 값은 scripts/gen_relay_board_figure.py에서 읽음 · 점선 상자 = 이 기판(GA6), 바깥 = 다른 곳</text>
+<rect class="board" x="300" y="100" width="820" height="635" rx="12"/>
+<text class="tb" x="1108" y="122" text-anchor="end">릴레이 구동 기판 (GA6, 전원 박스)</text>
+<rect class="box" x="24" y="128" width="130" height="62" rx="8"/>
+<text class="tb" x="89" y="153" text-anchor="middle">로직 배터리 12 V</text>
+<text class="ts" x="89" y="173" text-anchor="middle">LiFePO₄ · 5 A 퓨즈</text>
+<line class="w12" x1="154" y1="160" x2="190" y2="160"/>
+<circle class="dot" cx="190" cy="160" r="4.5"/>
+<line class="w12" x1="190" y1="160" x2="238" y2="144"/>
+<circle class="dot" cx="246" cy="160" r="4.5"/>
+<line class="w12" x1="246" y1="160" x2="300" y2="160"/>
+<text class="red" x="218" y="132" text-anchor="middle">E-stop NC ②</text>
+<text class="ts" x="218" y="184" text-anchor="middle">누르면 열림</text>
+<text class="ts" x="218" y="200" text-anchor="middle">→ 코일 4개 모두 꺼짐</text>
+<rect class="term" x="294" y="154" width="12" height="12" rx="2"/>
+<text class="tl" x="310" y="151" text-anchor="start">PWR +12 V</text>
+<line class="w12" x1="300" y1="160" x2="1000" y2="160"/>
+<text class="red" x="1006" y="164" text-anchor="start">+12 V 버스</text>
+<circle class="dot" cx="350" cy="160" r="4.5"/>
+<line class="wr" x1="350" y1="160" x2="350" y2="215.0"/>
+<path class="wr" d="M350 215.0 L358 222.5 L342 230.0 L358 237.5 L342 245.0 L358 252.5 L342 260.0 L358 267.5 L350 275.0"/>
+<line class="wr" x1="350" y1="275.0" x2="350" y2="330"/>
+<text class="pn" x="364" y="243.0" text-anchor="start">R3</text>
+<text class="pv" x="364" y="259.0" text-anchor="start">10 kΩ</text>
+<circle class="dot" cx="350" cy="330" r="4.5"/>
+<line class="wr" x1="350" y1="330" x2="350" y2="485.0"/>
+<path class="wr" d="M350 485.0 L358 492.5 L342 500.0 L358 507.5 L342 515.0 L358 522.5 L342 530.0 L358 537.5 L350 545.0"/>
+<line class="wr" x1="350" y1="545.0" x2="350" y2="700"/>
+<text class="pn" x="364" y="513.0" text-anchor="start">R4</text>
+<text class="pv" x="364" y="529.0" text-anchor="start">2.7 kΩ</text>
+<circle class="dot" cx="350" cy="700" r="4.5"/>
+<line class="wr" x1="300" y1="330" x2="350" y2="330"/>
+<rect class="term" x="294" y="324" width="12" height="12" rx="2"/>
+<text class="tl" x="310" y="321" text-anchor="start">TEENSY SENSE</text>
+<text class="ts" x="364" y="364" text-anchor="start">감지 노드 ≈ 12 V × 2.7/12.7</text>
+<text class="ts" x="364" y="380" text-anchor="start">= 2.55 V (E-stop 풀림)</text>
+<rect class="box" x="24" y="290" width="200" height="320" rx="8"/>
+<text class="tb" x="124" y="314" text-anchor="middle">신호 기판</text>
+<text class="ts" x="124" y="332" text-anchor="middle">RELAY 단자</text>
+<text class="blu" x="36" y="364" text-anchor="start">SENSE → Teensy 핀 20</text>
+<text class="blu" x="36" y="534" text-anchor="start">GATE ← Teensy 핀 21</text>
+<path class="wcab" d="M224 360 L262 360 L262 330 L300 330"/>
+<path class="wcab" d="M224 530 L262 530 L262 560 L300 560"/>
+<text class="ts" x="36" y="410" text-anchor="start">케이블 2가닥 (GATE, SENSE)</text>
+<text class="ts" x="36" y="428" text-anchor="start">GND 선은 따로 없음:</text>
+<text class="ts" x="36" y="446" text-anchor="start">두 기판 모두 스타 접지로</text>
+<text class="ts" x="36" y="464" text-anchor="start">(접지 고리 방지)</text>
+<circle class="dot" cx="560" cy="160" r="4.5"/>
+<line class="w12" x1="560" y1="160" x2="560" y2="228"/>
+<text class="ts" x="552" y="222" text-anchor="end">86</text>
+<rect class="coil" x="534" y="228" width="52" height="96" rx="6"/>
+<text class="pn" x="560" y="262" text-anchor="middle">K1</text>
+<text class="ts" x="560" y="282" text-anchor="middle">코일</text>
+<text class="ts" x="560" y="300" text-anchor="middle">조향 A</text>
+<text class="ts" x="552" y="340" text-anchor="end">85</text>
+<line class="wdrn" x1="560" y1="324" x2="560" y2="470"/>
+<circle class="dot" cx="560" cy="470" r="4.5"/>
+<circle class="dot" cx="606" cy="160" r="4.5"/>
+<line class="wd" x1="606" y1="160" x2="606" y2="200"/>
+<line class="wd" x1="606" y1="200" x2="606" y2="278.0"/>
+<path class="dio" d="M595 300.0 L617 300.0 L606 280.0 Z"/>
+<line class="wd" x1="594" y1="279.0" x2="618" y2="279.0"/>
+<line class="wd" x1="606" y1="300.0" x2="606" y2="380"/>
+<text class="pn" x="621" y="294.0" text-anchor="start">D1</text>
+<line class="wd" x1="606" y1="380" x2="606" y2="410"/>
+<line class="wd" x1="606" y1="410" x2="560" y2="410"/>
+<circle class="dot" cx="560" cy="410" r="4.5"/>
+<rect class="term" x="554" y="214" width="12" height="10" rx="2"/>
+<rect class="term" x="554" y="328" width="12" height="10" rx="2"/>
+<circle class="dot" cx="670" cy="160" r="4.5"/>
+<line class="w12" x1="670" y1="160" x2="670" y2="228"/>
+<text class="ts" x="662" y="222" text-anchor="end">86</text>
+<rect class="coil" x="644" y="228" width="52" height="96" rx="6"/>
+<text class="pn" x="670" y="262" text-anchor="middle">K2</text>
+<text class="ts" x="670" y="282" text-anchor="middle">코일</text>
+<text class="ts" x="670" y="300" text-anchor="middle">조향 B</text>
+<text class="ts" x="662" y="340" text-anchor="end">85</text>
+<line class="wdrn" x1="670" y1="324" x2="670" y2="470"/>
+<circle class="dot" cx="670" cy="470" r="4.5"/>
+<circle class="dot" cx="716" cy="160" r="4.5"/>
+<line class="wd" x1="716" y1="160" x2="716" y2="200"/>
+<line class="wd" x1="716" y1="200" x2="716" y2="278.0"/>
+<path class="dio" d="M705 300.0 L727 300.0 L716 280.0 Z"/>
+<line class="wd" x1="704" y1="279.0" x2="728" y2="279.0"/>
+<line class="wd" x1="716" y1="300.0" x2="716" y2="380"/>
+<text class="pn" x="731" y="294.0" text-anchor="start">D2</text>
+<line class="wd" x1="716" y1="380" x2="716" y2="410"/>
+<line class="wd" x1="716" y1="410" x2="670" y2="410"/>
+<circle class="dot" cx="670" cy="410" r="4.5"/>
+<rect class="term" x="664" y="214" width="12" height="10" rx="2"/>
+<rect class="term" x="664" y="328" width="12" height="10" rx="2"/>
+<circle class="dot" cx="780" cy="160" r="4.5"/>
+<line class="w12" x1="780" y1="160" x2="780" y2="228"/>
+<text class="ts" x="772" y="222" text-anchor="end">86</text>
+<rect class="coil" x="754" y="228" width="52" height="96" rx="6"/>
+<text class="pn" x="780" y="262" text-anchor="middle">K3</text>
+<text class="ts" x="780" y="282" text-anchor="middle">코일</text>
+<text class="ts" x="780" y="300" text-anchor="middle">구동 A</text>
+<text class="ts" x="772" y="340" text-anchor="end">85</text>
+<line class="wdrn" x1="780" y1="324" x2="780" y2="470"/>
+<circle class="dot" cx="780" cy="470" r="4.5"/>
+<circle class="dot" cx="826" cy="160" r="4.5"/>
+<line class="wd" x1="826" y1="160" x2="826" y2="200"/>
+<line class="wd" x1="826" y1="200" x2="826" y2="278.0"/>
+<path class="dio" d="M815 300.0 L837 300.0 L826 280.0 Z"/>
+<line class="wd" x1="814" y1="279.0" x2="838" y2="279.0"/>
+<line class="wd" x1="826" y1="300.0" x2="826" y2="380"/>
+<text class="pn" x="841" y="294.0" text-anchor="start">D3</text>
+<line class="wd" x1="826" y1="380" x2="826" y2="410"/>
+<line class="wd" x1="826" y1="410" x2="780" y2="410"/>
+<circle class="dot" cx="780" cy="410" r="4.5"/>
+<rect class="term" x="774" y="214" width="12" height="10" rx="2"/>
+<rect class="term" x="774" y="328" width="12" height="10" rx="2"/>
+<circle class="dot" cx="890" cy="160" r="4.5"/>
+<line class="w12" x1="890" y1="160" x2="890" y2="228"/>
+<text class="ts" x="882" y="222" text-anchor="end">86</text>
+<rect class="coil" x="864" y="228" width="52" height="96" rx="6"/>
+<text class="pn" x="890" y="262" text-anchor="middle">K4</text>
+<text class="ts" x="890" y="282" text-anchor="middle">코일</text>
+<text class="ts" x="890" y="300" text-anchor="middle">구동 B</text>
+<text class="ts" x="882" y="340" text-anchor="end">85</text>
+<line class="wdrn" x1="890" y1="324" x2="890" y2="470"/>
+<circle class="dot" cx="890" cy="470" r="4.5"/>
+<circle class="dot" cx="936" cy="160" r="4.5"/>
+<line class="wd" x1="936" y1="160" x2="936" y2="200"/>
+<line class="wd" x1="936" y1="200" x2="936" y2="278.0"/>
+<path class="dio" d="M925 300.0 L947 300.0 L936 280.0 Z"/>
+<line class="wd" x1="924" y1="279.0" x2="948" y2="279.0"/>
+<line class="wd" x1="936" y1="300.0" x2="936" y2="380"/>
+<text class="pn" x="951" y="294.0" text-anchor="start">D4</text>
+<line class="wd" x1="936" y1="380" x2="936" y2="410"/>
+<line class="wd" x1="936" y1="410" x2="890" y2="410"/>
+<circle class="dot" cx="890" cy="410" r="4.5"/>
+<rect class="term" x="884" y="214" width="12" height="10" rx="2"/>
+<rect class="term" x="884" y="328" width="12" height="10" rx="2"/>
+<text class="grn" x="978" y="252" text-anchor="start">D1–D4 1N4007</text>
+<text class="ts" x="978" y="270" text-anchor="start">띠(캐소드) = +12 V 쪽</text>
+<text class="red" x="978" y="288" text-anchor="start">거꾸로 = 배터리 단락</text>
+<text class="blu" x="978" y="322" text-anchor="start">□ = K 단자</text>
+<text class="ts" x="978" y="340" text-anchor="start">코일은 기판 밖 릴레이</text>
+<line class="wdrn" x1="520" y1="470" x2="1000" y2="470"/>
+<text class="tb" x="1006" y="474" text-anchor="start">DRAIN 버스</text>
+<text class="ts" x="730" y="492" text-anchor="middle">코일 4개의 85를 한데 묶어 MOSFET 하나가 한꺼번에 켜고 끈다</text>
+<line class="wdrn" x1="520" y1="470" x2="520" y2="515"/>
+<rect class="mos" x="500" y="515" width="130" height="100" rx="6"/>
+<text class="pn" x="565.0" y="547" text-anchor="middle">Q1 IRLZ44N</text>
+<text class="ts" x="565.0" y="567" text-anchor="middle">로직 레벨 N-MOSFET</text>
+<text class="ts" x="565.0" y="585" text-anchor="middle">탭 = 드레인</text>
+<text class="pn" x="528" y="509" text-anchor="start">D</text>
+<text class="pn" x="528" y="633" text-anchor="start">S</text>
+<text class="pn" x="492" y="552" text-anchor="end">G</text>
+<line class="wgnd" x1="520" y1="615" x2="520" y2="700"/>
+<circle class="dot" cx="520" cy="700" r="4.5"/>
+<rect class="term" x="294" y="554" width="12" height="12" rx="2"/>
+<text class="tl" x="310" y="551" text-anchor="start">TEENSY GATE</text>
+<line class="wg" x1="300" y1="560" x2="385" y2="560"/>
+<line class="wg" x1="385" y1="560" x2="390.0" y2="560"/>
+<path class="wg" d="M390.0 560 L397.5 568 L405.0 552 L412.5 568 L420.0 552 L427.5 568 L435.0 552 L442.5 568 L450.0 560"/>
+<line class="wg" x1="450.0" y1="560" x2="455" y2="560"/>
+<text class="pn" x="420.0" y="544" text-anchor="middle">R2</text>
+<text class="pv" x="420.0" y="586" text-anchor="middle">100 Ω</text>
+<line class="wg" x1="455" y1="560" x2="500" y2="560"/>
+<circle class="dot" cx="470" cy="560" r="4.5"/>
+<line class="pd" x1="470" y1="560" x2="470" y2="600.0"/>
+<path class="pd" d="M470 600.0 L478 607.5 L462 615.0 L478 622.5 L462 630.0 L478 637.5 L462 645.0 L478 652.5 L470 660.0"/>
+<line class="pd" x1="470" y1="660.0" x2="470" y2="700"/>
+<text class="pn" x="456" y="628.0" text-anchor="end">R1</text>
+<text class="pv" x="456" y="644.0" text-anchor="end">10 kΩ</text>
+<circle class="dot" cx="470" cy="700" r="4.5"/>
+<line class="wgnd" x1="300" y1="700" x2="1000" y2="700"/>
+<text class="tb" x="1006" y="704" text-anchor="start">GND 버스</text>
+<rect class="term" x="294" y="694" width="12" height="12" rx="2"/>
+<text class="tl" x="310" y="691" text-anchor="start">PWR GND</text>
+<path class="wgnd" d="M300 700 L262 700 L262 722"/>
+<text class="ts" x="30" y="748" text-anchor="start">→ 스타 접지(모터 드라이버). 이 기판에서 나가는 GND 선은 이것 하나</text>
+<rect class="note" x="660" y="545" width="290" height="78" rx="6"/>
+<text class="red" x="672" y="566" text-anchor="start">R1을 가장 먼저 납땜한다.</text>
+<text class="ts" x="672" y="585" text-anchor="start">R2의 MOSFET 쪽(게이트 노드)에 붙는다.</text>
+<text class="ts" x="672" y="602" text-anchor="start">게이트 선이 끊겨도 게이트가 GND로</text>
+<text class="ts" x="672" y="619" text-anchor="start">묶여 코일이 꺼진다 → STOCK.</text>
+<rect class="note" x="962" y="545" width="150" height="96" rx="6"/>
+<text class="red" x="972" y="566" text-anchor="start">탭 = 드레인</text>
+<text class="ts" x="972" y="585" text-anchor="start">접지된 금속판에</text>
+<text class="ts" x="972" y="602" text-anchor="start">그냥 고정 금지.</text>
+<text class="ts" x="972" y="619" text-anchor="start">방열판 불필요</text>
+<text class="ts" x="972" y="636" text-anchor="start">(0.1 W 미만)</text>
+<rect class="panel" x="24" y="775" width="590" height="196" rx="10"/>
+<text class="h2" x="42" y="803" text-anchor="start">어떻게 동작하나</text>
+<text class="t" x="42" y="827" text-anchor="start">· Teensy 핀 21 HIGH(3.3 V) → Q1 켜짐 → 코일 4개에 전류(약 600 mA)</text>
+<text class="t" x="42" y="847" text-anchor="start">    → 접점이 87(NO)로 → 모터가 MDDS30에 연결 = DBW</text>
+<text class="t" x="42" y="867" text-anchor="start">· 핀 21 LOW → Q1 꺼짐 → 접점이 87a(NC)로 → 순정 컨트롤러 = STOCK</text>
+<text class="t" x="42" y="887" text-anchor="start">· 아래 경우는 모두 STOCK이 된다 (기본값이 안전한 쪽):</text>
+<text class="t" x="42" y="907" text-anchor="start">    Teensy 꺼짐·리셋 / 게이트 선 빠짐(R1이 게이트를 GND로) /</text>
+<text class="t" x="42" y="927" text-anchor="start">    로직 전원 끊김 / E-stop 누름(코일 전원 자체가 끊김)</text>
+<text class="t" x="42" y="947" text-anchor="start">· 감지 노드: E-stop 풀림 ≈ 2.6–3.1 V, 눌림 = 0 V → Teensy 핀 20</text>
+<rect class="panel" x="630" y="775" width="586" height="176" rx="10"/>
+<text class="h2" x="648" y="803" text-anchor="start">E-stop 감지 전압 (R3 10 kΩ · R4 2.7 kΩ)</text>
+<text class="t" x="648" y="827" text-anchor="start">배터리 전압     감지 노드 (× 0.213)</text>
+<text class="t" x="648" y="847" text-anchor="start">· 12.0 V → 2.55 V</text>
+<text class="t" x="648" y="867" text-anchor="start">· 12.8 V → 2.72 V (LiFePO₄ 공칭)</text>
+<text class="t" x="648" y="887" text-anchor="start">· 13.3 V → 2.83 V (만충 휴지)</text>
+<text class="t" x="648" y="907" text-anchor="start">· 14.6 V → 3.10 V (충전 중 최대)</text>
+<text class="t" x="648" y="927" text-anchor="start">모두 3.3 V 아래 — 그래도 핀 20에 잇기 전에 잰다</text>
+<rect class="panel" x="24" y="985" width="1192" height="136" rx="10"/>
+<text class="h2" x="42" y="1013" text-anchor="start">릴레이가 바꾸는 선 (03-electrical.md §3.4) — 접점은 이 기판에 없다</text>
+<text class="t" x="42" y="1037" text-anchor="start">· K1 조향 모터 A · K2 조향 모터 B · K3 구동 모터 A(병렬) · K4 구동 모터 B(병렬)</text>
+<text class="t" x="42" y="1057" text-anchor="start">· 각 릴레이: 30 = 모터 쪽(공통) · 87a(NC) = 순정 컨트롤러(STOCK) · 87(NO) = MDDS30 출력(DBW) · 85·86 = 코일</text>
+<text class="t" x="42" y="1077" text-anchor="start">· 코일 극성 약속: 86 → +12 V(E-stop 거친 전원), 85 → DRAIN. 12개 모두 같게 — 다이오드 하나만 거꾸로여도 배터리 단락</text>
+<text class="t" x="42" y="1097" text-anchor="start">· 한 쌍(K1·K2, K3·K4)의 87a·87을 서로 바꿔 물리면 STOCK은 정상인데 DBW만 반대로 돈다 — 펌웨어 부호로 고치지 말고 선을 고친다</text>
+</svg>
