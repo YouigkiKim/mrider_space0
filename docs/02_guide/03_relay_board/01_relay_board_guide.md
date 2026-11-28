@@ -132,7 +132,8 @@
 | SENSE (2, 14) | 1가닥 | SENSE → Teensy 핀 20 |
 
 - **GND 선은 잇지 않는다.** 두 기판 모두 스타 접지(모터 드라이버)로 GND가 모이므로, 선을 더하면 접지 고리가 생긴다.
-- 연결 후 `estop_relay_check` 스케치로 확인한다(검증 7). 이 스케치는 E-stop 단계에서 커밋한다.
+- 연결 후 `estop_relay_check` 스케치로 확인한다(검증 7). `cd firmware/bench` 후 `pio run -e estop_relay_check -t upload`, `pio device monitor -p /dev/ttyACM0`.
+  - 업로드 직후에는 Teensy가 재부팅 중이라 포트가 잠깐 없다. 모니터가 포트를 물어보면 `Ctrl+C`로 나와 2–3초 뒤 다시 연다.
   - 시리얼 모니터에서 `g` → 게이트 HIGH(DBW, E-stop이 풀려 있을 때만), `x` → LOW(STOCK).
   - E-stop을 누르면 감지가 LOW가 되고, 코일이 하드웨어로 꺼진다.
 

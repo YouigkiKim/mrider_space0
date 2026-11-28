@@ -10,7 +10,7 @@
   **원본과 이 문서가 다르면 원본이 기준**이고, 다른 점은 §5에 이유와 함께 적었다.
 - **납땜 방법:** [릴레이 구동 기판 가이드](../../02_guide/03_relay_board/01_relay_board_guide.md)
 - **검사 방법·결과:** [릴레이 구동 기판 검증](../../03_validation/03_relay_board/01_relay_board.md)
-- **마지막 갱신:** 2026-11-16 · 브랜치 `firmware/steering` · 상태: 설계 확정(원본 그대로), 납땜 전
+- **마지막 갱신:** 2026-11-28 · 브랜치 `firmware/estop` · 상태: 납땜 완료, 검증 1–4·6·7 통과(5는 생략)
 
 ---
 
@@ -92,6 +92,8 @@
 ## 7. 다음 단계
 
 1. 납땜과 단계별 검사 ([가이드](../../02_guide/03_relay_board/01_relay_board_guide.md), [검증](../../03_validation/03_relay_board/01_relay_board.md))
-2. 신호 기판과 케이블 연결 후 `estop_relay_check` 스케치로 게이트(핀 21)와 감지(핀 20) 확인
-   - 이 스케치는 E-stop 단계에서 커밋한다. 작업 트리의 `firmware/bench/src/estop_relay_check.cpp`에 있다.
+2. 신호 기판과 케이블 연결 후 `estop_relay_check` 스케치로 게이트(핀 21)와 감지(핀 20) 확인 — **2026-11-28 통과**
+   - 스케치는 `firmware/estop` 브랜치에 커밋했다(`4ac7652`, `firmware/bench/src/estop_relay_check.cpp`).
+   - E-stop 버튼은 누를 때·뗄 때 1 ms 안에서 9–11번 튄다. 버튼 고장이 아니라 기계식 접점의 성질이다.
+     펌웨어에 E-stop 규칙을 넣을 때 hold-off 중 LOW가 오면 hold-off를 처음부터 다시 센다([검증](../../03_validation/03_relay_board/01_relay_board.md) §7).
 3. 릴레이 접점 배선(K1–K4의 30·87·87a)과 `03-electrical.md` §3.7 릴레이 MUX 벤치 시험. 전원 팀과 함께 한다.

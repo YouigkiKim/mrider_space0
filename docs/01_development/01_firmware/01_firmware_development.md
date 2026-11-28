@@ -104,10 +104,11 @@ firmware/
 
 - **커밋된 것:** 위 트리 전체(산출물 제외)
   - `bench/src/ibus_monitor.cpp` — `firmware/steering`에서 커밋. 수신기로 하드웨어 검증(2026-11-14, 7.8절)
+  - `bench/src/estop_relay_check.cpp` — `firmware/estop`에서 커밋(`4ac7652`). 릴레이 구동 기판으로 하드웨어 검증
+    (2026-11-28, [릴레이 기판 검증](../../03_validation/03_relay_board/01_relay_board.md) §7)
 - **아직 커밋하지 않은 것 (해당 단계에서 커밋 예정)**
   - `bench/src/pwm_effort_check.cpp` — Stage 1 (출력 부호, PWM 주기, hang 테스트)
-  - `bench/src/estop_relay_check.cpp` — E-stop 단계
-  - 두 파일 모두 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
+  - 이전 작업에서 만들어졌고, 빌드는 확인했지만 하드웨어 검증은 안 됐다.
 - **저장소 밖에 보관 중 (개발자 PC)**
   - 저장소 옆 폴더 `../mrider-wip/mitt_dbw_steer_drive_2026-11-13/` — Stage 1 조향 루프 + 구동 채널 코드
     (테스트 104개 통과). **이 PC에만 있고 다른 팀원 PC에는 없다.** 필요하면 해당 단계 브랜치로 옮겨 공유한다.
